@@ -2,9 +2,9 @@
 
 This directory contains canonical Repo Steward state and historical continuity artifacts for `hstptcn5/design-studio-ai`.
 
-## Current checkpoint
+## Completed continuity checkpoint
 
-- `DSA-STEW-002 — Direct-checkout canonical state initialization`: **COMPLETE**
+- `DSA-STEW-002 — Direct-checkout canonical state initialization`: **COMPLETE**, committed and pushed as `1839d1a964e51fa99ad70b2c1ad030c640c2a1f0`
 - Branch and recorded HEAD: `steward/continuity-bootstrap@aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5`
 - Canonical content digest: `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c`
 - Repo Steward RC: `hstptcn5/repo-steward@d53530028f79698d7ab6f0d5724ed85a1c94ccbe`
@@ -19,6 +19,13 @@ This directory contains canonical Repo Steward state and historical continuity a
 
 The earlier blocked attempt remains in `evidence/dsa-stew-002-blocked-2026-09-13.md` as historical evidence, not the current result.
 
-## Next bounded product checkpoint
+## Current product checkpoint
 
-The next candidate is a bounded YAML-authoring research/spec checkpoint derived from `CAND-YAML`. This is a recommendation only; product implementation remains unauthorized.
+`DSA-PROD-001 — YAML Authoring Research & Specification` is **COMPLETE** with decision **SELECT**. The selected capability is strict YAML as an editable source/interchange representation over the existing canonical `DesignDocument`, with JSON persistence unchanged and semantic rather than lexical round trips.
+
+- Research: `evidence/dsa-prod-001-research-2026-09-14.md`
+- Alternatives: `dsa-prod-001-brainstorm.json`
+- Specification: `dsa-prod-001-spec.md`
+- Current handoff: `handoff.md`
+
+The next checkpoint is a separately authorized `DSA-PROD-002 — YAML Authoring Implementation Handoff`. Product implementation, PR, merge, deploy, and release remain unauthorized.

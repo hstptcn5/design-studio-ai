@@ -1,37 +1,52 @@
-# Repo Steward handoff — DSA-STEW-002
+# Repo Steward handoff — DSA-PROD-001
 
 ## Outcome
 
-`DSA-STEW-002 — Direct-checkout canonical state initialization` is **COMPLETE**. Canonical version-1 state now exists at `.repo-steward/state.yaml` and was validated with Repo Steward RC `d53530028f79698d7ab6f0d5724ed85a1c94ccbe`.
+`DSA-PROD-001 — YAML Authoring Research & Specification` is **COMPLETE**. Decision: **SELECT**.
 
-## Canonical identity
+Select YAML as an editable source representation and interchange format over the existing canonical `DesignDocument`. Do not make YAML canonical persistence. Product implementation has not begun and is not authorized.
 
-- Repository: `https://github.com/hstptcn5/design-studio-ai.git`
-- Default branch: `main`
-- Branch: `steward/continuity-bootstrap`
-- Recorded HEAD: `aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5`
-- Content digest: `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c`
-- Starting checkout: clean
-- Current checkout: dirty only for authorized `.repo-steward/**` metadata
+## DSA-STEW-002 closure
 
-Repo Steward excludes `.repo-steward/**` from the content digest to avoid recursion, but resume still protects Git dirtiness. Resume therefore confirms exact HEAD/content/branch and returns `RECONCILE` for the visible in-scope metadata edits. This is recorded explicitly and is not product-content drift.
+The four expected metadata artifacts were committed and pushed on `steward/continuity-bootstrap` as `1839d1a964e51fa99ad70b2c1ad030c640c2a1f0`. From the clean tree, Repo Steward measured the unchanged content digest `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c` and correct branch. Resume reported `HEAD_DRIFT` and `HISTORICAL_EVIDENCE`, as required by the RC contract after a metadata-only commit; no content or branch drift exists.
 
-## Historical verification
+## Architecture result
 
-`.repo-steward/evidence/verification-2026-09-13.json` remains byte-for-byte unchanged. Its current and committed Git blob hashes are both `02fe6a7c917030845d18909fd24de91e898f1e2c`.
+The strict Zod `DesignDocument` versions 1/2 are the executable source of truth. Validated objects are stored as JSON text with owner-scoped optimistic revisions. Browser editor, REST, MCP, WebMCP, and CLI converge on shared document/operation validators and server save services. Rendering consumes validated objects. Provider generation returns JSON proposals for explicit review. JSON is the only lossless full-document interchange; SVG/HTML imports are partial and other exports are render/projection formats. No YAML product support or parser dependency exists.
 
-DSA-STEW-001 verification remains bound to its historical identities, particularly `133d1dffac2a57c10baf555123defdadcfa350c7`. It is not relabeled to later metadata or state identities.
+Detailed evidence: `evidence/dsa-prod-001-research-2026-09-14.md`.
 
-## Verification
+## Alternatives and decision
 
-PASS: canonical state validation; snapshot/content reconciliation; resume/continuity consumption with expected metadata-dirty protection; durable handoff validation; Repo Steward self-check and all 77 unit tests; historical byte/identity preservation; scoped metadata-only review.
+Compared editable YAML source, YAML import/export only, canonical YAML, generated read-only YAML, improving the visual editor without YAML, and defer/no-build. The selected editable-source option provides the strongest validation and preview loop while preserving all existing contracts. Canonical YAML was rejected because it creates migration, compatibility, and permanent maintenance cost without unique user value.
 
-GitHub Actions and product runtime checks: **NOT_RUN** because this checkpoint changes no product code or behavior and requires local/offline Steward validation.
+Brainstorm remains `context_only`: `dsa-prod-001-brainstorm.json`.
 
-## Authority
+## Proposed bounded behavior
 
-DSA-STEW-002 metadata implementation is authorized and complete. Product implementation, PR, merge, deploy, and release are not authorized and were not performed. `READY_TO_MERGE: NO`.
+Add an explicitly applied YAML source surface with Validate, Preview, Apply and save, Reset, and Download. Add `.yaml`/`.yml` native-document import and browser/server/CLI YAML export/input. Convert through one strict shared codec into the existing `DesignDocument`; persist JSON only. Reject aliases, anchors, merge keys, tags, duplicate/non-string keys, multiple documents, non-JSON values, unsafe/prototype keys, and excessive size/depth. Guarantee semantic—not lexical—round trips; comments and formatting are not persisted.
 
-## Next bounded product checkpoint
+Full specification and acceptance criteria: `dsa-prod-001-spec.md`.
 
-Plan a bounded **YAML-authoring research/spec checkpoint** derived from `CAND-YAML`. Establish shared-validator, client, documentation, and acceptance-test impact before implementation. This recommendation grants no product implementation authority.
+## Unresolved risks
+
+- User demand is inferred rather than measured.
+- The parser dependency must be pinned and audited during implementation.
+- Exact editor component/accessibility details need focused UI review.
+- Optional provider-generated YAML is deferred.
+- Final telemetry names and input ceilings must be reconciled with their existing owners.
+
+## Verification and authority
+
+PASS: repository research, six-option brainstorm, implementation-ready specification review, metadata-only scope review, canonical state validation, and durable handoff validation.
+
+NOT_RUN: product tests, build, browser tests, GitHub Actions, deployment, and release because no product files changed.
+
+- Research/specification: **AUTHORIZED and complete**.
+- YAML product implementation: **NOT AUTHORIZED**.
+- PR, merge, deploy, release: **NOT AUTHORIZED / not performed**.
+- `READY_TO_MERGE: NO`.
+
+## Next checkpoint
+
+With separate user authorization, create `DSA-PROD-002 — YAML Authoring Implementation Handoff` and implement only the bounded first slice in `dsa-prod-001-spec.md`. Reconcile the post-metadata-commit HEAD before implementation and keep all public clients and owning documentation synchronized.
