@@ -1,0 +1,35 @@
+{
+  "contract_version":"0.1.0","kind":"implementation_request","request_id":"DSA-IMPL-STEW-001",
+  "project":{"id":"github:hstptcn5/design-studio-ai","repository_identity":"https://github.com/hstptcn5/design-studio-ai.git","expected_branch":"steward/continuity-bootstrap","base_identity":"6b3cd5c1006ad586f10f1784aa56abd7b39d1001"},
+  "checkpoint":{"id":"DSA-STEW-001","objective":"Establish truthful repository-owned continuity for the new fork without changing product behavior.","requirements":[
+    {"id":"REQ-01","statement":"Record exact fork/upstream/base identity and discovery limitations in repository-owned durable evidence."},
+    {"id":"REQ-02","statement":"Persist Brainstorm proposals with context_only authority and keep selection separate from unselected ideas."},
+    {"id":"REQ-03","statement":"Persist an executable Implementation Request with exact base/branch/scope/rollback and separate implementation versus merge/deploy/release authority."},
+    {"id":"REQ-04","statement":"Change only .repo-steward/** in the implementation commit."},
+    {"id":"REQ-05","statement":"Do not claim runtime checks passed; explicitly retain NOT_RUN for unavailable local/npm/browser verification."}
+  ],"acceptance_criteria":[
+    {"id":"AC-01","description":"Exact fork, upstream, default branch and base commit identities are durable."},
+    {"id":"AC-02","description":"Brainstorm proposals remain context-only and product ideas not selected are not implemented."},
+    {"id":"AC-03","description":"Implementation Request is bounded and preserves authority separation and rollback."},
+    {"id":"AC-04","description":"Base-to-implementation diff contains only .repo-steward/** paths."},
+    {"id":"AC-05","description":"Verification distinguishes PASS from NOT_RUN and records the remote-only limitation."}
+  ]},
+  "scope":{"included":["Record current fork/default-branch/base identity and upstream relationship","Persist bounded Brainstorm alternatives and the selected continuity direction","Persist a buildable Research-to-Spec artifact and executable Implementation Request","Persist repository-scope verification and a durable handoff for a fresh agent"],"excluded":["Product code or runtime behavior changes","Canonical .repo-steward/state.yaml initialization until a direct checkout can compute the Repo Steward content digest","YAML authoring support from upstream issue #16","Complete offline source-project export from upstream issue #17","Adoption of upstream PR #37","GitHub Actions, pull request creation, merge, deploy, release, production data or secret changes"]},
+  "constraints":["Repository reality wins over README/history/conversation.","Do not invent a canonical content digest without direct-checkout evidence.","Avoid GitHub Actions when local/offline or repository-object verification is sufficient.","Do not expand into product feature work."],
+  "architecture_decisions":[{"id":"ADR-STEW-01","text":"Use repository-owned .repo-steward artifacts for remote bootstrap, but defer canonical state.yaml until direct-checkout snapshot reconciliation."}],
+  "research_conclusions":[{"id":"RC-01","text":"YAML authoring and complete source export are credible future candidates but are not selected."},{"id":"RC-02","text":"Feature-branch pushes do not trigger the repository CI workflow; push to main or pull_request does."}],
+  "uncertainty":{"non_blocking":["Canonical Repo Steward content digest is unavailable from this remote-only session.","No local product runtime can be executed here."],"blocking":[]},
+  "verification_plan":[
+    {"id":"VER-01","procedure":"Re-read main immediately before mutation and confirm base identity has not drifted.","executed":true},
+    {"id":"VER-02","procedure":"Read back persisted Brainstorm artifact and confirm context_only authority and candidate separation.","executed":false},
+    {"id":"VER-03","procedure":"Read back this Implementation Request and confirm identity/scope/rollback/authority fields.","executed":false},
+    {"id":"VER-04","procedure":"Compare base to implementation commit and require only .repo-steward/** paths.","executed":false},
+    {"id":"VER-05","procedure":"Local npm/typecheck/unit/browser checks.","executed":false}
+  ],
+  "rollback":{"expectation":"Delete the feature branch or revert only the scoped .repo-steward commits; no product/external runtime state changes."},
+  "authority":{"implementation":{"status":"authorized","source":{"kind":"user","locator":"conversation://active-task"}},"merge":{"status":"not_authorized","source":{"kind":"user","locator":"conversation://active-task"}},"deploy":{"status":"not_authorized","source":{"kind":"user","locator":"conversation://active-task"}},"release":{"status":"not_authorized","source":{"kind":"user","locator":"conversation://active-task"}}},
+  "prohibited_actions":["modify product code","create or run GitHub Actions","open a pull request","merge","deploy","release","production database mutation","production credential or secret changes","destructive or irreversible external actions"],
+  "external_integration_permissions":[],
+  "source_artifacts":{"buildable_spec":{"path":".repo-steward/research-to-spec.json","spec_id":"DSA-SPEC-STEW-001"},"brainstorm":{"path":".repo-steward/brainstorm.json","session_id":"DSA-BRAINSTORM-2026-09-13-001"}},
+  "produced_at":"2026-09-13T14:24:00Z"
+}

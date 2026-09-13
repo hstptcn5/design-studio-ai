@@ -1,0 +1,67 @@
+{
+  "contract_version": "0.1.0",
+  "session_id": "DSA-BRAINSTORM-2026-09-13-001",
+  "input_handoff_id": "remote-bootstrap:initial-repository-reality",
+  "project": {"id":"github:hstptcn5/design-studio-ai","name":"design-studio-ai"},
+  "objective": "Choose the safest highest-value bounded next checkpoint for a newly created fork with no durable Steward context.",
+  "accepted_decision_ids": ["AUTH-IMPLEMENT-BOUNDED","AUTH-NO-MERGE-DEPLOY-RELEASE","PREFER-LOCAL-VERIFICATION"],
+  "candidates": [
+    {
+      "id":"CAND-YAML","title":"Bounded YAML authoring support","kind":"direction","proposal":true,
+      "summary":"Implement a small first slice of upstream issue #16, starting at CLI document/operation input.",
+      "rationale":"High agent-experience value and existing JSON validators provide a clear normalization boundary.",
+      "status":"candidate",
+      "benefits":["Improves agent authoring ergonomics without changing the canonical document model."],
+      "costs":["Requires a safe YAML parser/dependency and synchronized CLI/MCP contract decisions."],
+      "technical_risks":["Parser safety, anchors/tags policy, lockfile changes, and cross-surface parity need executable verification."],
+      "product_risks":["A CLI-only slice could temporarily diverge from the repository rule that public contracts stay synchronized."],
+      "unknowns":["Preferred MCP envelope/field design and YAML subset are not yet accepted product decisions."],
+      "assumptions":["Upstream issue #16 remains a proposal, not fork-specific accepted scope."],
+      "evidence_refs":["upstream issue #16","packages/cli/src/client.ts","packages/cli/src/dsa.ts"],
+      "research_questions":["What smallest YAML boundary preserves parity without creating a second document model?"],
+      "conflicts_with_accepted_decision_ids":[],"conflicts_with_exclusions":[]
+    },
+    {
+      "id":"CAND-SOURCE-EXPORT","title":"Complete offline source handoff export","kind":"direction","proposal":true,
+      "summary":"Begin phase one of upstream issue #17 around the existing React/Vite source ZIP.",
+      "rationale":"Very high user value because it turns designs into portable editable projects.",
+      "status":"candidate",
+      "benefits":["Strong product differentiation and portability.","Directly supports handoff to developers and coding agents."],
+      "costs":["Touches export service, tokens, assets, manifest, docs and multiple public surfaces."],
+      "technical_risks":["Broad scope and fidelity/security requirements need isolated runtime tests unavailable in this session."],
+      "product_risks":["Likely collision with ongoing upstream evolution and a large acceptance surface."],
+      "unknowns":["Exact current React export ownership and a safe minimum phase require deeper direct-checkout inspection."],
+      "assumptions":["Upstream issue #17 is evidence of a possible direction, not authorization."],
+      "evidence_refs":["upstream issue #17","docs/product-brief.md"],
+      "research_questions":["What is the smallest complete offline handoff slice that can be proven in isolation?"],
+      "conflicts_with_accepted_decision_ids":[],"conflicts_with_exclusions":[]
+    },
+    {
+      "id":"CAND-CONTINUITY","title":"Remote Steward continuity bootstrap","kind":"simplification","proposal":true,
+      "summary":"Make no product change; first establish truthful durable repository context on a feature branch.",
+      "rationale":"The fork is new, has no .repo-steward/, no fork-specific branch/PR history, and this session cannot run local product verification. Durable continuity removes ambiguity without creating unverified product code.",
+      "status":"research_recommended",
+      "benefits":["Creates a safe continuity baseline for fresh agents.","Avoids product regression claims without runtime evidence.","Does not collide with upstream PR #37."],
+      "costs":["Defers visible product functionality by one checkpoint."],
+      "technical_risks":["Canonical Repo Steward content digest still needs a future direct checkout."],
+      "product_risks":["Minimal; product behavior is intentionally unchanged."],
+      "unknowns":["Which product candidate should follow after local reconciliation."],
+      "assumptions":["The active user request authorizes selecting and implementing one bounded checkpoint while withholding merge/deploy/release authority."],
+      "evidence_refs":["fork main@6b3cd5c1006ad586f10f1784aa56abd7b39d1001","absence of .repo-steward on main","no open PRs in fork","container DNS failure","upstream PR #37"],
+      "research_questions":["What durable artifacts can be truthfully persisted without fabricating a direct-checkout snapshot?"],
+      "conflicts_with_accepted_decision_ids":[],"conflicts_with_exclusions":[]
+    },
+    {
+      "id":"CAND-NO-CHANGE","title":"Stop after assessment","kind":"no_change","proposal":true,
+      "summary":"Leave the fork untouched and report candidate directions only.",
+      "rationale":"Would avoid all mutation, but fails to create the repository-owned durable continuity explicitly requested by the mission.",
+      "status":"rejected","rejection_reason":"The active mission authorizes a bounded implementation and specifically requires durable repository-owned handoff when safe.",
+      "benefits":["Zero repository mutation."],"costs":["A fresh agent would still have no durable context."],
+      "technical_risks":[],"product_risks":["Continuity remains conversation-dependent."],"unknowns":[],"assumptions":[],
+      "evidence_refs":["active task authority"],"research_questions":[],"conflicts_with_accepted_decision_ids":[],"conflicts_with_exclusions":[]
+    }
+  ],
+  "limitations": ["Brainstorm authority is context_only.","Upstream issues and PRs are signals, not accepted fork decisions.","No local checkout/runtime verification is available in this session."],
+  "authority":"context_only",
+  "produced_at":"2026-09-13T14:24:00Z"
+}
