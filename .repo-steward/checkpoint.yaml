@@ -1,22 +1,45 @@
 {
-  "id": "DSA-STEW-001",
-  "title": "Remote Steward continuity bootstrap",
-  "objective": "Establish truthful repository-owned continuity for the new fork without changing product behavior.",
-  "status": "complete",
+  "id": "DSA-STEW-002",
+  "title": "Direct-checkout canonical state initialization",
+  "objective": "Initialize canonical Repo Steward state only from a real measured working tree and validate resumable continuity.",
+  "status": "blocked",
   "scope": {
-    "included": ["Record current fork/default-branch/base identity and upstream relationship","Persist bounded Brainstorm alternatives and the selected continuity direction","Persist a buildable Research-to-Spec artifact and executable Implementation Request","Persist repository-scope verification and a durable handoff for a fresh agent"],
-    "excluded": ["Product code or runtime behavior changes","Canonical .repo-steward/state.yaml initialization until a direct checkout can compute the Repo Steward content digest","YAML authoring support from upstream issue #16","Complete offline source-project export from upstream issue #17","Adoption of upstream PR #37","GitHub Actions, pull request creation, merge, deploy, release, production data or secret changes"]
+    "included": [
+      "Reconcile live main/working-branch/PR reality",
+      "Obtain a real direct checkout of steward/continuity-bootstrap",
+      "Measure the canonical Repo Steward snapshot/content digest from actual working-tree bytes",
+      "Create .repo-steward/state.yaml only from that measured snapshot",
+      "Run canonical state, reconciliation, resume/continuity, handoff and relevant self-check validation",
+      "Persist truthful blocker evidence when the direct-checkout prerequisite is unavailable"
+    ],
+    "excluded": [
+      "Product source changes",
+      "YAML authoring",
+      "Offline source export",
+      "UI changes",
+      "Unrelated cleanup",
+      "Dependency upgrades",
+      "GitHub Actions",
+      "Pull request creation",
+      "Merge, deploy, release, production mutation, credential or secret changes"
+    ]
   },
-  "dependencies": [],
+  "dependencies": ["DSA-STEW-001"],
   "acceptance_criteria": [
-    {"id":"AC-01","description":"Durable evidence records the exact fork, upstream, default branch and base commit identities.","satisfied":true,"evidence_ids":["EV-BASE-IDENTITY","EV-MAIN-UNCHANGED"]},
-    {"id":"AC-02","description":"Brainstorm proposals remain context-only and the chosen continuity direction is explicitly separated from unselected product ideas.","satisfied":true,"evidence_ids":["EV-BRAINSTORM-READBACK"]},
-    {"id":"AC-03","description":"The buildable specification and Implementation Request preserve bounded scope, rollback, verification expectations and separate implementation versus merge/deploy/release authority.","satisfied":true,"evidence_ids":["EV-REQUEST-READBACK"]},
-    {"id":"AC-04","description":"The implementation commit changes only .repo-steward/** relative to the exact base commit.","satisfied":true,"evidence_ids":["EV-IMPLEMENTATION-SCOPE"]},
-    {"id":"AC-05","description":"Verification reports remote repository checks truthfully and records local/runtime checks as NOT_RUN rather than PASS.","satisfied":true,"evidence_ids":["EV-RUNTIME-NOT-RUN","EV-ACTIONS-NOT-RUN"]}
+    {"id":"AC-002-01","description":"Current repository identity is reconciled against live GitHub reality before canonical-state work.","satisfied":true,"evidence_ids":["EV-002-REMOTE-IDENTITY"]},
+    {"id":"AC-002-02","description":"Canonical .repo-steward/state.yaml is created from a real direct checkout and measured repository snapshot/content digest.","satisfied":false,"evidence_ids":[]},
+    {"id":"AC-002-03","description":"The recorded repository snapshot/content digest validates against the actual working tree.","satisfied":false,"evidence_ids":[]},
+    {"id":"AC-002-04","description":"Repo Steward successfully consumes/resumes from the canonical state without unresolved identity drift.","satisfied":false,"evidence_ids":[]},
+    {"id":"AC-002-05","description":"Historical DSA-STEW-001 verification remains attached to its original identities, especially 133d1dffac2a57c10baf555123defdadcfa350c7.","satisfied":true,"evidence_ids":["EV-002-HISTORICAL-PRESERVATION"]},
+    {"id":"AC-002-06","description":"No product code is changed and authority boundaries remain explicit.","satisfied":true,"evidence_ids":["EV-002-SCOPE-AUTHORITY"]},
+    {"id":"AC-002-07","description":"A durable handoff records the blocker and keeps the next product checkpoint deferred until canonical state succeeds.","satisfied":true,"evidence_ids":["EV-002-BLOCKER-HANDOFF"]}
   ],
-  "required_verification": ["repository_scope"],
-  "required_files": [".repo-steward/README.md",".repo-steward/brainstorm.json",".repo-steward/research-to-spec.json",".repo-steward/implementation-request.json",".repo-steward/evidence/repository-reality-2026-09-13.md"],
-  "risks": ["This session has connector-level repository access but no direct local checkout, so canonical Repo Steward content_digest cannot be reproduced.","No product runtime verification is established by this checkpoint."],
-  "rollback": "Delete the feature branch or revert only the scoped .repo-steward commits; no product or external runtime state is changed."
+  "required_verification": ["canonical_state_validation","repository_reconciliation","resume_continuity","handoff_validation","self_check"],
+  "required_files": [".repo-steward/state.yaml"],
+  "risks": [
+    "The active runtime has no target-repository checkout mounted.",
+    "Direct Git access cannot resolve github.com, so the target branch cannot be cloned/fetched into a working tree.",
+    "Creating content_digest from connector metadata would not satisfy the canonical Repo Steward snapshot algorithm and would be approximate."
+  ],
+  "rollback": "Revert only the DSA-STEW-002 blocker-metadata commit; DSA-STEW-001 evidence and product source remain unchanged."
 }

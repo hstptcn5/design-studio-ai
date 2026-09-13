@@ -1,34 +1,42 @@
 # Repo Steward durable context
 
-This directory was introduced by checkpoint `DSA-STEW-001` to give a fresh agent durable, repository-owned continuity for this fork.
+This directory was introduced by `DSA-STEW-001` and now records the blocked attempt to complete `DSA-STEW-002`.
 
 ## Current bounded checkpoint
 
 - Repository: `hstptcn5/design-studio-ai`
 - Base/default branch: `main@6b3cd5c1006ad586f10f1784aa56abd7b39d1001`
 - Working branch: `steward/continuity-bootstrap`
-- Checkpoint: `DSA-STEW-001` — Remote Steward continuity bootstrap
-- Product behavior changed by this checkpoint: **no**
+- Starting identity for DSA-STEW-002: `3787271b784a73d2fdf2e51a5d4f9d9850fe99ca`
+- Historical verified DSA-STEW-001 implementation identity: `133d1dffac2a57c10baf555123defdadcfa350c7`
+- Current checkpoint: `DSA-STEW-002 — Direct-checkout canonical state initialization`
+- Current checkpoint status: **BLOCKED**
+- Product behavior changed: **no**
 - Merge/deploy/release authority: **not authorized**
 
-The fork had no `.repo-steward/` context, no feature branch, and no open pull request when this checkpoint started. The fork was created from `bestagentkits/design-studio-ai` and its `main` matched the upstream HEAD above at discovery time.
+## Canonical state status
 
-## Why there is no canonical `state.yaml` yet
+`.repo-steward/state.yaml` is still intentionally absent.
 
-This session has GitHub connector access but no direct checkout: the execution container could not resolve `github.com`. Repo Steward RC computes `repository.recorded.content_digest` from the direct working tree and explicitly excludes `.repo-steward/**` from that digest. Reconstructing that digest from connector metadata alone would require inventing or approximating file bytes, which is not acceptable.
+The active runtime had no direct checkout and direct Git access failed because `github.com` could not be resolved. The current Repo Steward RC computes `repository.recorded.content_digest` by enumerating the real Git working tree and hashing actual file bytes outside `.repo-steward/**`. Connector metadata is not substituted for that canonical procedure.
 
-Therefore this checkpoint deliberately **does not create a misleading `.repo-steward/state.yaml`**. The durable files here are the authoritative remote-bootstrap evidence until a future agent with a direct checkout computes the canonical snapshot and initializes `state.yaml`.
+See `evidence/dsa-stew-002-blocked-2026-09-13.md` for the exact blocker and check statuses.
+
+## Historical evidence boundary
+
+`evidence/verification-2026-09-13.json` remains unchanged. Its DSA-STEW-001 verification belongs to the exact historical identities recorded there, especially `133d1dffac2a57c10baf555123defdadcfa350c7`. Later metadata commits must not relabel that verification.
 
 ## Durable artifacts
 
-- `checkpoint.yaml` — bounded checkpoint and acceptance contract.
-- `brainstorm.json` — context-only alternatives and trade-offs.
-- `research-to-spec.json` — selected buildable specification; readiness is not implementation/merge authority.
-- `implementation-request.json` — exact implementation authority and prohibited actions.
-- `evidence/repository-reality-2026-09-13.md` — repository observations tied to the exact base identity.
-- `evidence/verification-2026-09-13.json` — added after implementation verification.
-- `handoff.md` — added after verification/review.
+- `checkpoint.yaml` — current DSA-STEW-002 blocked checkpoint contract.
+- `brainstorm.json` — prior context-only alternatives and trade-offs.
+- `research-to-spec.json` — prior DSA-STEW-001 buildable specification.
+- `implementation-request.json` / `implementation-response.json` — prior bounded DSA-STEW-001 implementation authority/result.
+- `evidence/repository-reality-2026-09-13.md` — original repository observations.
+- `evidence/verification-2026-09-13.json` — historical DSA-STEW-001 verification, unchanged.
+- `evidence/dsa-stew-002-blocked-2026-09-13.md` — direct-checkout blocker evidence for the current checkpoint.
+- `handoff.md` — current blocked handoff.
 
 ## Safest continuation
 
-First obtain a direct checkout of this branch, recompute Repo Steward RC snapshot identity/content digest, and initialize canonical `.repo-steward/state.yaml` without relabeling the historical remote evidence. Only after that reconciliation should a product checkpoint be selected from the deferred candidates.
+Retry **DSA-STEW-002** only in an environment with a real checkout of `steward/continuity-bootstrap`. Measure the canonical snapshot/content digest using Repo Steward RC, create `state.yaml`, then run validation/reconcile/resume/handoff/self-check locally. Product work remains deferred until that succeeds.
