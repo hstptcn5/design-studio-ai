@@ -1,18 +1,17 @@
 {
-  "id": "DSA-PROD-001",
-  "title": "YAML Authoring Research & Specification",
-  "objective": "Determine whether YAML authoring should be the next product capability and produce a repository-grounded implementation-ready specification if selected.",
+  "id": "DSA-PROD-002",
+  "title": "YAML Authoring Implementation Handoff",
+  "objective": "Convert the accepted DSA-PROD-001 YAML specification into one bounded executable Implementation Request pinned to actual repository identity.",
   "status": "complete",
-  "scope": {"included": ["Architecture discovery", "Alternative analysis", "Narrow research", "Product decision", "Implementation-ready specification", "Durable handoff"], "excluded": ["Product source changes", "YAML implementation", "Dependencies", "GitHub Actions", "PR or merge", "Deploy or release"]},
-  "dependencies": ["DSA-STEW-002"],
+  "scope": {"included": ["Repository reconciliation", "Machine-readable Implementation Request", "Requirements and acceptance criteria", "Target/dependency/migration plan", "Local verification and rollback plan", "Durable handoff"], "excluded": ["Product source changes", "YAML implementation", "Dependency installation", "Feature redesign", "Actions", "PR/merge", "Deploy/release"]},
+  "dependencies": ["DSA-PROD-001"],
   "acceptance_criteria": [
-    {"id": "AC-PROD-001-01", "description": "Current executable architecture and YAML absence are established.", "satisfied": true, "evidence_ids": ["EV-PROD-001-RESEARCH"]},
-    {"id": "AC-PROD-001-02", "description": "Six bounded alternatives are compared under context-only authority.", "satisfied": true, "evidence_ids": ["EV-PROD-001-BRAINSTORM"]},
-    {"id": "AC-PROD-001-03", "description": "The YAML decision and implementation-ready specification are evidence-backed.", "satisfied": true, "evidence_ids": ["EV-PROD-001-SPEC", "EV-PROD-001-REVIEW"]},
-    {"id": "AC-PROD-001-04", "description": "Canonical handoff passes and implementation remains unauthorized.", "satisfied": true, "evidence_ids": ["EV-PROD-001-HANDOFF", "EV-PROD-001-REVIEW"]}
+    {"id": "AC-PROD-002-01", "description": "Repository and accepted specification are reconciled.", "satisfied": true, "evidence_ids": ["EV-PROD-002-RECONCILIATION"]},
+    {"id": "AC-PROD-002-02", "description": "One complete executable machine-readable Implementation Request exists.", "satisfied": true, "evidence_ids": ["EV-PROD-002-REQUEST", "EV-PROD-002-REVIEW"]},
+    {"id": "AC-PROD-002-03", "description": "Canonical state and handoff validate without granting implementation authority.", "satisfied": true, "evidence_ids": ["EV-PROD-002-HANDOFF", "EV-PROD-002-REVIEW"]}
   ],
-  "required_verification": ["research", "brainstorm", "specification", "handoff_validation"],
-  "required_files": [".repo-steward/dsa-prod-001-brainstorm.json", ".repo-steward/evidence/dsa-prod-001-research-2026-09-14.md", ".repo-steward/dsa-prod-001-spec.md", ".repo-steward/handoff.md"],
-  "risks": ["User demand is inferred, parser risk needs audit, and semantic round trips cannot retain comments."],
-  "rollback": "Revert only DSA-PROD-001 Steward research/spec metadata."
+  "required_verification": ["repository_reconciliation", "implementation_request", "handoff_validation"],
+  "required_files": [".repo-steward/dsa-prod-002-implementation-request.json", ".repo-steward/handoff.md"],
+  "risks": ["Parser dependency and cross-client surface remain future implementation risks."],
+  "rollback": "Revert only DSA-PROD-002 Steward metadata."
 }

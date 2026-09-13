@@ -1,52 +1,45 @@
-# Repo Steward handoff — DSA-PROD-001
+# Repo Steward handoff — DSA-PROD-002
 
 ## Outcome
 
-`DSA-PROD-001 — YAML Authoring Research & Specification` is **COMPLETE**. Decision: **SELECT**.
+`DSA-PROD-002 — YAML Authoring Implementation Handoff` is **COMPLETE**.
 
-Select YAML as an editable source representation and interchange format over the existing canonical `DesignDocument`. Do not make YAML canonical persistence. Product implementation has not begun and is not authorized.
+The executable machine-readable request is `.repo-steward/dsa-prod-002-implementation-request.json`, identity `DSA-IMPL-YAML-001`. It is pinned to `https://github.com/hstptcn5/design-studio-ai.git`, branch `steward/continuity-bootstrap`, base `956421bd8c927f3e0d26c5bbe9d0824f400ce387`, and product-content digest `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c`.
 
-## DSA-STEW-002 closure
+## Accepted implementation scope
 
-The four expected metadata artifacts were committed and pushed on `steward/continuity-bootstrap` as `1839d1a964e51fa99ad70b2c1ad030c640c2a1f0`. From the clean tree, Repo Steward measured the unchanged content digest `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c` and correct branch. Resume reported `HEAD_DRIFT` and `HISTORICAL_EVIDENCE`, as required by the RC contract after a metadata-only commit; no content or branch drift exists.
+The future MVP adds one strict shared YAML codec; an explicit editor source workflow; browser import/export; authenticated server YAML export; CLI YAML file/stdin/get/import/export/offline-output support; synchronized REST/MCP/WebMCP capability discovery and owning documentation; and focused unit, server, CLI, browser, security, accessibility, documentation, and regression tests.
 
-## Architecture result
+Canonical `DesignDocument`, JSON database storage, ownership, assets, schema versions, optimistic revisions, rendering, publication, and save services remain unchanged.
 
-The strict Zod `DesignDocument` versions 1/2 are the executable source of truth. Validated objects are stored as JSON text with owner-scoped optimistic revisions. Browser editor, REST, MCP, WebMCP, and CLI converge on shared document/operation validators and server save services. Rendering consumes validated objects. Provider generation returns JSON proposals for explicit review. JSON is the only lossless full-document interchange; SVG/HTML imports are partial and other exports are render/projection formats. No YAML product support or parser dependency exists.
+Expected new files are `src/shared/document-yaml.ts`, `src/app/yaml-source-dialog.tsx`, `src/app/yaml-source.css`, `tests/document-yaml.test.ts`, and `tests/yaml-source-ui.spec.ts`. Existing expected owners are listed precisely in the request.
 
-Detailed evidence: `evidence/dsa-prod-001-research-2026-09-14.md`.
+## Dependency and migration
 
-## Alternatives and decision
+Expected dependency: exact root runtime dependency `yaml@2.9.1` plus `package-lock.json`, with custom tags disabled and anchors/aliases independently rejected. No database, document-schema, stored-project, or publication migration is expected.
 
-Compared editable YAML source, YAML import/export only, canonical YAML, generated read-only YAML, improving the visual editor without YAML, and defer/no-build. The selected editable-source option provides the strongest validation and preview loop while preserving all existing contracts. Canonical YAML was rejected because it creates migration, compatibility, and permanent maintenance cost without unique user value.
+## Verification contract
 
-Brainstorm remains `context_only`: `dsa-prod-001-brainstorm.json`.
+The request requires focused codec, export/security, CLI, UI mobile/desktop, and documentation tests followed by CLI build, typecheck, full unit tests, production build, and the repository-selected E2E lane. It explicitly covers valid/invalid parsing, prohibited features, schema validation, semantic JSON/YAML round trips, preview non-mutation, revision-checked apply, stale conflicts, import/export, CLI, and existing JSON regression. GitHub Actions are not required.
 
-## Proposed bounded behavior
+## Exclusions and risks
 
-Add an explicitly applied YAML source surface with Validate, Preview, Apply and save, Reset, and Download. Add `.yaml`/`.yml` native-document import and browser/server/CLI YAML export/input. Convert through one strict shared codec into the existing `DesignDocument`; persist JSON only. Reject aliases, anchors, merge keys, tags, duplicate/non-string keys, multiple documents, non-JSON values, unsafe/prototype keys, and excessive size/depth. Guarantee semantic—not lexical—round trips; comments and formatting are not persisted.
+Excluded: canonical YAML storage, comment/format persistence, collaboration/text merge, autosave, raw YAML REST bodies, a second schema/migration system, AI provider changes, general configuration-language features, unrelated redesign/refactors, and all implementation during this checkpoint.
 
-Full specification and acceptance criteria: `dsa-prod-001-spec.md`.
+Non-blocking risks are parser/resource safety, comment-persistence expectations, full-document concurrency, cross-client drift, and mobile accessibility. The request includes concrete mitigations and resolution rules for its three non-blocking questions. No blocking uncertainty remains.
 
-## Unresolved risks
+## Validation and authority
 
-- User demand is inferred rather than measured.
-- The parser dependency must be pinned and audited during implementation.
-- Exact editor component/accessibility details need focused UI review.
-- Optional provider-generated YAML is deferred.
-- Final telemetry names and input ceilings must be reconciled with their existing owners.
+PASS: actual repository reconciliation, machine-readable request validation/review, canonical state validation, durable handoff validation, and metadata-only scope review.
 
-## Verification and authority
+NOT_RUN: product tests/build/E2E because product implementation did not occur. GitHub Actions, PR, merge, deploy, and release were not performed.
 
-PASS: repository research, six-option brainstorm, implementation-ready specification review, metadata-only scope review, canonical state validation, and durable handoff validation.
-
-NOT_RUN: product tests, build, browser tests, GitHub Actions, deployment, and release because no product files changed.
-
-- Research/specification: **AUTHORIZED and complete**.
-- YAML product implementation: **NOT AUTHORIZED**.
-- PR, merge, deploy, release: **NOT AUTHORIZED / not performed**.
+- Implementation Request creation: **AUTHORIZED and complete**.
+- Request status: **EXECUTABLE**, contingent on fresh reconciliation and explicit implementation authorization.
+- Product implementation: **NOT AUTHORIZED**.
+- PR, merge, deploy, release: **NOT AUTHORIZED**.
 - `READY_TO_MERGE: NO`.
 
-## Next checkpoint
+## Recommended next checkpoint
 
-With separate user authorization, create `DSA-PROD-002 — YAML Authoring Implementation Handoff` and implement only the bounded first slice in `dsa-prod-001-spec.md`. Reconcile the post-metadata-commit HEAD before implementation and keep all public clients and owning documentation synchronized.
+`DSA-PROD-003 — YAML Authoring MVP Implementation`, only after explicit user authorization. Execute `DSA-IMPL-YAML-001` without redesign or scope expansion and stop before merge/deploy/release unless separately authorized.

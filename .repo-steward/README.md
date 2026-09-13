@@ -19,7 +19,7 @@ This directory contains canonical Repo Steward state and historical continuity a
 
 The earlier blocked attempt remains in `evidence/dsa-stew-002-blocked-2026-09-13.md` as historical evidence, not the current result.
 
-## Current product checkpoint
+## Completed product decision
 
 `DSA-PROD-001 — YAML Authoring Research & Specification` is **COMPLETE** with decision **SELECT**. The selected capability is strict YAML as an editable source/interchange representation over the existing canonical `DesignDocument`, with JSON persistence unchanged and semantic rather than lexical round trips.
 
@@ -28,4 +28,8 @@ The earlier blocked attempt remains in `evidence/dsa-stew-002-blocked-2026-09-13
 - Specification: `dsa-prod-001-spec.md`
 - Current handoff: `handoff.md`
 
-The next checkpoint is a separately authorized `DSA-PROD-002 — YAML Authoring Implementation Handoff`. Product implementation, PR, merge, deploy, and release remain unauthorized.
+## Current checkpoint
+
+`DSA-PROD-002 — YAML Authoring Implementation Handoff` is **COMPLETE**. The executable request is `dsa-prod-002-implementation-request.json` (`DSA-IMPL-YAML-001`), pinned to base `956421bd8c927f3e0d26c5bbe9d0824f400ce387`.
+
+The recommended next checkpoint is `DSA-PROD-003 — YAML Authoring MVP Implementation`, requiring separate explicit authorization. Product implementation, PR, merge, deploy, and release remain unauthorized.
