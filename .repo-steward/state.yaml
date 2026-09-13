@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "project": {
+    "name": "design-studio-ai",
+    "objective": "An open-source AI design studio with durable human and agent workflows across web, API, MCP, WebMCP, and CLI clients.",
+    "architecture": "TypeScript web application and shared contracts with Node and Cloudflare server runtimes, renderer tooling, and a separate CLI package.",
+    "platform": "Node.js 24+, browser, Node server, and Cloudflare Workers"
+  },
+  "repository": {
+    "identity": "https://github.com/hstptcn5/design-studio-ai.git",
+    "default_branch": "main",
+    "current_branch": "steward/continuity-bootstrap",
+    "recorded": {
+      "head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5",
+      "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"
+    }
+  },
+  "current": {
+    "milestone": "Steward continuity bootstrap",
+    "task": "Initialize canonical state from the direct checkout",
+    "phase": "HANDOFF",
+    "checkpoint": {
+      "id": "DSA-STEW-002",
+      "title": "Direct-checkout canonical state initialization",
+      "objective": "Initialize canonical Repo Steward state only from a real measured working tree and validate resumable continuity.",
+      "status": "complete",
+      "scope": {
+        "included": [
+          "Reconcile actual repository identity and working-tree state",
+          "Measure the canonical repository content digest from actual file bytes",
+          "Create and validate .repo-steward/state.yaml",
+          "Run repository reconciliation, resume/continuity, handoff validation, and relevant Repo Steward self-checks",
+          "Preserve DSA-STEW-001 verification at its exact historical identities",
+          "Update durable Repo Steward handoff metadata"
+        ],
+        "excluded": [
+          "Product source or behavior changes",
+          "YAML authoring",
+          "Offline source export",
+          "Dependency upgrades",
+          "GitHub Actions",
+          "Pull request creation or merge",
+          "Deployment, release, production mutation, and credential or secret changes"
+        ]
+      },
+      "dependencies": [],
+      "acceptance_criteria": [
+        {"id": "AC-002-01", "description": "Actual local repository identity, branch, HEAD, dirty state, and canonical content digest are measured and recorded.", "satisfied": true, "evidence_ids": ["EV-002-REPOSITORY-RECONCILIATION"]},
+        {"id": "AC-002-02", "description": "Canonical state validates against the Repo Steward RC schema and semantic contract.", "satisfied": true, "evidence_ids": ["EV-002-CANONICAL-STATE"]},
+        {"id": "AC-002-03", "description": "Repository reconciliation and resume confirm the recorded branch, HEAD, and content digest while explicitly classifying in-scope Steward metadata dirtiness.", "satisfied": true, "evidence_ids": ["EV-002-REPOSITORY-RECONCILIATION", "EV-002-RESUME-CONTINUITY"]},
+        {"id": "AC-002-04", "description": "The durable handoff passes the current Repo Steward handoff gate.", "satisfied": true, "evidence_ids": ["EV-002-HANDOFF-VALIDATION"]},
+        {"id": "AC-002-05", "description": "Relevant Repo Steward self-checks pass locally and offline.", "satisfied": true, "evidence_ids": ["EV-002-SELF-CHECK"]},
+        {"id": "AC-002-06", "description": "Historical DSA-STEW-001 verification remains unchanged and bound to implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7.", "satisfied": true, "evidence_ids": ["EV-002-HISTORICAL-PRESERVATION"]},
+        {"id": "AC-002-07", "description": "Only Repo Steward metadata changes, with merge, deploy, and release still not authorized.", "satisfied": true, "evidence_ids": ["EV-002-REVIEW"]}
+      ],
+      "required_verification": [
+        "canonical_state_validation",
+        "repository_reconciliation",
+        "resume_continuity",
+        "handoff_validation",
+        "self_check"
+      ],
+      "required_files": [".repo-steward/state.yaml"],
+      "risks": [
+        "The content digest excludes .repo-steward metadata, ignored files, environment, dependencies, and runtime state by contract.",
+        "Metadata-only commits after verification will cause explicit HEAD drift even when product content is unchanged."
+      ],
+      "rollback": "Revert only the DSA-STEW-002 Repo Steward metadata changes; preserve all product files and historical DSA-STEW-001 evidence."
+    }
+  },
+  "completed": [],
+  "constraints": [
+    {"id": "C-DSA-001", "classification": "DECIDED", "text": "Scope is Repo Steward metadata and state only; do not modify product code or start YAML authoring.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-002", "classification": "DECIDED", "text": "Do not use GitHub Actions; verify locally and offline.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-003", "classification": "DECIDED", "text": "Merge, deploy, and release are not authorized.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-004", "classification": "DECIDED", "text": "Historical DSA-STEW-001 verification remains bound to exact implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7 and must not be relabeled to later metadata or state commits.", "source": "User authorization for DSA-STEW-002"}
+  ],
+  "decisions": [],
+  "facts": [
+    {"id": "F-DSA-001", "classification": "OBSERVED", "text": "The direct checkout began clean on steward/continuity-bootstrap at aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5.", "source": "git status --short --branch; git rev-parse HEAD; git branch --show-current", "severity": "low"},
+    {"id": "F-DSA-002", "classification": "OBSERVED", "text": "Repo Steward RC d53530028f79698d7ab6f0d5724ed85a1c94ccbe measured canonical content digest 691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c from actual checkout bytes.", "source": "python D:/build2026/repo-steward/scripts/steward.py snapshot D:/build2026/design-studio-ai", "severity": "low"},
+    {"id": "F-DSA-003", "classification": "OBSERVED", "text": "The committed and current Git blob hashes of .repo-steward/evidence/verification-2026-09-13.json are both 02fe6a7c917030845d18909fd24de91e898f1e2c.", "source": "git show 3787271:.repo-steward/evidence/verification-2026-09-13.json | git hash-object --stdin; git hash-object .repo-steward/evidence/verification-2026-09-13.json", "severity": "low"}
+  ],
+  "blockers": [],
+  "risks": [
+    {"id": "R-DSA-001", "classification": "OBSERVED", "text": "Canonical content identity excludes .repo-steward metadata and therefore must be paired with exact HEAD reconciliation.", "source": "Repo Steward RC rules/state.md and scripts/steward.py"}
+  ],
+  "evidence": [
+    {
+      "id": "EV-002-CANONICAL-STATE", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "canonical_state_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate project-state .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:00Z", "summary": "Repo Steward RC schema and semantic validation returned no errors.",
+      "limitations": ["Validation establishes contract consistency, not product runtime behavior."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-REPOSITORY-RECONCILIATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "repository_reconciliation",
+      "procedure": "git identity/status inspection and python D:/build2026/repo-steward/scripts/steward.py snapshot D:/build2026/design-studio-ai",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:01Z", "summary": "Actual origin, branch, HEAD, and content digest match canonical state; only authorized .repo-steward metadata is dirty.",
+      "limitations": ["The RC snapshot excludes .repo-steward/** and reports Git dirtiness separately."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-RESUME-CONTINUITY", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "resume_continuity",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py resume D:/build2026/design-studio-ai",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:02Z", "summary": "Resume consumed canonical state, matched HEAD/content/branch, and fail-closed on the expected authorized Steward metadata dirtiness.",
+      "limitations": ["Resume returns RECONCILE while the new and updated .repo-steward files remain uncommitted; this is expected protection, not product-content drift."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-HANDOFF-VALIDATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:03Z", "summary": "The canonical durable handoff declaration passed the Repo Steward RC new-persistence gate.",
+      "limitations": ["The gate validates declared obligations and references; it does not independently prove agent honesty."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-SELF-CHECK", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "self_check",
+      "procedure": "From Repo Steward RC d53530028f79698d7ab6f0d5724ed85a1c94ccbe run python scripts/self_check.py and python -m unittest discover -s tests -v",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:04Z", "summary": "Repo Steward self-check exited successfully and all 77 unit tests passed locally.",
+      "limitations": ["Repo Steward's own canonical state reports its pre-existing HEAD drift and historical evidence; the self-check remains exit-zero."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-HISTORICAL-PRESERVATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "historical_preservation",
+      "procedure": "Compare Git blob hashes for current .repo-steward/evidence/verification-2026-09-13.json and the file at commit 3787271.",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:05Z", "summary": "Both Git blob hashes are 02fe6a7c917030845d18909fd24de91e898f1e2c; the historical record still names implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7.",
+      "limitations": ["This proves byte preservation and identity labeling; it does not rerun or upgrade DSA-STEW-001 checks."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-REVIEW", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "review",
+      "procedure": "Review git diff/status, canonical state, historical verification boundary, and user authority for DSA-STEW-002.",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:06Z", "summary": "Only .repo-steward metadata changed; no product code, Actions, PR, merge, deploy, or release action occurred.",
+      "limitations": ["Bounded self-review for Steward metadata only; no product runtime claims are made."], "executed": true, "interrupted": false
+    }
+  ],
+  "last_reviewed_commit": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5",
+  "next": {
+    "recommended_action": "Plan a bounded YAML-authoring research/spec checkpoint without beginning implementation unless separately authorized.",
+    "reason": "DSA-STEW-002 is complete; the previously identified CAND-YAML product direction is the next bounded candidate, but implementation remains unauthorized."
+  },
+  "updated_at": "2026-09-13T17:04:06Z",
+  "handoff": {
+    "verifications": [
+      {"evidence_id": "EV-002-CANONICAL-STATE", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-REPOSITORY-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-RESUME-CONTINUITY", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-HANDOFF-VALIDATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-SELF-CHECK", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-HISTORICAL-PRESERVATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false},
+      {"evidence_id": "EV-002-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"}, "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "historical": false}
+    ],
+    "findings": [
+      {"collection": "facts", "id": "F-DSA-001", "severity": "low"},
+      {"collection": "facts", "id": "F-DSA-002", "severity": "low"},
+      {"collection": "facts", "id": "F-DSA-003", "severity": "low"}
+    ],
+    "next_before": {
+      "recommended_action": "Complete DSA-STEW-002 local validation and durable handoff before selecting product work.",
+      "reason": "Canonical state has been initialized but its required verification is still in progress."
+    }
+  }
+}

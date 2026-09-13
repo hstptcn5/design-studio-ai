@@ -1,42 +1,24 @@
 # Repo Steward durable context
 
-This directory was introduced by `DSA-STEW-001` and now records the blocked attempt to complete `DSA-STEW-002`.
+This directory contains canonical Repo Steward state and historical continuity artifacts for `hstptcn5/design-studio-ai`.
 
-## Current bounded checkpoint
+## Current checkpoint
 
-- Repository: `hstptcn5/design-studio-ai`
-- Base/default branch: `main@6b3cd5c1006ad586f10f1784aa56abd7b39d1001`
-- Working branch: `steward/continuity-bootstrap`
-- Starting identity for DSA-STEW-002: `3787271b784a73d2fdf2e51a5d4f9d9850fe99ca`
-- Historical verified DSA-STEW-001 implementation identity: `133d1dffac2a57c10baf555123defdadcfa350c7`
-- Current checkpoint: `DSA-STEW-002 — Direct-checkout canonical state initialization`
-- Current checkpoint status: **BLOCKED**
+- `DSA-STEW-002 — Direct-checkout canonical state initialization`: **COMPLETE**
+- Branch and recorded HEAD: `steward/continuity-bootstrap@aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5`
+- Canonical content digest: `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c`
+- Repo Steward RC: `hstptcn5/repo-steward@d53530028f79698d7ab6f0d5724ed85a1c94ccbe`
 - Product behavior changed: **no**
-- Merge/deploy/release authority: **not authorized**
+- Merge, deploy, and release: **not authorized**
 
-## Canonical state status
-
-`.repo-steward/state.yaml` is still intentionally absent.
-
-The active runtime had no direct checkout and direct Git access failed because `github.com` could not be resolved. The current Repo Steward RC computes `repository.recorded.content_digest` by enumerating the real Git working tree and hashing actual file bytes outside `.repo-steward/**`. Connector metadata is not substituted for that canonical procedure.
-
-See `evidence/dsa-stew-002-blocked-2026-09-13.md` for the exact blocker and check statuses.
+`.repo-steward/state.yaml` is the canonical version-1 state. Its identity was measured from the direct checkout and actual file bytes. The contract excludes `.repo-steward/**` from content identity while Git still reports these uncommitted metadata edits as a protected dirty worktree during resume.
 
 ## Historical evidence boundary
 
-`evidence/verification-2026-09-13.json` remains unchanged. Its DSA-STEW-001 verification belongs to the exact historical identities recorded there, especially `133d1dffac2a57c10baf555123defdadcfa350c7`. Later metadata commits must not relabel that verification.
+`evidence/verification-2026-09-13.json` is unchanged. DSA-STEW-001 verification remains attached to its recorded historical identities, especially `133d1dffac2a57c10baf555123defdadcfa350c7`; DSA-STEW-002 does not relabel or upgrade it.
 
-## Durable artifacts
+The earlier blocked attempt remains in `evidence/dsa-stew-002-blocked-2026-09-13.md` as historical evidence, not the current result.
 
-- `checkpoint.yaml` — current DSA-STEW-002 blocked checkpoint contract.
-- `brainstorm.json` — prior context-only alternatives and trade-offs.
-- `research-to-spec.json` — prior DSA-STEW-001 buildable specification.
-- `implementation-request.json` / `implementation-response.json` — prior bounded DSA-STEW-001 implementation authority/result.
-- `evidence/repository-reality-2026-09-13.md` — original repository observations.
-- `evidence/verification-2026-09-13.json` — historical DSA-STEW-001 verification, unchanged.
-- `evidence/dsa-stew-002-blocked-2026-09-13.md` — direct-checkout blocker evidence for the current checkpoint.
-- `handoff.md` — current blocked handoff.
+## Next bounded product checkpoint
 
-## Safest continuation
-
-Retry **DSA-STEW-002** only in an environment with a real checkout of `steward/continuity-bootstrap`. Measure the canonical snapshot/content digest using Repo Steward RC, create `state.yaml`, then run validation/reconcile/resume/handoff/self-check locally. Product work remains deferred until that succeeds.
+The next candidate is a bounded YAML-authoring research/spec checkpoint derived from `CAND-YAML`. This is a recommendation only; product implementation remains unauthorized.
