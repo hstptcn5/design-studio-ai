@@ -2,42 +2,21 @@
   "id": "DSA-STEW-001",
   "title": "Remote Steward continuity bootstrap",
   "objective": "Establish truthful repository-owned continuity for the new fork without changing product behavior.",
-  "status": "review_required",
+  "status": "complete",
   "scope": {
-    "included": [
-      "Record current fork/default-branch/base identity and upstream relationship",
-      "Persist bounded Brainstorm alternatives and the selected continuity direction",
-      "Persist a buildable Research-to-Spec artifact and executable Implementation Request",
-      "Persist repository-scope verification and a durable handoff for a fresh agent"
-    ],
-    "excluded": [
-      "Product code or runtime behavior changes",
-      "Canonical .repo-steward/state.yaml initialization until a direct checkout can compute the Repo Steward content digest",
-      "YAML authoring support from upstream issue #16",
-      "Complete offline source-project export from upstream issue #17",
-      "Adoption of upstream PR #37",
-      "GitHub Actions, pull request creation, merge, deploy, release, production data or secret changes"
-    ]
+    "included": ["Record current fork/default-branch/base identity and upstream relationship","Persist bounded Brainstorm alternatives and the selected continuity direction","Persist a buildable Research-to-Spec artifact and executable Implementation Request","Persist repository-scope verification and a durable handoff for a fresh agent"],
+    "excluded": ["Product code or runtime behavior changes","Canonical .repo-steward/state.yaml initialization until a direct checkout can compute the Repo Steward content digest","YAML authoring support from upstream issue #16","Complete offline source-project export from upstream issue #17","Adoption of upstream PR #37","GitHub Actions, pull request creation, merge, deploy, release, production data or secret changes"]
   },
   "dependencies": [],
   "acceptance_criteria": [
-    {"id":"AC-01","description":"Durable evidence records the exact fork, upstream, default branch and base commit identities.","satisfied":false,"evidence_ids":[]},
-    {"id":"AC-02","description":"Brainstorm proposals remain context-only and the chosen continuity direction is explicitly separated from unselected product ideas.","satisfied":false,"evidence_ids":[]},
-    {"id":"AC-03","description":"The buildable specification and Implementation Request preserve bounded scope, rollback, verification expectations and separate implementation versus merge/deploy/release authority.","satisfied":false,"evidence_ids":[]},
-    {"id":"AC-04","description":"The implementation commit changes only .repo-steward/** relative to the exact base commit.","satisfied":false,"evidence_ids":[]},
-    {"id":"AC-05","description":"Verification reports remote repository checks truthfully and records local/runtime checks as NOT_RUN rather than PASS.","satisfied":false,"evidence_ids":[]}
+    {"id":"AC-01","description":"Durable evidence records the exact fork, upstream, default branch and base commit identities.","satisfied":true,"evidence_ids":["EV-BASE-IDENTITY","EV-MAIN-UNCHANGED"]},
+    {"id":"AC-02","description":"Brainstorm proposals remain context-only and the chosen continuity direction is explicitly separated from unselected product ideas.","satisfied":true,"evidence_ids":["EV-BRAINSTORM-READBACK"]},
+    {"id":"AC-03","description":"The buildable specification and Implementation Request preserve bounded scope, rollback, verification expectations and separate implementation versus merge/deploy/release authority.","satisfied":true,"evidence_ids":["EV-REQUEST-READBACK"]},
+    {"id":"AC-04","description":"The implementation commit changes only .repo-steward/** relative to the exact base commit.","satisfied":true,"evidence_ids":["EV-IMPLEMENTATION-SCOPE"]},
+    {"id":"AC-05","description":"Verification reports remote repository checks truthfully and records local/runtime checks as NOT_RUN rather than PASS.","satisfied":true,"evidence_ids":["EV-RUNTIME-NOT-RUN","EV-ACTIONS-NOT-RUN"]}
   ],
   "required_verification": ["repository_scope"],
-  "required_files": [
-    ".repo-steward/README.md",
-    ".repo-steward/brainstorm.json",
-    ".repo-steward/research-to-spec.json",
-    ".repo-steward/implementation-request.json",
-    ".repo-steward/evidence/repository-reality-2026-09-13.md"
-  ],
-  "risks": [
-    "This session has connector-level repository access but no direct local checkout, so canonical Repo Steward content_digest cannot be reproduced.",
-    "No product runtime verification is established by this checkpoint."
-  ],
+  "required_files": [".repo-steward/README.md",".repo-steward/brainstorm.json",".repo-steward/research-to-spec.json",".repo-steward/implementation-request.json",".repo-steward/evidence/repository-reality-2026-09-13.md"],
+  "risks": ["This session has connector-level repository access but no direct local checkout, so canonical Repo Steward content_digest cannot be reproduced.","No product runtime verification is established by this checkpoint."],
   "rollback": "Delete the feature branch or revert only the scoped .repo-steward commits; no product or external runtime state is changed."
 }
