@@ -1,0 +1,499 @@
+{
+  "version": 1,
+  "project": {
+    "name": "design-studio-ai",
+    "objective": "An open-source AI design studio with durable human and agent workflows across web, API, MCP, WebMCP, and CLI clients.",
+    "architecture": "TypeScript web application and shared contracts with Node and Cloudflare server runtimes, renderer tooling, and a separate CLI package.",
+    "platform": "Node.js 24+, browser, Node server, and Cloudflare Workers"
+  },
+  "repository": {
+    "identity": "https://github.com/hstptcn5/design-studio-ai.git",
+    "default_branch": "main",
+    "current_branch": "steward/continuity-bootstrap",
+    "recorded": {
+      "head": "1769de9258c6be285162a3cee9259600871462c1",
+      "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"
+    }
+  },
+  "current": {
+    "milestone": "YAML MVP pull-request handoff",
+    "task": "Open and reconcile a review-only pull request without merge, deploy, release, or product changes",
+    "phase": "HANDOFF",
+    "checkpoint": {
+      "id": "DSA-PR-001",
+      "title": "YAML MVP PR-only Handoff",
+      "objective": "Create and reconcile a review-only pull request for the technically complete YAML MVP while preserving exact evidence identities and absent merge authority.",
+      "status": "complete",
+      "scope": {
+        "included": ["Live GitHub repository/default-branch reconciliation", "Merge-base and branch identity verification", "Pull request creation", "Accurate PR description", "PR diff and status inspection", "PR identity response and durable handoff"],
+        "excluded": ["Product or test code changes", "New features or architecture", "Additional verification", "GitHub Actions manipulation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]
+      },
+      "dependencies": ["DSA-PROD-005"],
+      "acceptance_criteria": [
+        {"id": "AC-PR-001-01", "description": "Live GitHub default branch, base SHA, merge base, head branch, head SHA, and clean remote parity are reconciled before PR creation.", "satisfied": true, "evidence_ids": ["EV-PR-001-RECONCILIATION"]},
+        {"id": "AC-PR-001-02", "description": "An open non-draft PR uses the authorized title and accurately describes capability, safety, persistence, dependency, verification, limitations, and authority.", "satisfied": true, "evidence_ids": ["EV-PR-001-CREATION"]},
+        {"id": "AC-PR-001-03", "description": "The resulting PR diff and identities match the intended YAML MVP plus Steward evidence history with no unexpected product scope and no merge.", "satisfied": true, "evidence_ids": ["EV-PR-001-REVIEW"]},
+        {"id": "AC-PR-001-04", "description": "Exact historical and product verification identities remain unchanged, and durable PR handoff validation passes.", "satisfied": true, "evidence_ids": ["EV-PR-001-HISTORICAL", "EV-PR-001-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "pull_request_creation", "review", "historical_preservation", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-pr-001-handoff-response.json", ".repo-steward/handoff.md"],
+      "risks": ["PR creation may trigger repository-configured GitHub checks that were not manually invoked.", "The PR includes the full Steward bootstrap/evidence history because the authorized branch diverges from main before YAML implementation."],
+      "rollback": "Close PR #1 and revert only DSA-PR-001 Steward metadata if the handoff must be withdrawn; do not rewrite product or historical evidence."
+    }
+  },
+  "completed": [
+    {
+      "id": "DSA-PROD-005", "title": "YAML MVP Merge-Readiness Closure", "objective": "Close the remaining repository-wide gate by proving the Windows symlink failure is a host-capability limitation and running the full unit suite on a capable supported Node 24 host.", "status": "complete",
+      "scope": {"included": ["Push existing DSA-PROD-004 metadata commit", "Windows and WSL2 symlink-capability validation", "Supported Node 24 isolated structured-export reproduction", "Full npm test on capable Linux host", "Review conclusion reconfirmation", "Historical evidence preservation", "Closure response and durable handoff"], "excluded": ["Product code changes", "New YAML features or redesign", "Test weakening", "Unrelated defect repair", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]},
+      "dependencies": ["DSA-PROD-004"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-005-01", "description": "The exact clean branch and sole expected unpushed DSA-PROD-004 metadata commit are reconciled and pushed without a PR.", "satisfied": true, "evidence_ids": ["EV-PROD-005-RECONCILIATION"]},
+        {"id": "AC-PROD-005-02", "description": "The Windows symlink failure remains preserved as BLOCKED_HOST_CAPABILITY and the same test passes on a capable WSL2 Linux environment at the exact product identity.", "satisfied": true, "evidence_ids": ["EV-PROD-005-HOST"]},
+        {"id": "AC-PROD-005-03", "description": "The full npm test suite passes under supported Node 24 on the capable host without weakening tests or changing product code.", "satisfied": true, "evidence_ids": ["EV-PROD-005-FULL-TEST"]},
+        {"id": "AC-PROD-005-04", "description": "The prior YAML review, focused verification, cross-browser evidence, product identity, and historical identities remain valid and unchanged.", "satisfied": true, "evidence_ids": ["EV-PROD-005-REVIEW", "EV-PROD-005-HISTORICAL"]},
+        {"id": "AC-PROD-005-05", "description": "Closure artifacts separately declare technical readiness and absent merge authority, and pass durable handoff validation.", "satisfied": true, "evidence_ids": ["EV-PROD-005-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "host_capability", "full_test_gate", "review", "historical_preservation", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-prod-005-closure-response.json", ".repo-steward/handoff.md"],
+      "risks": ["The direct Windows host remains unable to create the test symlink without an OS policy change.", "The complete repository-selected 35-spec E2E matrix was not run.", "The existing root dependency graph reports eight high-severity audit findings."],
+      "rollback": "Revert only the DSA-PROD-005 Steward closure metadata commit; preserve product commit 1769de9258c6be285162a3cee9259600871462c1 and all earlier evidence."
+    },
+    {
+      "id": "DSA-PROD-004", "title": "YAML Authoring MVP Review and Node 24/Cross-Browser Gate", "objective": "Independently review product commit 1769de9258c6be285162a3cee9259600871462c1 and verify it under supported Node 24 and practical Chromium, Firefox, and WebKit coverage.", "status": "complete",
+      "scope": {"included": ["Remote durability of existing DSA-PROD-003 commits", "Independent bounded implementation review", "Supported Node 24 dependency/typecheck/build/test gate", "Chromium, Firefox, WebKit, and mobile YAML critical-path verification", "Historical evidence preservation", "Review response and durable handoff"], "excluded": ["New YAML features", "Design expansion", "Opportunistic cleanup", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]},
+      "dependencies": ["DSA-PROD-003"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-004-01", "description": "The exact branch, Steward HEAD, product identity, digest, clean state, and two-commit remote durability scope are reconciled and pushed without a PR.", "satisfied": true, "evidence_ids": ["EV-PROD-004-RECONCILIATION"]},
+        {"id": "AC-PROD-004-02", "description": "Independent review covers the accepted YAML codec, clients, UI, security, accessibility, regressions, dependency, and scope without finding or inventing a material defect.", "satisfied": true, "evidence_ids": ["EV-PROD-004-REVIEW"]},
+        {"id": "AC-PROD-004-03", "description": "Dependency integrity, typecheck, builds, focused tests, and the full unit suite are rerun under supported Node 24 with exact PASS/BLOCKED classification.", "satisfied": true, "evidence_ids": ["EV-PROD-004-NODE24"]},
+        {"id": "AC-PROD-004-04", "description": "The YAML critical path passes in Chromium, Firefox, WebKit, and responsive mobile coverage, including invalid input, persistence/reload, download, conflict, and import.", "satisfied": true, "evidence_ids": ["EV-PROD-004-BROWSERS"]},
+        {"id": "AC-PROD-004-05", "description": "Historical identities, product verification binding, authority boundaries, review response, and durable handoff are preserved and validated.", "satisfied": true, "evidence_ids": ["EV-PROD-004-HISTORICAL", "EV-PROD-004-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "review", "node24_gate", "cross_browser", "historical_preservation", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-prod-004-review-response.json", ".repo-steward/handoff.md"],
+      "risks": ["A Windows host-permission EPERM still prevents an all-green repository unit gate.", "The complete repository-selected 35-spec E2E matrix was not run.", "The existing root dependency graph reports eight high-severity audit findings."],
+      "rollback": "Revert only the DSA-PROD-004 Steward review metadata commit; the reviewed product commit and already-pushed DSA-PROD-003 history remain unchanged."
+    },
+    {
+      "id": "DSA-PROD-003", "title": "YAML Authoring MVP Implementation", "objective": "Implement the bounded DSA-IMPL-YAML-001 request while preserving canonical JSON persistence, revision checks, ownership, and excluded authority.", "status": "complete",
+      "scope": {"included": ["Shared strict YAML codec", "Editor validate/preview/apply/reset/download", "Browser YAML import/export", "Authenticated server YAML export", "CLI YAML flows", "API/MCP/WebMCP/docs/skill inventories", "Focused local verification", "Implementation Response and durable handoff"], "excluded": ["Canonical YAML storage", "Comment or formatting persistence", "Collaborative YAML editing", "Raw YAML REST bodies", "Provider changes", "Unrelated redesign/refactors", "GitHub Actions", "Pull request, merge, deploy, or release"]},
+      "dependencies": ["DSA-PROD-002"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-003-01", "description": "Shared YAML parsing and serialization enforce accepted safety and DesignDocument semantics.", "satisfied": true, "evidence_ids": ["EV-PROD-003-CODEC"]},
+        {"id": "AC-PROD-003-02", "description": "Browser, server, CLI, API, MCP, WebMCP, docs and skill surfaces use or advertise the accepted YAML flows without parallel persistence.", "satisfied": true, "evidence_ids": ["EV-PROD-003-CLIENTS"]},
+        {"id": "AC-PROD-003-03", "description": "Editor preview is non-mutating and apply is explicit, revision guarded, accessible, responsive, and conflict preserving.", "satisfied": true, "evidence_ids": ["EV-PROD-003-UI"]},
+        {"id": "AC-PROD-003-04", "description": "Relevant local verification passes or records explicit BLOCKED/NOT_RUN status without fabricated success.", "satisfied": true, "evidence_ids": ["EV-PROD-003-GATES"]},
+        {"id": "AC-PROD-003-05", "description": "Scope, historical identities, authority boundaries, response, and handoff are preserved and reviewed.", "satisfied": true, "evidence_ids": ["EV-PROD-003-RECONCILIATION", "EV-PROD-003-REVIEW", "EV-PROD-003-HISTORICAL", "EV-PROD-003-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "codec_security", "client_parity", "ui_workflow", "typecheck_build_tests", "review", "handoff_validation"],
+      "required_files": ["src/shared/document-yaml.ts", "src/app/yaml-source-dialog.tsx", "tests/document-yaml.test.ts", "tests/yaml-source-ui.spec.ts", ".repo-steward/dsa-prod-003-implementation-response.json", ".repo-steward/handoff.md"],
+      "risks": ["Full-document source apply remains coarse but revision guarded.", "Only Chromium UI evidence exists.", "The Node 22 Windows host cannot make the aggregate symlink test green."],
+      "rollback": "Revert implementation commit 1769de9258c6be285162a3cee9259600871462c1 and the following Steward metadata commit; no data migration rollback is required."
+    },
+    {
+      "id": "DSA-STEW-002", "title": "Direct-checkout canonical state initialization", "objective": "Initialize canonical Repo Steward state only from a real measured working tree and validate resumable continuity.", "status": "complete",
+      "scope": {
+        "included": ["Reconcile actual repository identity and working-tree state", "Measure the canonical repository content digest from actual file bytes", "Create and validate .repo-steward/state.yaml", "Run repository reconciliation, resume/continuity, handoff validation, and relevant Repo Steward self-checks", "Preserve DSA-STEW-001 verification at its exact historical identities", "Update durable Repo Steward handoff metadata"],
+        "excluded": ["Product source or behavior changes", "YAML authoring", "Offline source export", "Dependency upgrades", "GitHub Actions", "Pull request creation or merge", "Deployment, release, production mutation, and credential or secret changes"]
+      },
+      "dependencies": [],
+      "acceptance_criteria": [
+        {"id": "AC-002-01", "description": "Actual local repository identity, branch, HEAD, dirty state, and canonical content digest are measured and recorded.", "satisfied": true, "evidence_ids": ["EV-002-REPOSITORY-RECONCILIATION"]},
+        {"id": "AC-002-02", "description": "Canonical state validates against the Repo Steward RC schema and semantic contract.", "satisfied": true, "evidence_ids": ["EV-002-CANONICAL-STATE"]},
+        {"id": "AC-002-03", "description": "Repository reconciliation and resume confirm the recorded branch, HEAD, and content digest while explicitly classifying in-scope Steward metadata dirtiness.", "satisfied": true, "evidence_ids": ["EV-002-REPOSITORY-RECONCILIATION", "EV-002-RESUME-CONTINUITY"]},
+        {"id": "AC-002-04", "description": "The durable handoff passes the current Repo Steward handoff gate.", "satisfied": true, "evidence_ids": ["EV-002-HANDOFF-VALIDATION"]},
+        {"id": "AC-002-05", "description": "Relevant Repo Steward self-checks pass locally and offline.", "satisfied": true, "evidence_ids": ["EV-002-SELF-CHECK"]},
+        {"id": "AC-002-06", "description": "Historical DSA-STEW-001 verification remains unchanged and bound to implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7.", "satisfied": true, "evidence_ids": ["EV-002-HISTORICAL-PRESERVATION"]},
+        {"id": "AC-002-07", "description": "Only Repo Steward metadata changes, with merge, deploy, and release still not authorized.", "satisfied": true, "evidence_ids": ["EV-002-REVIEW"]}
+      ],
+      "required_verification": ["canonical_state_validation", "repository_reconciliation", "resume_continuity", "handoff_validation", "self_check"],
+      "required_files": [".repo-steward/state.yaml"],
+      "risks": ["The content digest excludes .repo-steward metadata, ignored files, environment, dependencies, and runtime state by contract.", "Metadata-only commits after verification will cause explicit HEAD drift even when product content is unchanged."],
+      "rollback": "Revert only the DSA-STEW-002 Repo Steward metadata changes; preserve all product files and historical DSA-STEW-001 evidence."
+    },
+    {
+      "id": "DSA-PROD-001", "title": "YAML Authoring Research & Specification", "objective": "Determine whether YAML authoring should be the next product capability and produce a repository-grounded implementation-ready specification if selected.", "status": "complete",
+      "scope": {"included": ["Repository-grounded architecture discovery", "Bounded alternative analysis", "Narrow YAML parsing research", "YAML product decision", "Implementation-ready specification", "Durable Steward handoff"], "excluded": ["Product source changes", "YAML implementation", "Dependency changes", "GitHub Actions", "Pull request or merge", "Deploy or release"]},
+      "dependencies": ["DSA-STEW-002"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-001-01", "description": "Actual creation, document, persistence, validation, rendering, generation, UI, and import/export architecture is distinguished from documentation claims.", "satisfied": true, "evidence_ids": ["EV-PROD-001-RESEARCH"]},
+        {"id": "AC-PROD-001-02", "description": "At least six bounded YAML and non-YAML alternatives are compared with context-only authority.", "satisfied": true, "evidence_ids": ["EV-PROD-001-BRAINSTORM"]},
+        {"id": "AC-PROD-001-03", "description": "The YAML SELECT decision is justified by repository and narrow primary external evidence with uncertainty classifications.", "satisfied": true, "evidence_ids": ["EV-PROD-001-RESEARCH", "EV-PROD-001-REVIEW"]},
+        {"id": "AC-PROD-001-04", "description": "A bounded implementation-ready specification covers behavior, source of truth, codec policy, round trips, validation, security, clients, acceptance, tests, scope, and rollback.", "satisfied": true, "evidence_ids": ["EV-PROD-001-SPEC"]},
+        {"id": "AC-PROD-001-05", "description": "Only Steward metadata changes and implementation, merge, deploy, and release remain unauthorized.", "satisfied": true, "evidence_ids": ["EV-PROD-001-REVIEW"]},
+        {"id": "AC-PROD-001-06", "description": "The current session is persisted through the canonical Repo Steward handoff gate.", "satisfied": true, "evidence_ids": ["EV-PROD-001-HANDOFF"]}
+      ],
+      "required_verification": ["research", "brainstorm", "specification", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-prod-001-brainstorm.json", ".repo-steward/evidence/dsa-prod-001-research-2026-09-14.md", ".repo-steward/dsa-prod-001-spec.md", ".repo-steward/handoff.md"],
+      "risks": ["Demand for whole-document YAML authoring is inferred rather than measured with users.", "A YAML parser adds dependency and input-complexity risk that must be bounded and audited.", "Semantic round trips cannot preserve comments or lexical formatting without introducing a second persisted source."],
+      "rollback": "Revert only DSA-PROD-001 Steward research/spec metadata; retain DSA-STEW-002 canonical state history and product files."
+    },
+    {
+      "id": "DSA-PROD-002", "title": "YAML Authoring Implementation Handoff", "objective": "Convert the accepted DSA-PROD-001 YAML specification into one bounded executable Implementation Request pinned to actual repository identity.", "status": "complete",
+      "scope": {"included": ["Repository and canonical-state reconciliation", "Machine-readable Implementation Request", "Exact requirements and acceptance criteria", "Target file and dependency plan", "Local verification and rollback plan", "Durable Steward handoff"], "excluded": ["Product source changes", "YAML implementation", "Dependency installation", "Feature redesign", "GitHub Actions", "Pull request or merge", "Deploy or release"]},
+      "dependencies": ["DSA-PROD-001"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-002-01", "description": "Actual repository identity and accepted DSA-PROD-001 artifacts are reconciled before handoff authoring.", "satisfied": true, "evidence_ids": ["EV-PROD-002-RECONCILIATION"]},
+        {"id": "AC-PROD-002-02", "description": "One machine-readable Implementation Request pins repository, base, branch, decision, scope, requirements, criteria, targets, dependencies, migrations, verification, rollback, risks, questions, authority, and prohibited actions.", "satisfied": true, "evidence_ids": ["EV-PROD-002-REQUEST"]},
+        {"id": "AC-PROD-002-03", "description": "The Implementation Request is concrete and executable with no blocking uncertainty and does not redesign the accepted feature.", "satisfied": true, "evidence_ids": ["EV-PROD-002-REVIEW"]},
+        {"id": "AC-PROD-002-04", "description": "Only Steward metadata changes; product implementation, PR, merge, deploy, and release remain unauthorized.", "satisfied": true, "evidence_ids": ["EV-PROD-002-REVIEW"]},
+        {"id": "AC-PROD-002-05", "description": "Canonical state and durable handoff pass Repo Steward validation.", "satisfied": true, "evidence_ids": ["EV-PROD-002-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "implementation_request", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-prod-002-implementation-request.json", ".repo-steward/handoff.md"],
+      "risks": ["The future implementation adds a parser dependency and a broad cross-client format surface.", "Metadata-only commits advance HEAD beyond the identity recorded by their evidence."],
+      "rollback": "Revert only DSA-PROD-002 Steward handoff metadata; preserve DSA-PROD-001 and all product files."
+    }
+  ],
+  "constraints": [
+    {"id": "C-DSA-001", "classification": "DECIDED", "text": "Scope is Repo Steward metadata and state only; do not modify product code or start YAML authoring.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-002", "classification": "DECIDED", "text": "Do not use GitHub Actions; verify locally and offline.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-003", "classification": "DECIDED", "text": "Merge, deploy, and release are not authorized.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-DSA-004", "classification": "DECIDED", "text": "Historical DSA-STEW-001 verification remains bound to exact implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7 and must not be relabeled to later metadata or state commits.", "source": "User authorization for DSA-STEW-002"},
+    {"id": "C-PROD-001", "classification": "DECIDED", "text": "DSA-PROD-001 authorizes discovery, assessment, brainstorming, research, specification, and handoff only; product implementation, merge, deploy, and release are not authorized.", "source": "User request for DSA-PROD-001"},
+    {"id": "C-PROD-002", "classification": "DECIDED", "text": "DSA-PROD-002 authorizes Implementation Handoff artifacts only; product implementation, merge, deploy, and release remain unauthorized.", "source": "User request for DSA-PROD-002"},
+    {"id": "C-PROD-003", "classification": "DECIDED", "text": "DSA-PROD-003 authorizes only the bounded YAML authoring MVP implementation and local verification; pull request creation, merge, deploy, release, production mutation, destructive action, and unrelated scope remain unauthorized.", "source": "User request for DSA-PROD-003"},
+    {"id": "C-PROD-004", "classification": "DECIDED", "text": "DSA-PROD-004 authorizes independent review, bounded verification, remote push of only the expected existing commits, and necessary in-scope defect correction; merge, deploy, release, unrelated work, production mutation, secrets, and destructive actions remain unauthorized.", "source": "User request for DSA-PROD-004"},
+    {"id": "C-PROD-005", "classification": "DECIDED", "text": "DSA-PROD-005 authorizes push of existing in-scope commits, local and host-capability verification, and Steward closure metadata only; PR creation, merge, deploy, release, production mutation, secrets, destructive actions, and new product work remain unauthorized.", "source": "User request for DSA-PROD-005"},
+    {"id": "C-PR-001", "classification": "DECIDED", "text": "DSA-PR-001 authorizes PR creation and accurate PR/handoff metadata only; product changes, merge, deploy, release, and new product work remain unauthorized.", "source": "User PR-only handoff request"}
+  ],
+  "decisions": [
+    {"id": "DEC-YAML-001", "date": "2026-09-13T17:16:57Z", "status": "accepted", "context": "The canonical DesignDocument is strict versioned JSON-object data shared by every client and persisted as JSON; advanced users and agents have no lower-punctuation whole-document source workflow.", "decision": "Select strict YAML as an explicitly applied editable source representation and interchange format over the existing canonical DesignDocument; do not make YAML canonical persistence.", "reason": "This delivers readable authoring and validation while preserving schema, revision, ownership, merge, renderer, and storage contracts.", "alternatives": ["YAML import/export only", "YAML as canonical source", "Generated read-only YAML", "Improve visual editor without YAML", "Defer or do not build"], "consequences": ["A shared safe YAML codec and cross-client format updates are required", "Semantic round trips are supported but comments and lexical formatting are not persisted", "Product implementation still requires a separately authorized checkpoint"], "supersedes": [], "superseded_by": []}
+  ],
+  "facts": [
+    {"id": "F-DSA-001", "classification": "OBSERVED", "text": "The direct checkout began clean on steward/continuity-bootstrap at aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5.", "source": "git status --short --branch; git rev-parse HEAD; git branch --show-current", "severity": "low"},
+    {"id": "F-DSA-002", "classification": "OBSERVED", "text": "Repo Steward RC d53530028f79698d7ab6f0d5724ed85a1c94ccbe measured canonical content digest 691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c from actual checkout bytes.", "source": "python D:/build2026/repo-steward/scripts/steward.py snapshot D:/build2026/design-studio-ai", "severity": "low"},
+    {"id": "F-DSA-003", "classification": "OBSERVED", "text": "The committed and current Git blob hashes of .repo-steward/evidence/verification-2026-09-13.json are both 02fe6a7c917030845d18909fd24de91e898f1e2c.", "source": "git show 3787271:.repo-steward/evidence/verification-2026-09-13.json | git hash-object --stdin; git hash-object .repo-steward/evidence/verification-2026-09-13.json", "severity": "low"},
+    {"id": "F-PROD-001-CLOSURE", "classification": "OBSERVED", "text": "DSA-STEW-002 metadata was committed and pushed as 1839d1a964e51fa99ad70b2c1ad030c640c2a1f0; the clean snapshot retained content digest 691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c and resume reported expected metadata HEAD drift plus historical evidence.", "source": "git commit, git push, Repo Steward snapshot/resume", "severity": "low"},
+    {"id": "F-PROD-001-ARCH", "classification": "OBSERVED", "text": "DesignDocument Zod schemas and shared object services are the executable source of truth; documents persist as JSON text with owner-scoped optimistic revisions, and no YAML product support exists.", "source": ".repo-steward/evidence/dsa-prod-001-research-2026-09-14.md", "severity": "medium"},
+    {"id": "F-PROD-002-RECON", "classification": "OBSERVED", "text": "DSA-PROD-002 began from a clean checkout at 956421bd8c927f3e0d26c5bbe9d0824f400ce387 on steward/continuity-bootstrap with content digest 691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c.", "source": "git status/rev-parse/branch and Repo Steward snapshot", "severity": "low"},
+    {"id": "F-PROD-002-REQUEST", "classification": "OBSERVED", "text": "The accepted YAML specification maps to concrete current owners and one executable request; no blocking contradiction or uncertainty was found.", "source": ".repo-steward/dsa-prod-002-implementation-request.json and target-file inspection", "severity": "medium"},
+    {"id": "F-PROD-003-RECON", "classification": "OBSERVED", "text": "DSA-PROD-003 began from a clean checkout at 1d07904ac82ef771208bb47d7028fc20301193c6 on steward/continuity-bootstrap; origin and the accepted DSA-IMPL-YAML-001 request reconciled without contradiction.", "source": "git status/rev-parse/branch/remote and Implementation Request inspection", "severity": "low"},
+    {"id": "F-PROD-003-RESULT", "classification": "OBSERVED", "text": "The bounded YAML MVP is committed as 1769de9258c6be285162a3cee9259600871462c1 with canonical product content digest 64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67.", "source": "git commit and Repo Steward snapshot", "severity": "low"},
+    {"id": "F-PROD-003-GATE", "classification": "OBSERVED", "text": "Focused codec, CLI, export, security, desktop/mobile Chromium, documentation, typecheck, CLI build, and product build checks passed; aggregate npm test had one unrelated Windows EPERM symlink failure on a Node 22 host while the repository requires Node 24+.", "source": ".repo-steward/dsa-prod-003-implementation-response.json", "severity": "medium"},
+    {"id": "F-PROD-004-RECON", "classification": "OBSERVED", "text": "DSA-PROD-004 reconciled a clean steward/continuity-bootstrap checkout at ecfbb8558520980c91b745ce824b0bdfe0712152, exactly two expected commits ahead of origin, and pushed that range without creating a PR.", "source": "git status/rev-list/log/push", "severity": "low"},
+    {"id": "F-PROD-004-REVIEW", "classification": "OBSERVED", "text": "Independent inspection found no material YAML MVP defect, unsafe parser behavior, auth/owner regression, dependency error, or scope creep; no product code changed.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "low"},
+    {"id": "F-PROD-004-GATES", "classification": "OBSERVED", "text": "Node v24.21.0 focused gates and production builds passed, all YAML critical-path browser targets passed, and aggregate npm test remained BLOCKED only by the unrelated Windows EPERM symlink permission failure at 482/483 passing.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "medium"},
+    {"id": "F-PROD-005-RECON", "classification": "OBSERVED", "text": "DSA-PROD-005 began clean at e625ed0154be9e026405ef26f67c6161985b35da with exactly that one expected review-metadata commit ahead of origin; it was pushed without creating a PR.", "source": "git status/rev-list/log/push", "severity": "low"},
+    {"id": "F-PROD-005-HOST", "classification": "OBSERVED", "text": "A WSL2 Ubuntu 24.04.3 native Linux checkout at exact product commit 1769de9258c6be285162a3cee9259600871462c1 supports symlinks and passes the formerly blocked structured React-export test under Node v24.21.0.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"},
+    {"id": "F-PROD-005-FULL", "classification": "OBSERVED", "text": "The full npm test suite passes 483/483 on the capable WSL2 Node v24.21.0 environment; the direct Windows EPERM remains preserved as BLOCKED_HOST_CAPABILITY rather than relabeled.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"},
+    {"id": "F-PR-001-IDENTITY", "classification": "OBSERVED", "text": "GitHub PR #1 is open and non-draft at https://github.com/hstptcn5/design-studio-ai/pull/1 from steward/continuity-bootstrap to main; creation-time head was 11791c6057c7129cb1582cc8a3a65fa8de071a20, base and merge base were 6b3cd5c1006ad586f10f1784aa56abd7b39d1001.", "source": "gh repo view, gh pr create, gh pr view", "severity": "low"},
+    {"id": "F-PR-001-DIFF", "classification": "OBSERVED", "text": "The PR has 40 files, 1976 additions, and 40 deletions covering the YAML MVP and full Steward specification/evidence history; no unexpected product area was found and GitHub reported CLEAN merge state before handoff metadata.", "source": "gh pr view and gh pr diff --name-only", "severity": "low"}
+  ],
+  "blockers": [],
+  "risks": [
+    {"id": "R-DSA-001", "classification": "OBSERVED", "text": "Canonical content identity excludes .repo-steward metadata and therefore must be paired with exact HEAD reconciliation.", "source": "Repo Steward RC rules/state.md and scripts/steward.py"}
+  ],
+  "evidence": [
+    {
+      "id": "EV-002-CANONICAL-STATE", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "canonical_state_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate project-state .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:00Z", "summary": "Repo Steward RC schema and semantic validation returned no errors.",
+      "limitations": ["Validation establishes contract consistency, not product runtime behavior."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-REPOSITORY-RECONCILIATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "repository_reconciliation",
+      "procedure": "git identity/status inspection and python D:/build2026/repo-steward/scripts/steward.py snapshot D:/build2026/design-studio-ai",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:01Z", "summary": "Actual origin, branch, HEAD, and content digest match canonical state; only authorized .repo-steward metadata is dirty.",
+      "limitations": ["The RC snapshot excludes .repo-steward/** and reports Git dirtiness separately."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-RESUME-CONTINUITY", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "resume_continuity",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py resume D:/build2026/design-studio-ai",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:02Z", "summary": "Resume consumed canonical state, matched HEAD/content/branch, and fail-closed on the expected authorized Steward metadata dirtiness.",
+      "limitations": ["Resume returns RECONCILE while the new and updated .repo-steward files remain uncommitted; this is expected protection, not product-content drift."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-HANDOFF-VALIDATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:03Z", "summary": "The canonical durable handoff declaration passed the Repo Steward RC new-persistence gate.",
+      "limitations": ["The gate validates declared obligations and references; it does not independently prove agent honesty."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-SELF-CHECK", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "self_check",
+      "procedure": "From Repo Steward RC d53530028f79698d7ab6f0d5724ed85a1c94ccbe run python scripts/self_check.py and python -m unittest discover -s tests -v",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:04Z", "summary": "Repo Steward self-check exited successfully and all 77 unit tests passed locally.",
+      "limitations": ["Repo Steward's own canonical state reports its pre-existing HEAD drift and historical evidence; the self-check remains exit-zero."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-HISTORICAL-PRESERVATION", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "historical_preservation",
+      "procedure": "Compare Git blob hashes for current .repo-steward/evidence/verification-2026-09-13.json and the file at commit 3787271.",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:05Z", "summary": "Both Git blob hashes are 02fe6a7c917030845d18909fd24de91e898f1e2c; the historical record still names implementation identity 133d1dffac2a57c10baf555123defdadcfa350c7.",
+      "limitations": ["This proves byte preservation and identity labeling; it does not rerun or upgrade DSA-STEW-001 checks."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-002-REVIEW", "checkpoint_digest": "3d64fcb6447b252c22e0d33360e56ab8f9f5e4fef03f307e3f3255e27c9ef586", "type": "review",
+      "procedure": "Review git diff/status, canonical state, historical verification boundary, and user authority for DSA-STEW-002.",
+      "result": "PASS", "identity": {"head": "aa88a6d7266884d35f20ad6ad5fcb2b94e5dfdf5", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:04:06Z", "summary": "Only .repo-steward metadata changed; no product code, Actions, PR, merge, deploy, or release action occurred.",
+      "limitations": ["Bounded self-review for Steward metadata only; no product runtime claims are made."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-001-RESEARCH", "checkpoint_digest": "647eccc24702e8232fd179cca72e8ab292faf4d4ec12ca6a2b9920f6b8b9aa73", "type": "research",
+      "procedure": "Inspect current source owners for schemas, persistence, imports/exports, rendering, AI generation, UI, REST, MCP, WebMCP, CLI, documentation, tests, and repository-wide YAML support; consult only YAML 1.2.2 and the selected parser's primary documentation for concrete semantics.",
+      "result": "PASS", "identity": {"head": "1839d1a964e51fa99ad70b2c1ad030c640c2a1f0", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:16:50Z", "summary": "Repository-grounded architecture and YAML absence are recorded with OBSERVED, DECIDED, ASSUMED, and UNRESOLVED provenance in the research artifact.",
+      "limitations": ["No product runtime or user-demand study was run; demand remains an explicit assumption."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-001-BRAINSTORM", "checkpoint_digest": "647eccc24702e8232fd179cca72e8ab292faf4d4ec12ca6a2b9920f6b8b9aa73", "type": "brainstorm",
+      "procedure": "Compare editable-source, import/export-only, canonical-source, read-only, visual-editor-only, and defer/no-build alternatives across user value, complexity, compatibility, round trip, loss, evolution, validation UX, AI use, cost, and maintenance.",
+      "result": "PASS", "identity": {"head": "1839d1a964e51fa99ad70b2c1ad030c640c2a1f0", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:16:51Z", "summary": "Six alternatives are durably compared; brainstorm authority remains context_only and does not authorize implementation.",
+      "limitations": ["Comparative product value is reasoned from repository workflows rather than measured usage analytics or interviews."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-001-SPEC", "checkpoint_digest": "647eccc24702e8232fd179cca72e8ab292faf4d4ec12ca6a2b9920f6b8b9aa73", "type": "specification",
+      "procedure": "Review the YAML implementation specification against the user-required topics and current executable owners.",
+      "result": "PASS", "identity": {"head": "1839d1a964e51fa99ad70b2c1ad030c640c2a1f0", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:16:52Z", "summary": "The selected alternate-source design has exact behavior, codec constraints, semantic round trips, errors, security, clients, scope, acceptance criteria, test strategy, and rollback.",
+      "limitations": ["Implementation estimates and final UI component selection require the next authorized implementation plan."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-001-HANDOFF", "checkpoint_digest": "647eccc24702e8232fd179cca72e8ab292faf4d4ec12ca6a2b9920f6b8b9aa73", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1839d1a964e51fa99ad70b2c1ad030c640c2a1f0", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:16:53Z", "summary": "Canonical session evidence and findings pass the Repo Steward new-persistence handoff gate.",
+      "limitations": ["The gate validates declared consistency, not independent truthfulness."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-001-REVIEW", "checkpoint_digest": "647eccc24702e8232fd179cca72e8ab292faf4d4ec12ca6a2b9920f6b8b9aa73", "type": "review",
+      "procedure": "Review DSA-PROD-001 artifacts, repository diff, decision provenance, unresolved assumptions, and authority boundaries.",
+      "result": "PASS", "identity": {"head": "1839d1a964e51fa99ad70b2c1ad030c640c2a1f0", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:16:54Z", "summary": "Research/spec scope is complete, selection is justified, product files are unchanged, and implementation/merge/deploy/release remain unauthorized.",
+      "limitations": ["Bounded self-review; implementation has not begun and no runtime behavior is claimed."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-002-RECONCILIATION", "checkpoint_digest": "c3ef1fd1d366a9fe5cd73f2bd94470f462f94edc250c8a6880465726968cc4a5", "type": "repository_reconciliation",
+      "procedure": "Inspect branch, HEAD, origin, clean status, canonical state, DSA-PROD-001 artifacts, target files, and run Repo Steward snapshot/resume.",
+      "result": "PASS", "identity": {"head": "956421bd8c927f3e0d26c5bbe9d0824f400ce387", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:28:50Z", "summary": "Actual repository, branch, clean base, digest, accepted decision, and target owners reconcile; resume reports only expected metadata HEAD drift and historical evidence.",
+      "limitations": ["Repo Steward state recorded the pre-metadata-commit identity until this handoff update; metadata is excluded from content digest."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-002-REQUEST", "checkpoint_digest": "c3ef1fd1d366a9fe5cd73f2bd94470f462f94edc250c8a6880465726968cc4a5", "type": "implementation_request",
+      "procedure": "Validate machine-readable JSON and inspect DSA-IMPL-YAML-001 for exact identity, accepted scope, requirements, criteria, targets, dependency, migration, verification, rollback, risks, questions, authority, and prohibited actions.",
+      "result": "PASS", "identity": {"head": "956421bd8c927f3e0d26c5bbe9d0824f400ce387", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:28:51Z", "summary": "DSA-IMPL-YAML-001 is concrete, internally traceable, target-file grounded, and declares no blocking uncertainty.",
+      "limitations": ["The request is executable only after separate product-implementation authorization and fresh repository reconciliation."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-002-HANDOFF", "checkpoint_digest": "c3ef1fd1d366a9fe5cd73f2bd94470f462f94edc250c8a6880465726968cc4a5", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "956421bd8c927f3e0d26c5bbe9d0824f400ce387", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:28:52Z", "summary": "Canonical DSA-PROD-002 evidence, findings, next action, and handoff declarations pass the new-persistence gate.",
+      "limitations": ["The gate validates declaration consistency rather than external truthfulness."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-002-REVIEW", "checkpoint_digest": "c3ef1fd1d366a9fe5cd73f2bd94470f462f94edc250c8a6880465726968cc4a5", "type": "review",
+      "procedure": "Review the Implementation Request against the accepted specification, repository owners, user-required verification coverage, scope exclusions, and current authority.",
+      "result": "PASS", "identity": {"head": "956421bd8c927f3e0d26c5bbe9d0824f400ce387", "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c"},
+      "timestamp": "2026-09-13T17:28:53Z", "summary": "The request implements the accepted design without redesign, covers required local verification, changes no product file, and preserves all prohibited authority boundaries.",
+      "limitations": ["Product behavior is not implemented or runtime-verified in this handoff-only checkpoint."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-RECONCILIATION", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "repository_reconciliation",
+      "procedure": "Inspect origin, branch, HEAD, clean status, canonical state, and DSA-IMPL-YAML-001 before implementation; snapshot product content after commit.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:20Z", "summary": "Implementation began from clean reconciled base 1d07904ac82ef771208bb47d7028fc20301193c6 and produced the recorded product commit and measured digest on the expected branch.",
+      "limitations": ["Steward metadata is excluded from the product content digest."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-CODEC", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "codec_security",
+      "procedure": "Run tests/document-yaml.test.ts and inspect the shared codec's YAML 1.2, AST prohibition, resource-bound, JSON-compatibility, schema-validation, diagnostic, and deterministic serialization paths.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:21Z", "summary": "All 5 focused codec tests passed, covering valid v1/v2 documents, semantic round trips, syntax/schema diagnostics, unsupported YAML features, and byte/depth limits.",
+      "limitations": ["Comments and lexical formatting intentionally do not survive semantic conversion."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-CLIENTS", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "client_parity",
+      "procedure": "Run the full CLI test file, focused authenticated YAML export test, security-boundary tests, documentation browser tests, and inspect REST/MCP/WebMCP/shared-contract ownership.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:22Z", "summary": "CLI 12/12, security 6/6, authenticated export, and public documentation checks passed; YAML uses the shared DesignDocument and export contracts.",
+      "limitations": ["No live provider or production service was used."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-UI", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "ui_workflow",
+      "procedure": "Run tests/yaml-source-ui.spec.ts in desktop and mobile Chromium and the existing mobile onboarding regression spec.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:23Z", "summary": "Desktop and mobile YAML workflows passed 2/2 each, including non-mutating preview, explicit revision-guarded apply, stale-revision recovery, reset/download, and responsive dialog behavior; mobile onboarding passed 2/2.",
+      "limitations": ["Browser evidence is Chromium-only; Firefox and WebKit were not run."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-GATES", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "typecheck_build_tests",
+      "procedure": "Run npm ci for both dependency trees, npm run typecheck, npm run build:cli, focused/unit/E2E tests, npm run build, git diff --check, and attempt aggregate npm test.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:24Z", "summary": "Relevant focused tests, typecheck, CLI build, and product build passed at the implementation identity; the aggregate suite ran 482 tests with 481 passing and one unrelated Windows EPERM symlink failure.",
+      "limitations": ["Aggregate npm test is BLOCKED, not PASS: tests/structured-export.test.ts cannot create a Windows symlink on this Node 22.19.0 host; package.json requires Node >=24.", "The complete repository-selected E2E matrix and GitHub Actions were not run."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-REVIEW", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "review",
+      "procedure": "Review implementation diff, dependency/license, generated documentation ownership, acceptance criteria, response artifact, regressions, exclusions, authority, and Git state.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:25Z", "summary": "The implementation is bounded to the accepted MVP, keeps JSON/revision persistence canonical, adds yaml@2.9.1 under ISC, records all limitations, and is READY_TO_REVIEW but not READY_TO_MERGE.",
+      "limitations": ["Bounded self-review is not an independent code review."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-HISTORICAL", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "historical_preservation",
+      "procedure": "Compare the current historical verification Git blob with the preserved blob and inspect its internal implementation identity.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:26Z", "summary": "Historical verification remains byte-identical at blob 02fe6a7c917030845d18909fd24de91e898f1e2c and remains labeled to 133d1dffac2a57c10baf555123defdadcfa350c7.",
+      "limitations": ["Historical checks were preserved, not relabeled or rerun."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-003-HANDOFF", "checkpoint_digest": "bf0152e1b4f8cf18ab3cfc68caf59a8022a8128110015e4d37e97998e50606c1", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T14:01:27Z", "summary": "Canonical DSA-PROD-003 evidence, findings, next action, authority, and durable handoff declarations pass the Repo Steward gate.",
+      "limitations": ["The gate validates declared consistency, not independent truthfulness."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-RECONCILIATION", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "repository_reconciliation",
+      "procedure": "Inspect origin, branch, HEAD, worktree, upstream divergence, and exact two-commit range; push steward/continuity-bootstrap to origin.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:00Z", "summary": "The expected clean checkout and product identity reconciled; only commits 1769de9 and ecfbb85 were ahead, and both were pushed. No PR was created.",
+      "limitations": ["Evidence identity remains pinned to the reviewed product commit rather than later Steward-only metadata."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-REVIEW", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "review",
+      "procedure": "Independently inspect DSA-PROD-001, DSA-IMPL-YAML-001, DSA-PROD-003 response, product diff, codec AST/resource policy, schema path, UI/save semantics, import/export, CLI, REST/MCP/WebMCP/docs, accessibility, auth/ownership, JSON regressions, dependency, and scope.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:01Z", "summary": "CONFIRMED: no material defect or scope creep was found. SUSPECTED findings: none. Product code remained unchanged.",
+      "limitations": ["This is a bounded independent pass by the current agent, not a human maintainer approval."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-NODE24", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "node24_gate",
+      "procedure": "Using official checksum-verified Node v24.21.0 and npm 11.19.0, run npm ci in both trees, npm ls yaml, typecheck, production build, CLI build, focused codec/CLI/security tests, and full npm test.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:02Z", "summary": "Install, dependency identity, typecheck, production build, CLI build, codec 5/5, CLI 12/12, and security 6/6 passed. Aggregate npm test executed 483 with 482 passing; the one unrelated Windows symlink test is BLOCKED by host EPERM.",
+      "limitations": ["Aggregate npm test is BLOCKED rather than PASS due to Windows symlink permissions in tests/structured-export.test.ts.", "npm reports eight high-severity findings in the existing root dependency graph."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-BROWSERS", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "cross_browser",
+      "procedure": "Run the repository YAML UI spec and a temporary non-persisted extension covering invalid input, persisted reload, and download in desktop Chromium, Firefox 155.0, mobile WebKit 26.6, and mobile Chromium under Node 24.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:03Z", "summary": "Each target passed 2/2 across load, YAML representation, invalid rejection, edit, validate, preview non-mutation, explicit apply, persisted revision/reload, download/parse, stale conflict preservation, and import.",
+      "limitations": ["The full repository-selected 35-spec E2E matrix was not run; the temporary verification extension was removed after the gate."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-HISTORICAL", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "historical_preservation",
+      "procedure": "Hash the current DSA-STEW-001 verification artifact and confirm its internally recorded implementation identity.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:04Z", "summary": "The historical artifact remains blob 02fe6a7c917030845d18909fd24de91e898f1e2c and remains bound to 133d1dffac2a57c10baf555123defdadcfa350c7.",
+      "limitations": ["Historical verification was preserved rather than rerun or relabeled."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-004-HANDOFF", "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:10:05Z", "summary": "Canonical DSA-PROD-004 evidence, findings, blocked/not-run gates, next action, authority, and handoff declarations pass the Steward gate.",
+      "limitations": ["The gate validates declared consistency rather than independently reproducing checks."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-RECONCILIATION", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "repository_reconciliation",
+      "procedure": "Fetch origin; inspect exact branch, HEAD, clean worktree, upstream divergence, and unpushed diff; push the sole expected DSA-PROD-004 metadata commit.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:00Z", "summary": "The expected clean local HEAD e625ed0 was exactly one commit ahead and was pushed to origin/steward/continuity-bootstrap. No PR was created.",
+      "limitations": ["Identity remains pinned to the YAML product commit, not later metadata commits."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HOST", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "host_capability",
+      "procedure": "Probe symlink creation in WSL2 Ubuntu native /tmp; create an isolated checkout at 1769de9258c6be285162a3cee9259600871462c1; use checksum-verified Node v24.21.0; install dependencies/build renderer/Chromium and run the previously blocked React source archive test.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:01Z", "summary": "Formal disposition PASS_ON_CAPABLE_HOST: WSL2 Ubuntu 24.04.3 symlink probe and targeted structured-export test passed 1/1; the original Windows EPERM remains BLOCKED_HOST_CAPABILITY.",
+      "limitations": ["The direct Windows host still lacks required symlink capability; no test or product behavior was weakened."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-FULL-TEST", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "full_test_gate",
+      "procedure": "In the same isolated WSL2 Ubuntu checkout at the exact product identity, install both dependency trees, build CLI and renderer, supply local runtime libraries, and run npm test under Node v24.21.0.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:02Z", "summary": "Full repository unit suite passed 483/483 with zero failures, skips, cancellations, or interruptions on the capable supported environment.",
+      "limitations": ["The full repository-selected 35-spec E2E matrix and GitHub Actions were not run."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-REVIEW", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "review",
+      "procedure": "Reconfirm DSA-PROD-004 review conclusions against unchanged product bytes and the new capable-host verification results.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:03Z", "summary": "No material YAML defect, unsafe parser behavior, auth/ownership regression, dependency issue, scope creep, or JSON workflow regression emerged; product code is unchanged.",
+      "limitations": ["Existing npm audit findings and the unrun full E2E matrix remain separately disclosed."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HISTORICAL", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "historical_preservation",
+      "procedure": "Confirm current DSA-STEW-001 evidence blob and exact YAML product identity without rewriting or relabeling either record.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:04Z", "summary": "DSA-STEW-001 remains bound to 133d1dffac2a57c10baf555123defdadcfa350c7 at evidence blob 02fe6a7c917030845d18909fd24de91e898f1e2c; YAML verification remains bound to 1769de9258c6be285162a3cee9259600871462c1.",
+      "limitations": ["Historical evidence was preserved, not rerun."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HANDOFF", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:05Z", "summary": "Closure evidence, formal host disposition, technical readiness, absent merge authority, next action, and durable handoff pass the Steward gate.",
+      "limitations": ["Steward validation checks declared consistency rather than independently rerunning tests."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-RECONCILIATION", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "repository_reconciliation",
+      "procedure": "Fetch origin; inspect clean local/upstream parity; query live GitHub repository default branch; resolve origin/main SHA and merge base.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:00Z", "summary": "Live GitHub confirmed main at 6b3cd5c1006ad586f10f1784aa56abd7b39d1001 as both base and merge base; head branch was clean and synchronized at 11791c6057c7129cb1582cc8a3a65fa8de071a20.",
+      "limitations": ["Product evidence remains pinned to the implementation identity rather than metadata-only head commits."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-CREATION", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "pull_request_creation",
+      "procedure": "Create GitHub PR from steward/continuity-bootstrap to main with product-oriented title and evidence-accurate description using gh pr create.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:01Z", "summary": "Created open non-draft PR #1, Add strict YAML authoring and interchange support, at https://github.com/hstptcn5/design-studio-ai/pull/1. No merge was performed.",
+      "limitations": ["PR creation may cause repository-configured checks to run; no workflow was manually dispatched."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-REVIEW", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "review",
+      "procedure": "Inspect gh pr view structured metadata, commit list, file list, name-only diff, base/head identities, merge state, and merged status against the authorized YAML MVP scope.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:02Z", "summary": "The 40-file diff contains the intended YAML product surfaces and full Steward evidence history, with no unexpected product scope; base/head matched, merge state was CLEAN, and mergedAt was null.",
+      "limitations": ["GitHub check results were not claimed or polled as verification evidence."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-HISTORICAL", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "historical_preservation",
+      "procedure": "Verify PR commit list and durable evidence retain exact DSA-STEW-001 and YAML product identities without relabeling.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:03Z", "summary": "DSA-STEW-001 remains bound to 133d1dffac2a57c10baf555123defdadcfa350c7 and YAML verification remains bound to 1769de9258c6be285162a3cee9259600871462c1.",
+      "limitations": ["Historical evidence was referenced, not rerun."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-HANDOFF", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:04Z", "summary": "PR identity, diff review, verification references, absent merge authority, next action, and durable handoff pass the Steward gate.",
+      "limitations": ["The handoff gate validates recorded consistency rather than GitHub's future state."], "executed": true, "interrupted": false
+    }
+  ],
+  "last_reviewed_commit": "1769de9258c6be285162a3cee9259600871462c1",
+  "next": {
+    "recommended_action": "Await human review of GitHub PR #1 and explicit merge authorization; do not merge, deploy, release, or begin new product work.",
+    "reason": "The technically merge-ready YAML MVP is now in an open, reconciled review PR, while merge authority remains explicitly absent."
+  },
+  "updated_at": "2026-09-14T15:45:04Z",
+  "handoff": {
+    "verifications": [
+      {"evidence_id": "EV-PR-001-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-CREATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-HISTORICAL", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-HANDOFF", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false}
+    ],
+    "findings": [
+      {"collection": "facts", "id": "F-PR-001-IDENTITY", "severity": "low"},
+      {"collection": "facts", "id": "F-PR-001-DIFF", "severity": "low"}
+    ],
+    "next_before": {
+      "recommended_action": "Await explicit authorization for a PR-only handoff or PR creation for the technically complete YAML MVP; do not merge, deploy, release, or begin new product work.",
+      "reason": "The exact YAML product commit was technically merge-ready after 483/483 tests passed on a capable Node 24 host, but PR and merge authority were absent."
+    }
+  }
+}

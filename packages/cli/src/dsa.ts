@@ -16,6 +16,7 @@ import { duplicateDocument, mutateDocument, operationsSchema } from '../../../sr
 import { renderHtml, renderSvg } from '../../../src/shared/render';
 import { interviewSchema, answerSchema, scopeSchema } from '../../../src/shared/brief';
 import { mergeRequestSchema } from '../../../src/shared/collaboration-contract';
+import { DocumentYamlError, parseDocumentYaml, stringifyDocumentYaml } from '../../../src/shared/document-yaml';
 import { registerObservabilityCommands } from './observability-commands';
 import { registerDesignSystemCommands } from './design-system-commands';
 import { Client, CliError, inputJson, inputText, nonnegativeNumber, output, outputFile, positiveInteger, secretInput } from './client';
@@ -36,7 +37,14 @@ const part = (value: string) => encodeURIComponent(value);
 const projectPath = (id: string) => `/api/projects/${part(id)}`;
 const wrap = (handler: (...args: any[]) => Promise<unknown> | unknown) => async (...args: any[]) => { const value = await handler(...args); if (value !== undefined) output(value); };
 async function project(id: string): Promise<Project> { return (await client().json<{ project: Project }>(projectPath(id))).project; }
-async function documentInput(file: string): Promise<DesignDocument> {
+async function documentInput(file: string, requestedFormat?: string): Promise<DesignDocument> {
+  const format = requestedFormat?.toLowerCase() ?? (/\.ya?ml$/i.test(file) ? 'yaml' : file === '-' ? undefined : 'json');
+  if (!format) throw new CliError('input_format_required', 'Use --input-format json or --input-format yaml when reading a document from stdin.');
+  if (!['json', 'yaml'].includes(format)) throw new CliError('unsupported_format', 'Document input format must be json or yaml.');
+  if (format === 'yaml') {
+    try { return parseDocumentYaml(await inputText(file)); }
+    catch (error) { if (error instanceof DocumentYamlError) throw new CliError(error.diagnostic.code, error.message, 1, undefined, error.diagnostic); throw error; }
+  }
   const input = await inputJson(file) as any;
   return documentSchema.parse(input?.project?.document ?? input?.document ?? input);
 }
@@ -100,10 +108,10 @@ projects.command('list').option('--query <text>', 'Search name/description').opt
 }));
 projects.command('get <id>').action(wrap(id => client().json(projectPath(id))));
 projects.command('check <id>').description('Read-only preflight with node IDs, severity and actionable design checks').action(wrap(id => client().json(`${projectPath(id)}/checks`)));
-projects.command('create').requiredOption('--name <name>', 'Project name').option('--description <text>', 'Project description', '').option('--kind <kind>', 'Document kind').option('--template <id>', 'Template ID').option('--theme <id>', 'Theme ID').option('--file <path>', 'Document JSON file or - for stdin').action(wrap(async options => {
+projects.command('create').requiredOption('--name <name>', 'Project name').option('--description <text>', 'Project description', '').option('--kind <kind>', 'Document kind').option('--template <id>', 'Template ID').option('--theme <id>', 'Theme ID').option('--file <path>', 'Document JSON/YAML file or - for stdin').option('--input-format <format>', 'Required for stdin: json or yaml').action(wrap(async options => {
   if (options.file && options.template) throw new CliError('conflicting_options', 'Choose either --file or --template.');
   const template = options.template ? selection(templates, options.template) : undefined;
-  const document = options.file ? await documentInput(options.file) : undefined;
+  const document = options.file ? await documentInput(options.file, options.inputFormat) : undefined;
   const kind = selectedKind(options.kind ?? document?.kind ?? template?.kind ?? 'web');
   if (document && document.kind !== kind || template && template.kind !== kind) throw new CliError('kind_mismatch', 'Requested kind must match the document or template.');
   if (options.theme) selection(themes, options.theme);
@@ -121,15 +129,15 @@ projects.command('clone <id>').option('--name <name>', 'Name for the new project
 const documents = projects.command('document').description('Read and write the canonical design document');
 documents.command('merge <id>').description('Merge edits against the actual base you read; overlapping changes return conflict').requiredOption('--file <path>', 'JSON {base,document,baseRevision}, or - for stdin').action(wrap(async (id, options) => client().json(`${projectPath(id)}/merge`, 'POST', mergeRequestSchema.parse(await inputJson(options.file)))));
 documents.command('changes <id>').option('--since <revision>', 'Last observed revision', '0').action(wrap((id, options) => client().json(`${projectPath(id)}/changes?since=${nonnegativeNumber(options.since)}`)));
-documents.command('get <id>').option('--output <file>', 'Save document JSON to a file').action(async (id, options) => { await outputFile(options.output, JSON.stringify((await project(id)).document, null, 2)); });
-documents.command('put <id>').option('--brief-revision <number>', 'Observed brief revision when applying a proposal').requiredOption('--file <path>', 'Document JSON or - for stdin').requiredOption('--revision <number>', 'Expected saved revision').action(wrap(async (id, options) => client().json(`${projectPath(id)}/document`,'PUT',{document:await documentInput(options.file),expectedRevision:revision(options.revision),...(options.briefRevision!==undefined?{expectedBriefRevision:nonnegativeNumber(options.briefRevision)}:{})})));
+documents.command('get <id>').option('--output <file>', 'Save document to a file').option('--format <format>', 'json or yaml; defaults from output extension, then json').action(async (id, options) => { const format = options.format ?? (/\.ya?ml$/i.test(options.output ?? '') ? 'yaml' : 'json'); if (!['json','yaml'].includes(format)) throw new CliError('unsupported_format','Document output format must be json or yaml.'); const document=(await project(id)).document; await outputFile(options.output, format === 'yaml' ? stringifyDocumentYaml(document) : JSON.stringify(document, null, 2), {format}); });
+documents.command('put <id>').option('--brief-revision <number>', 'Observed brief revision when applying a proposal').requiredOption('--file <path>', 'Document JSON/YAML or - for stdin').option('--input-format <format>', 'Required for stdin: json or yaml').requiredOption('--revision <number>', 'Expected saved revision').action(wrap(async (id, options) => client().json(`${projectPath(id)}/document`,'PUT',{document:await documentInput(options.file,options.inputFormat),expectedRevision:revision(options.revision),...(options.briefRevision!==undefined?{expectedBriefRevision:nonnegativeNumber(options.briefRevision)}:{})})));
 documents.command('patch <id>').description('Apply shared targeted operations; reuses atomic revision-checked save').requiredOption('--file <path>', 'Operations array JSON or - for stdin').requiredOption('--revision <number>', 'Expected saved revision').action(wrap(async (id, options) => {
   const operations = operationsSchema.parse(await inputJson(options.file)); const expected = revision(options.revision);
   const current = await project(id); ensureRevision(current, expected);
   return save(id, mutateDocument(current.document, operations), expected);
 }));
-projects.command('import').description('Create a new project from canonical JSON').requiredOption('--file <path>', 'Document JSON or - for stdin').option('--name <name>', 'Override project name').action(wrap(async options => {
-  const document = await documentInput(options.file);
+projects.command('import').description('Create a new project from JSON or YAML source').requiredOption('--file <path>', 'Document JSON/YAML or - for stdin').option('--input-format <format>', 'Required for stdin: json or yaml').option('--name <name>', 'Override project name').action(wrap(async options => {
+  const document = await documentInput(options.file, options.inputFormat);
   return client().json('/api/projects', 'POST', { name: options.name ?? document.name, kind: document.kind, document });
 }));
 
@@ -139,10 +147,10 @@ projects.command('thumbnail <id>').description('Download a persistent saved-revi
   if (response.status === 202) { output({ ...(await response.json() as object), retryAfterSeconds: 2 }); return; }
   await outputFile(options.output, new Uint8Array(await response.arrayBuffer()), { format: 'png' });
 });
-projects.command('export <id>').description('Export through the authenticated server renderer').requiredOption('--format <format>', 'json, html, svg, png, pdf, pptx, webm, mp4, react (ZIP), glb, gltf, motion (ZIP), png-sequence (ZIP), spritesheet (ZIP), scene-angles (ZIP), editable-scene (JSON)').option('-o, --output <file>', 'Output filename; required for binary formats').option('--out <file>', 'Alias for --output').option('--start <seconds>', 'Frame export start time').option('--end <seconds>', 'Frame export end time').option('--fps <number>', 'Frame export FPS').option('--review-samples <number>', 'Scene review samples (2–25)').option('--node <id>', 'Imported model for editable-scene export').option('--page <index>', 'Zero-based page for single-page exports', '0').option('--revision <number>', 'Require the saved revision to match').action(async (id, options) => {
-  if (!['json', 'html', 'svg', 'png', 'pdf', 'pptx', 'webm', 'mp4', 'react', 'glb', 'gltf', 'motion', 'png-sequence', 'spritesheet', 'scene-angles', 'editable-scene'].includes(options.format)) throw new CliError('unsupported_format', 'Formats: json, html, svg, png, pdf, pptx, webm, mp4, react, glb, gltf, motion, png-sequence, spritesheet, scene-angles, editable-scene. Use google-slides for Google Slides.');
+projects.command('export <id>').description('Export through the authenticated server renderer').requiredOption('--format <format>', 'json, yaml, html, svg, png, pdf, pptx, webm, mp4, react (ZIP), glb, gltf, motion (ZIP), png-sequence (ZIP), spritesheet (ZIP), scene-angles (ZIP), editable-scene (JSON)').option('-o, --output <file>', 'Output filename; required for binary formats').option('--out <file>', 'Alias for --output').option('--start <seconds>', 'Frame export start time').option('--end <seconds>', 'Frame export end time').option('--fps <number>', 'Frame export FPS').option('--review-samples <number>', 'Scene review samples (2–25)').option('--node <id>', 'Imported model for editable-scene export').option('--page <index>', 'Zero-based page for single-page exports', '0').option('--revision <number>', 'Require the saved revision to match').action(async (id, options) => {
+  if (!['json', 'yaml', 'html', 'svg', 'png', 'pdf', 'pptx', 'webm', 'mp4', 'react', 'glb', 'gltf', 'motion', 'png-sequence', 'spritesheet', 'scene-angles', 'editable-scene'].includes(options.format)) throw new CliError('unsupported_format', 'Formats: json, yaml, html, svg, png, pdf, pptx, webm, mp4, react, glb, gltf, motion, png-sequence, spritesheet, scene-angles, editable-scene. Use google-slides for Google Slides.');
   const destination = options.output ?? options.out;
-  const binary = !['json', 'html', 'svg', 'gltf'].includes(options.format);
+  const binary = !['json', 'yaml', 'html', 'svg', 'gltf'].includes(options.format);
   if (binary && (!destination || destination === '-')) throw new CliError('file_required', 'Binary exports require --output FILE.');
   const page = nonnegativeNumber(options.page);
   if (!Number.isInteger(page)) throw new CliError('invalid_page', 'Page must be a zero-based integer.');
@@ -150,16 +158,16 @@ projects.command('export <id>').description('Export through the authenticated se
   const content = binary ? new Uint8Array(await response.arrayBuffer()) : await response.text();
   await outputFile(destination, content, { format: options.format, mimeType: response.headers.get('Content-Type') });
 });
-program.command('render').description('Render a local JSON document offline using shared static HTML/SVG rendering').requiredOption('--file <path>', 'Document JSON or - for stdin').requiredOption('--format <format>', 'json, html, or svg').option('--output <file>', 'Output filename; omitted writes content to stdout').option('--page <index>', 'Zero-based SVG page', '0').option('--time <seconds>', 'SVG timeline position', '0').action(async options => {
-  if (!['json', 'html', 'svg'].includes(options.format)) throw new CliError('unsupported_format', 'Offline rendering supports json, html, or svg. Use projects export for cloud-rendered binary formats.');
-  const input = await documentInput(options.file);
-  const document = options.format === 'json' ? input : publicCreativeProjection(upgradeDocument(input));
+program.command('render').description('Render a local JSON/YAML document offline using shared static rendering').requiredOption('--file <path>', 'Document JSON/YAML or - for stdin').option('--input-format <format>', 'Required for stdin: json or yaml').requiredOption('--format <format>', 'json, yaml, html, or svg').option('--output <file>', 'Output filename; omitted writes content to stdout').option('--page <index>', 'Zero-based SVG page', '0').option('--time <seconds>', 'SVG timeline position', '0').action(async options => {
+  if (!['json', 'yaml', 'html', 'svg'].includes(options.format)) throw new CliError('unsupported_format', 'Offline rendering supports json, yaml, html, or svg. Use projects export for cloud-rendered binary formats.');
+  const input = await documentInput(options.file, options.inputFormat);
+  const document = ['json','yaml'].includes(options.format) ? input : publicCreativeProjection(upgradeDocument(input));
   // The rendered document is always the upgraded, projected one, so the offline-asset check must not
   // depend on the version of the input: a legacy document with owned assets cannot render offline either.
-  if (options.format !== 'json' && document.assets.some(a => !a.url.startsWith('data:'))) throw new CliError('offline_asset_unavailable', 'Creative media is not embedded locally. Use authenticated projects export to resolve owned assets.');
+  if (!['json','yaml'].includes(options.format) && document.assets.some(a => !a.url.startsWith('data:'))) throw new CliError('offline_asset_unavailable', 'Creative media is not embedded locally. Use authenticated projects export to resolve owned assets.');
   const page = nonnegativeNumber(options.page);
   if (!Number.isInteger(page)) throw new CliError('invalid_page', 'Page must be a zero-based integer.');
-  const content = options.format === 'json' ? JSON.stringify(document, null, 2) : options.format === 'html' ? renderHtml(document) : renderSvg(document, page, nonnegativeNumber(options.time));
+  const content = options.format === 'json' ? JSON.stringify(document, null, 2) : options.format === 'yaml' ? stringifyDocumentYaml(document) : options.format === 'html' ? renderHtml(document) : renderSvg(document, page, nonnegativeNumber(options.time));
   await outputFile(options.output, content, { format: options.format });
 });
 

@@ -760,7 +760,7 @@ export function App() {
                         <Import size={19} />
                         <input
                           type="file"
-                          accept=".json,.svg,.html,.htm,.zip"
+                          accept=".json,.yaml,.yml,.svg,.html,.htm,.zip"
                           aria-label="Import a design"
                           onChange={(e) => {
                             const file = e.target.files?.[0];

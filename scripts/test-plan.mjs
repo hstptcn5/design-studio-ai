@@ -45,6 +45,7 @@ const CORE_PATHS = [
 const DOCS_PATHS = [/^docs\//, /^README\.md$/, /^(AGENTS|CLAUDE)\.md$/, /^skills\//, /^LICENSE$/, /^plans\//];
 
 const AREAS = [
+  { name: 'yaml-source', paths: [/^src\/shared\/document-yaml\.ts$/, /^src\/app\/yaml-source/, /^src\/app\/file-formats\.ts$/], specs: ['yaml-source-ui.spec.ts', 'onboarding-ui.spec.ts'] },
   {
     name: 'community',
     paths: [/^src\/app\/community/, /^src\/app\/browser-community-tools/, /^src\/shared\/community/, /^src\/shared\/public-metadata/, /^server\/community-/, /^migrations\/00(13|14)-community/],

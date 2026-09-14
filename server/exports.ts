@@ -18,12 +18,13 @@ import type { Env, Bindings } from './types';
 import { projectRow, validateAssets } from './projects';
 import { ApiError, fail, origin, owner, rateLimit } from './security';
 import { interactiveSnapshotHtml } from './published-html';
+import { stringifyDocumentYaml } from '../src/shared/document-yaml';
 
 // Both adapters expose the small browser surface used here; the renderer itself is shared.
 export interface ExportBrowser { newPage(): Promise<any>; close(): Promise<void> }
 export const exportRoutes = new Hono<Env>();
 
-const mimeTypes = {'editable-scene':'application/json','scene-angles':'application/zip', motion:'application/zip', 'png-sequence':'application/zip', spritesheet:'application/zip', json: 'application/json', svg: 'image/svg+xml', html: 'text/html', png: 'image/png', pdf: 'application/pdf', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', webm: 'video/webm', mp4: 'video/mp4', react: 'application/zip', glb: 'model/gltf-binary', gltf: 'model/gltf+json' };
+const mimeTypes = {'editable-scene':'application/json','scene-angles':'application/zip', motion:'application/zip', 'png-sequence':'application/zip', spritesheet:'application/zip', json: 'application/json', yaml: 'application/yaml; charset=utf-8', svg: 'image/svg+xml', html: 'text/html', png: 'image/png', pdf: 'application/pdf', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', webm: 'video/webm', mp4: 'video/mp4', react: 'application/zip', glb: 'model/gltf-binary', gltf: 'model/gltf+json' };
 
 /** Fetch only generated Google Fonts CSS and its fixed-origin font files, before browser isolation. */
 export async function embeddedDocumentFonts(doc: DesignDocument) {
@@ -76,7 +77,7 @@ export async function renderProjectExport(c: Context<Env>, projectId: string, in
     span.event.projectId = row.id; span.event.action = thumbnail ? 'thumbnail.render' : `export.${options.format}`;
     await updateEvent(c.env, span.event);
     let doc = documentSchema.parse(JSON.parse(row.document));
-    if (options.format !== 'json') {
+    if (options.format !== 'json' && options.format !== 'yaml') {
       if (options.format !== 'editable-scene') doc = publicCreativeProjection(upgradeDocument(doc));
       await validateAssets(c, doc, row.id);
     }
@@ -107,6 +108,7 @@ export async function renderSnapshotExport(bindings: Bindings, name: string, doc
   const extension = options.format==='editable-scene'?'json':['react','motion','png-sequence','spritesheet','scene-angles'].includes(options.format) ? 'zip' : options.format;
   const headers = { 'Content-Type': mimeTypes[options.format], 'Content-Disposition': `attachment; filename="${name.replace(/[^a-zA-Z0-9_-]/g, '_')}.${extension}"`, 'Cache-Control': 'private,no-store', 'X-Content-Type-Options': 'nosniff' };
   if (options.format === 'json') { const output = JSON.stringify(doc, null, 2); hooks.onBytes?.(new TextEncoder().encode(output).length); return new Response(output, { headers }); }
+  if (options.format === 'yaml') { const output = stringifyDocumentYaml(doc); hooks.onBytes?.(new TextEncoder().encode(output).length); return new Response(output, { headers }); }
   if (!['html', 'svg', 'react'].includes(options.format)) {
     const selectedPages = hooks.inspection ? hooks.inspection.pageIndices.map(index => doc.pages[index]) : options.format === 'pdf' || options.format === 'pptx' ? doc.pages : [doc.pages[options.pageIndex]];
     const renderNodes = selectedPages.flatMap(page => page.nodes.filter(node => node.visible !== false));

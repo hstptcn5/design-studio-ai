@@ -1,0 +1,17 @@
+{
+  "id": "DSA-PROD-002",
+  "title": "YAML Authoring Implementation Handoff",
+  "objective": "Convert the accepted DSA-PROD-001 YAML specification into one bounded executable Implementation Request pinned to actual repository identity.",
+  "status": "complete",
+  "scope": {"included": ["Repository reconciliation", "Machine-readable Implementation Request", "Requirements and acceptance criteria", "Target/dependency/migration plan", "Local verification and rollback plan", "Durable handoff"], "excluded": ["Product source changes", "YAML implementation", "Dependency installation", "Feature redesign", "Actions", "PR/merge", "Deploy/release"]},
+  "dependencies": ["DSA-PROD-001"],
+  "acceptance_criteria": [
+    {"id": "AC-PROD-002-01", "description": "Repository and accepted specification are reconciled.", "satisfied": true, "evidence_ids": ["EV-PROD-002-RECONCILIATION"]},
+    {"id": "AC-PROD-002-02", "description": "One complete executable machine-readable Implementation Request exists.", "satisfied": true, "evidence_ids": ["EV-PROD-002-REQUEST", "EV-PROD-002-REVIEW"]},
+    {"id": "AC-PROD-002-03", "description": "Canonical state and handoff validate without granting implementation authority.", "satisfied": true, "evidence_ids": ["EV-PROD-002-HANDOFF", "EV-PROD-002-REVIEW"]}
+  ],
+  "required_verification": ["repository_reconciliation", "implementation_request", "handoff_validation"],
+  "required_files": [".repo-steward/dsa-prod-002-implementation-request.json", ".repo-steward/handoff.md"],
+  "risks": ["Parser dependency and cross-client surface remain future implementation risks."],
+  "rollback": "Revert only DSA-PROD-002 Steward metadata."
+}

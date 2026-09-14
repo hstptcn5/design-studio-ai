@@ -1,0 +1,157 @@
+{
+  "contract_version": "0.1.0",
+  "kind": "implementation_request",
+  "request_id": "DSA-IMPL-YAML-001",
+  "checkpoint": {"id": "DSA-PROD-002", "title": "YAML Authoring Implementation Handoff"},
+  "repository": {
+    "identity": "https://github.com/hstptcn5/design-studio-ai.git",
+    "base_commit": "956421bd8c927f3e0d26c5bbe9d0824f400ce387",
+    "expected_branch": "steward/continuity-bootstrap",
+    "content_digest": "691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c",
+    "reconciliation_rule": "Repository reality wins. Before implementation, require the expected branch, reconcile any HEAD/content drift, and preserve unknown edits."
+  },
+  "accepted_specification": {
+    "id": "DSA-PROD-001",
+    "path": ".repo-steward/dsa-prod-001-spec.md",
+    "decision": "SELECT",
+    "behavior": "YAML is an explicitly applied editable source and interchange representation over the canonical DesignDocument.",
+    "source_of_truth": "The existing validated DesignDocument object and JSON/revision persistence model remain canonical.",
+    "round_trip": "Semantic DesignDocument equality only; comments, author formatting, scalar spelling, and key order are not persisted."
+  },
+  "authority": {
+    "request_creation": "authorized",
+    "product_implementation": "not_authorized_in_DSA-PROD-002",
+    "pull_request": "not_authorized",
+    "merge": "not_authorized",
+    "deploy": "not_authorized",
+    "release": "not_authorized",
+    "required_next_authorization": "Explicitly authorize DSA-PROD-003 implementation against this request after reconciling its base identity."
+  },
+  "included_scope": [
+    "Add one shared strict YAML codec that converts between text and the existing DesignDocument and returns stable structured diagnostics.",
+    "Add an authenticated editor YAML source surface with generated source, Validate, Preview, Apply and save, Reset from design, Download YAML, Close, unsaved-change protection, and accessible mobile/desktop behavior.",
+    "Add .yaml and .yml native-document import in the browser workspace through the shared codec.",
+    "Add YAML as a lossless textual browser and authenticated server export format through the shared codec.",
+    "Add CLI YAML input/output, extension detection, explicit stdin format, document get, project import/export, and offline render-output support.",
+    "Advertise the YAML format through existing REST/API reference, MCP/WebMCP capability inventories, CLI help, official docs, agent skill, and generated llms outputs.",
+    "Add focused codec, server, CLI, UI, accessibility, security, documentation, and JSON regression tests and update E2E test-plan routing."
+  ],
+  "excluded_scope": [
+    "YAML as canonical or database persistence",
+    "Database or document-schema migration",
+    "Persisted comments, lexical formatting, scalar spelling, key order, anchors, or aliases",
+    "Collaborative or textual YAML merge and live source co-editing",
+    "Autosaving a YAML source buffer",
+    "Raw application/yaml REST request bodies or a new import endpoint",
+    "A YAML-specific product schema, schema-version system, or best-effort unknown-field dropping",
+    "Provider prompt/output changes or automatic AI-generated YAML application",
+    "Templates, variables, includes, macros, expressions, executable tags, scripts, environment interpolation, or remote references",
+    "Unrelated editor/API redesign, refactoring, dependency upgrades, or product features"
+  ],
+  "requirements": [
+    {"id": "REQ-YAML-01", "statement": "Implement parseDocumentYaml and stringifyDocumentYaml in one shared module; both must pass values through documentSchema and never duplicate the DesignDocument field schema.", "acceptance_criteria": ["AC-YAML-01", "AC-YAML-02", "AC-YAML-04"]},
+    {"id": "REQ-YAML-02", "statement": "Parse exactly one UTF-8 YAML 1.2 document with a 2 MiB input ceiling and depth limit 100; reject aliases, anchors, merge keys, explicit/custom tags, duplicate keys, non-string mapping keys, multiple documents, non-finite or non-JSON values, cyclic/shared references, undefined/date/binary/map/set values, and prototype-pollution keys.", "acceptance_criteria": ["AC-YAML-03", "AC-YAML-04"]},
+    {"id": "REQ-YAML-03", "statement": "Return stable diagnostic codes with path and YAML line/column when available; never log or render source as HTML.", "acceptance_criteria": ["AC-YAML-04", "AC-YAML-08"]},
+    {"id": "REQ-YAML-04", "statement": "Provide explicit Validate and Preview actions that do not mutate editor or server state, and Apply and save through the existing full-document revision/brief-revision guarded save path.", "acceptance_criteria": ["AC-YAML-05", "AC-YAML-06"]},
+    {"id": "REQ-YAML-05", "statement": "Preserve the YAML buffer on validation/save failure or revision conflict; require explicit discard/reset when local visual edits would replace changed source.", "acceptance_criteria": ["AC-YAML-06", "AC-YAML-08"]},
+    {"id": "REQ-YAML-06", "statement": "Use the shared codec for browser import/export, server export, and CLI YAML flows while retaining unchanged JSON behavior.", "acceptance_criteria": ["AC-YAML-02", "AC-YAML-07", "AC-YAML-09"]},
+    {"id": "REQ-YAML-07", "statement": "Disclose that comments and formatting are session-only and not persisted; generated YAML is deterministic, two-space indented, block-sequence formatted, final-newline terminated, and contains no generated anchors.", "acceptance_criteria": ["AC-YAML-02", "AC-YAML-08"]},
+    {"id": "REQ-YAML-08", "statement": "Keep server authorization, project identity/kind, asset ownership, topology/evolution, schemaVersion, and optimistic revision validation authoritative.", "acceptance_criteria": ["AC-YAML-06", "AC-YAML-09"]},
+    {"id": "REQ-YAML-09", "statement": "Synchronize public clients and documentation from owning sources and regenerate derived documentation/bundles rather than hand-editing generated output.", "acceptance_criteria": ["AC-YAML-10"]}
+  ],
+  "acceptance_criteria": [
+    {"id": "AC-YAML-01", "description": "Representative valid schemaVersion 1 and 2 documents parse from YAML and validate as DesignDocument values."},
+    {"id": "AC-YAML-02", "description": "For catalog templates and representative creative, motion, and 3D documents, parseDocumentYaml(stringifyDocumentYaml(doc)) deep-equals documentSchema.parse(doc), and JSON-to-YAML-to-JSON preserves every supported value."},
+    {"id": "AC-YAML-03", "description": "Malformed YAML and every prohibited YAML/non-JSON feature are rejected before mutation, including size/depth and prototype-pollution cases."},
+    {"id": "AC-YAML-04", "description": "Syntax and schema failures expose stable error codes, document paths, and YAML line/column where available without including full source in logs or telemetry."},
+    {"id": "AC-YAML-05", "description": "Validate and Preview never mutate local canonical editor state, persistence, revision, brief revision, or publication state."},
+    {"id": "AC-YAML-06", "description": "Apply is explicit and saves only at the exact observed project and applicable brief revision; stale revisions fail with actionable reconciliation while preserving source."},
+    {"id": "AC-YAML-07", "description": "Browser .yaml/.yml import, browser/server YAML export, and CLI YAML input/output use the shared codec with correct filenames, content type, stdin format requirements, and structured failures."},
+    {"id": "AC-YAML-08", "description": "The source workflow discloses comment/format loss, protects unsaved source, supports keyboard and screen-reader error navigation, works at mobile and desktop sizes, and retains a textarea fallback."},
+    {"id": "AC-YAML-09", "description": "Existing JSON imports, exports, CLI commands, REST/MCP/WebMCP document writes, revision conflicts, rendering, and publication behavior remain backward compatible."},
+    {"id": "AC-YAML-10", "description": "Owning documentation, API/format inventories, CLI help, agent skill, llms sources/derived outputs, generated assets, and E2E test routing are synchronized and verified."}
+  ],
+  "target_files": {
+    "new": [
+      {"path": "src/shared/document-yaml.ts", "purpose": "Strict shared codec and structured diagnostics"},
+      {"path": "src/app/yaml-source-dialog.tsx", "purpose": "Accessible explicit source workflow"},
+      {"path": "src/app/yaml-source.css", "purpose": "Responsive source UI"},
+      {"path": "tests/document-yaml.test.ts", "purpose": "Codec, security, diagnostics, and semantic round trips"},
+      {"path": "tests/yaml-source-ui.spec.ts", "purpose": "Preview/apply/conflict/accessibility/mobile-desktop workflow"}
+    ],
+    "existing_expected": [
+      {"path": "package.json", "purpose": "Pin yaml dependency"},
+      {"path": "package-lock.json", "purpose": "Lock dependency graph"},
+      {"path": "src/app/file-formats.ts", "purpose": "Browser YAML import/export"},
+      {"path": "src/app/app.tsx", "purpose": "Accept .yaml/.yml workspace import"},
+      {"path": "src/app/editor.tsx", "purpose": "Open/source preview/apply integration using existing save guards"},
+      {"path": "src/shared/export-contract.ts", "purpose": "Add yaml export format"},
+      {"path": "server/exports.ts", "purpose": "Authenticated YAML response, extension, and content type"},
+      {"path": "packages/cli/src/dsa.ts", "purpose": "YAML file/stdin input and output flags"},
+      {"path": "tests/export.test.ts", "purpose": "Server YAML export and JSON regression"},
+      {"path": "tests/cli.test.ts", "purpose": "CLI YAML and JSON regression"},
+      {"path": "tests/onboarding-ui.spec.ts", "purpose": "Workspace import coverage if not wholly owned by the new spec"},
+      {"path": "tests/security-boundaries.test.ts", "purpose": "Server ownership/revision/security regression where relevant"},
+      {"path": "tests/public-docs.spec.ts", "purpose": "Published documentation and discovery assertions"},
+      {"path": "src/shared/api-reference.ts", "purpose": "Public format/capability inventory"},
+      {"path": "src/app/browser-design-tools.ts", "purpose": "WebMCP capability inventory"},
+      {"path": "server/mcp.ts", "purpose": "MCP capability/resource inventory"},
+      {"path": "packages/cli/README.md", "purpose": "CLI YAML usage"},
+      {"path": "docs/agents.md", "purpose": "Canonical document/source workflow"},
+      {"path": "docs/web-documentation.md", "purpose": "Derived-document ownership compliance if routing changes"},
+      {"path": "skills/design-studio-ai/SKILL.md", "purpose": "Agent YAML workflow and safety limits"},
+      {"path": "scripts/build-public-docs.mjs", "purpose": "Owning llms/documentation source when YAML claims are added"},
+      {"path": "scripts/test-plan.mjs", "purpose": "Route new browser spec"}
+    ],
+    "generated_do_not_hand_edit": ["dist/**", "public/studio-renderer.js", "public/studio-viewer.js", "llms.txt", "llms-full.txt"]
+  },
+  "dependency_changes": [
+    {"package": "yaml", "version": "2.9.1", "location": "root dependencies", "reason": "YAML 1.2 Document AST, diagnostics, deterministic serialization, and bounded conversion; pin exact version and update package-lock.json.", "constraints": ["Do not enable custom tags", "Set alias expansion limit to zero and independently reject anchors/aliases", "Audit shipped dependency and license locally"]}
+  ],
+  "migration_expectations": {
+    "database": "none",
+    "document_schema": "none",
+    "stored_projects": "unchanged JSON text",
+    "publications": "unchanged immutable JSON-derived snapshots",
+    "rollback_data_action": "none"
+  },
+  "verification_plan": [
+    {"id": "VER-YAML-UNIT", "commands": ["npx tsx --test tests/document-yaml.test.ts"], "covers": ["valid parse", "invalid syntax", "prohibited features", "DesignDocument validation", "semantic round trips", "diagnostics", "limits"]},
+    {"id": "VER-YAML-EXPORT", "commands": ["node scripts/build-renderer.mjs", "npx tsx --test tests/export.test.ts tests/security-boundaries.test.ts"], "covers": ["server YAML export", "authorization", "JSON regression", "render/publication boundaries"]},
+    {"id": "VER-YAML-CLI", "commands": ["npm run build:cli", "npx tsx --test tests/cli.test.ts"], "covers": ["file and stdin input", "get/import/export/render", "structured failures", "JSON regression"]},
+    {"id": "VER-YAML-UI", "commands": ["npm run build", "npm run test:e2e -- tests/yaml-source-ui.spec.ts --project=mobile", "npm run test:e2e -- tests/yaml-source-ui.spec.ts --project=desktop", "npm run test:e2e -- tests/onboarding-ui.spec.ts --project=mobile"], "covers": ["preview non-mutation", "explicit apply", "stale revision", "buffer preservation", "import", "keyboard/error UX", "mobile/desktop"]},
+    {"id": "VER-YAML-DOCS", "commands": ["npx tsx --test tests/public-docs.spec.ts"], "covers": ["API/CLI/MCP/WebMCP/docs discovery and generated documentation"]},
+    {"id": "VER-YAML-GATES", "commands": ["npm run typecheck", "npm test", "npm run build", "npm run test:e2e -- $(node scripts/test-plan.mjs --format=args)"], "covers": ["shared contracts", "full unit regression", "production build", "mapped browser and always-run security coverage"]},
+    {"id": "VER-YAML-MANUAL", "procedure": "Inspect actual YAML downloads and exercise source editor at representative mobile and desktop viewports. Report only browsers actually run; Chromium-only evidence does not establish cross-browser support."}
+  ],
+  "rollback": {
+    "strategy": "Revert the focused YAML implementation commit(s), removing format registration, UI, shared codec, yaml dependency, tests, and source documentation together.",
+    "data": "No migration or stored-project rollback is required because persistence remains JSON.",
+    "preserve": ["Existing projects and revisions", "JSON workflows", "Unrelated user changes", "Historical Steward evidence"]
+  },
+  "known_risks": [
+    {"id": "R-YAML-01", "risk": "Parser features or resource expansion create denial-of-service or unsafe object shapes.", "mitigation": "AST-level feature rejection, zero aliases, duplicate-key rejection, JSON-only conversion, prototype-key rejection, 2 MiB/depth limits, tests, exact dependency pin."},
+    {"id": "R-YAML-02", "risk": "Users expect comments or formatting to persist.", "mitigation": "Disclose semantic-only behavior at source entry and before apply; test reset/reload behavior."},
+    {"id": "R-YAML-03", "risk": "A full-document source apply overwrites concurrent or unsaved changes.", "mitigation": "Snapshot revisions, explicit apply, existing CAS/brief guards, preserve buffer on failure, no autosave, conflict recovery."},
+    {"id": "R-YAML-04", "risk": "Format support drifts across browser, server, CLI, MCP/WebMCP, and docs.", "mitigation": "Single codec and export enum plus parity/documentation tests and generated-source ownership."},
+    {"id": "R-YAML-05", "risk": "Large source UI is difficult on mobile or inaccessible.", "mitigation": "Full-screen mobile layout, textarea fallback, keyboard/focus/error semantics, mobile and desktop E2E."}
+  ],
+  "unresolved_non_blocking": [
+    {"id": "Q-YAML-01", "question": "Use a plain textarea initially or an existing lightweight editor abstraction?", "resolution_rule": "Prefer textarea unless focused UI review proves an existing dependency-free abstraction meets accessibility and bundle constraints; do not add a second editor dependency."},
+    {"id": "Q-YAML-02", "question": "What telemetry event names should source actions use?", "resolution_rule": "Follow src/app/analytics.ts naming/privacy conventions; record actions and error codes only, never YAML content."},
+    {"id": "Q-YAML-03", "question": "Is 2 MiB and depth 100 the final limit?", "resolution_rule": "Keep these specified ceilings unless existing representative valid documents exceed them in tests; any change requires evidence and must remain below the existing 10 MiB browser import ceiling."}
+  ],
+  "prohibited_actions": [
+    "Do not implement during DSA-PROD-002",
+    "Do not modify product source or dependencies during DSA-PROD-002",
+    "Do not create or merge a pull request",
+    "Do not deploy or release",
+    "Do not run GitHub Actions for convenience",
+    "Do not weaken validation or revision checks",
+    "Do not edit generated bundles or generated documentation directly",
+    "Do not expand beyond the accepted YAML MVP"
+  ],
+  "executable": true,
+  "blocking_uncertainty": [],
+  "next_checkpoint": "DSA-PROD-003 — YAML Authoring MVP Implementation"
+}

@@ -13,6 +13,7 @@ import { secret } from '../server/security';
 import type { Bindings } from '../server/types';
 import { documentSchema } from '../src/shared/schema';
 import { createDocument } from '../src/shared/catalog';
+import { parseDocumentYaml, stringifyDocumentYaml } from '../src/shared/document-yaml';
 import { z } from 'zod';
 
 const executable = resolve('packages/cli/dist/dsa.js');
@@ -112,8 +113,26 @@ test('schema and templates use the actual shared document format', async () => {
 
 test('offline rendering accepts canonical JSON on stdin without authentication', async () => {
   const document = await json(['templates', 'instantiate', 'product-deck']);
-  const rendered = await run(['render', '--file', '-', '--format', 'svg', '--page', '1'], { input: JSON.stringify(document), token: '' });
+  const rendered = await run(['render', '--file', '-', '--input-format', 'json', '--format', 'svg', '--page', '1'], { input: JSON.stringify(document), token: '' });
   assert.equal(rendered.code, 0, rendered.stderr); assert.match(rendered.stdout, /^<svg /); assert.match(rendered.stdout, /A clear perspective/);
+});
+
+test('CLI accepts strict YAML files and explicit YAML stdin, and emits semantic YAML', async () => {
+  const document = createDocument('web', 'CLI YAML source');
+  const yamlFile = join(directory, 'source.yaml');
+  await writeFile(yamlFile, stringifyDocumentYaml(document));
+  const rendered = await run(['render', '--file', yamlFile, '--format', 'yaml'], { token: '' });
+  assert.equal(rendered.code, 0, rendered.stderr);
+  const canonical = documentSchema.parse(JSON.parse(JSON.stringify(document)));
+  assert.deepEqual(parseDocumentYaml(rendered.stdout), canonical);
+  const stdin = await run(['render', '--file', '-', '--input-format', 'yaml', '--format', 'json'], { input: stringifyDocumentYaml(document), token: '' });
+  assert.equal(stdin.code, 0, stdin.stderr); assert.equal(JSON.parse(stdin.stdout).name, 'CLI YAML source');
+  const unspecified = await run(['render', '--file', '-', '--format', 'json'], { input: stringifyDocumentYaml(document), token: '' });
+  assert.equal(unspecified.code, 1); assert.equal(JSON.parse(unspecified.stderr).error.code, 'input_format_required');
+  const created = (await json(['projects', 'import', '--file', yamlFile])).project;
+  const downloaded = join(directory, 'downloaded.yaml');
+  await json(['projects', 'document', 'get', created.id, '--format', 'yaml', '--output', downloaded]);
+  assert.deepEqual(parseDocumentYaml(await readFile(downloaded, 'utf8')), documentSchema.parse(created.document));
 });
 
 const cliError = z.object({ error: z.object({ code: z.string() }) });
@@ -126,7 +145,7 @@ test('offline rendering refuses documents whose media is not embedded, legacy an
   // input version, or v1 silently renders markup pointing at unreachable /api/assets URLs.
   const current = documentSchema.parse({ ...legacy, schemaVersion: 2, boards: [], paintings: [] });
   for (const [label, candidate] of [['legacy v1', legacy], ['current v2', current]] as const) {
-    const refused = await run(['render', '--file', '-', '--format', 'svg'], { input: JSON.stringify(candidate), token: '' });
+    const refused = await run(['render', '--file', '-', '--input-format', 'json', '--format', 'svg'], { input: JSON.stringify(candidate), token: '' });
     assert.equal(refused.code, 1, `${label}: ${refused.stderr}`);
     assert.equal(cliError.parse(JSON.parse(refused.stderr)).error.code, 'offline_asset_unavailable', label);
   }
@@ -135,7 +154,7 @@ test('offline rendering refuses documents whose media is not embedded, legacy an
   const embedded = createDocument('slides', 'Embedded media');
   embedded.assets.push({ id: 'embedded', name: 'Embedded', type: 'image', mimeType: 'image/png', url: dataUrl });
   embedded.pages[0].nodes.push({ id: 'embedded-image', type: 'image', name: 'Embedded', x: 0, y: 0, width: 10, height: 10, src: dataUrl });
-  const rendered = await run(['render', '--file', '-', '--format', 'html'], { input: JSON.stringify(embedded), token: '' });
+  const rendered = await run(['render', '--file', '-', '--input-format', 'json', '--format', 'html'], { input: JSON.stringify(embedded), token: '' });
   assert.equal(rendered.code, 0, rendered.stderr);
   assert.match(rendered.stdout, /data:image\/png;base64/, 'the embedded asset must reach the rendered output');
 });
@@ -166,7 +185,7 @@ test('real SQLite project edits use stdin operations and reject stale revisions 
   await json(['unpreview', created.id]); assert.equal((await fetch(preview.url)).status, 404);
   const share = await json(['share', created.id]); assert.equal((await fetch(share.url)).status, 200);
   await json(['unshare', created.id]); assert.equal((await fetch(share.url)).status, 404);
-  const invalid = await run(['projects', 'document', 'put', created.id, '--revision', '3', '--file', '-'], { input: '{}' });
+  const invalid = await run(['projects', 'document', 'put', created.id, '--revision', '3', '--file', '-', '--input-format', 'json'], { input: '{}' });
   assert.equal(invalid.code, 1); assert.equal(JSON.parse(invalid.stderr).error.code, 'invalid_document');
   const unconfigured = await run(['projects', 'export', created.id, '--format', 'png', '--output', join(directory, 'unavailable.png')]);
   assert.equal(unconfigured.code, 1); assert.equal(JSON.parse(unconfigured.stderr).error.code, 'renderer_not_configured');
@@ -180,7 +199,7 @@ test('asset clone copies bytes and static exports embed images after deleting so
   assert.equal((await json(['assets', 'list', created.id])).assets.length, 1);
   created.document.assets.push(asset);
   created.document.pages[0].nodes.push({ id: 'cli-test-image', type: 'image', name: 'Pixel', x: 0, y: 0, width: 1, height: 1, src: asset.url });
-  await json(['projects', 'document', 'put', created.id, '--revision', '1', '--file', '-'], { input: JSON.stringify(created.document) });
+  await json(['projects', 'document', 'put', created.id, '--revision', '1', '--file', '-', '--input-format', 'json'], { input: JSON.stringify(created.document) });
   const clone = (await json(['projects', 'clone', created.id, '--name', 'Independent clone'])).project;
   assert.notEqual(clone.document.assets[0].id, asset.id); assert.notEqual(clone.document.assets[0].url, asset.url);
   await json(['projects', 'delete', created.id]);

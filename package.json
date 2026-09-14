@@ -45,6 +45,7 @@
     "react-dom": "^19.2.8",
     "roughjs": "4.6.6",
     "three": "^0.185.1",
+    "yaml": "2.9.1",
     "zod": "^4.5.4"
   },
   "devDependencies": {

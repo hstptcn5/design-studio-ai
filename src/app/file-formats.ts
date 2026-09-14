@@ -2,6 +2,7 @@ import { createTimelineAudioEngine, timelineAudioCues, type TimelineAudioEngine 
 import { publicCreativeProjection } from '../shared/public-creative-projection';
 import { upgradeDocument } from '../shared/document-upgrade';
 import {documentSchema} from '../shared/schema';
+import { parseDocumentYaml, stringifyDocumentYaml } from '../shared/document-yaml';
 import type { DesignDocument, DesignNode } from "../shared/schema";
 import { renderHtml, renderSvg } from "../shared/render";
 import { createDocument } from "../shared/catalog";
@@ -87,6 +88,10 @@ export async function exportDesign(
       JSON.stringify(input, null, 2),
       "application/json",
     );
+    return;
+  }
+  if (format === "yaml") {
+    download(`${name}.yaml`, stringifyDocumentYaml(input), "application/yaml;charset=utf-8");
     return;
   }
   const doc = await portableDocument(publicCreativeProjection(upgradeDocument(input)), ['react', 'glb', 'gltf', 'html'].includes(format)),
@@ -264,6 +269,12 @@ export async function importDesign(
       document: doc,
       notice:
         "Design document imported. All supported document data is preserved.",
+    };
+  }
+  if (/\.ya?ml$/i.test(file.name)) {
+    return {
+      document: parseDocumentYaml(text),
+      notice: "YAML design document imported. Comments and formatting are not persisted.",
     };
   }
   const doc = createDocument("web", name),

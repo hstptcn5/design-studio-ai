@@ -120,6 +120,7 @@ import { inspectDesign } from "../shared/design-checks";
 import { exportDesign } from "./file-formats";
 import { registerDesignTools } from './browser-design-tools';
 import { mutateDocument } from '../shared/operations';
+import { YamlSourceDialog } from './yaml-source-dialog';
 const SceneView = lazy(() =>
   import("./scene-view").then((module) => ({ default: module.SceneView })),
 );
@@ -303,9 +304,9 @@ export function Editor({
   const [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
     [proposal, setProposal] = useState<DesignDocument | null>(null),
-    [dialogScreen, setDialogScreen] = useScreenState("dialog", "none", ["none", "export", "checks", "code"]),
+    [dialogScreen, setDialogScreen] = useScreenState("dialog", "none", ["none", "export", "checks", "code", "yaml"]),
     [shareUrl, setShareUrl] = useState("");
-  const exportOpen = dialogScreen === 'export', showChecks = dialogScreen === 'checks', showCode = dialogScreen === 'code';
+  const exportOpen = dialogScreen === 'export', showChecks = dialogScreen === 'checks', showCode = dialogScreen === 'code', showYaml = dialogScreen === 'yaml';
   const setExportOpen = (open: boolean) => setDialogScreen(open ? 'export' : 'none');
   const setShowChecks = (open: boolean) => setDialogScreen(open ? 'checks' : 'none');
   const setShowCode = (open: boolean) => setDialogScreen(open ? 'code' : 'none');
@@ -1661,6 +1662,15 @@ export function Editor({
             <Play size={15}/> Preview
           </button>
           <button
+            className="button small"
+            aria-label="Edit YAML source"
+            onClick={() => setDialogScreen('yaml')}
+            disabled={!!busy}
+          >
+            <Code2 size={15} />
+            <span>YAML</span>
+          </button>
+          <button
             className="button small export-button"
             aria-label="Export"
             onClick={() => setExportOpen(true)}
@@ -2514,6 +2524,11 @@ export function Editor({
                   detail: "Fully editable source",
                 },
                 {
+                  id: "yaml",
+                  name: "Design YAML",
+                  detail: "Editable interchange source",
+                },
+                {
                   id: "google",
                   name: "Google Slides",
                   detail: "Connect your Google account",
@@ -2577,6 +2592,16 @@ export function Editor({
             )}
           </div>
         </Modal>
+      )}
+      {showYaml && (
+        <YamlSourceDialog document={doc} revision={project.revision} briefRevision={brief?.revision} onClose={() => setDialogScreen('none')} onApply={async (sourceDocument, observedRevision, observedBriefRevision) => {
+          const { project: next } = await saveDocument<{ project: Project }>(`/api/projects/${project.id}/document`, {
+            document: sourceDocument,
+            expectedRevision: observedRevision,
+            ...(observedBriefRevision !== undefined ? { expectedBriefRevision: observedBriefRevision } : {}),
+          });
+          remember(); projectRef.current = next; docRef.current = next.document; setProject(next); setDoc(next.document); setSaved(documentFingerprint(next.document)); onProject(next); setProposal(null); notify('YAML source applied and saved.');
+        }}/>
       )}
       {googleUrl && (
         <Modal

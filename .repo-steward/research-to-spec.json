@@ -1,0 +1,44 @@
+{
+  "contract_version":"0.1.0","kind":"buildable_spec","spec_id":"DSA-SPEC-STEW-001",
+  "project":{"id":"github:hstptcn5/design-studio-ai","repository_identity":"https://github.com/hstptcn5/design-studio-ai.git","base_branch":"main","base_identity":"6b3cd5c1006ad586f10f1784aa56abd7b39d1001"},
+  "selected_direction":{"candidate_id":"CAND-CONTINUITY","selection_source":"active user task delegates selection of the safest highest-value bounded checkpoint and authorizes its implementation","decision":"Implement remote Steward continuity bootstrap only."},
+  "product_boundary":{"implemented_product_behavior":"none","canonical_design_document_contract":"unchanged","public_API_MCP_WebMCP_CLI_contracts":"unchanged"},
+  "included_scope":["Record current fork/default-branch/base identity and upstream relationship","Persist bounded Brainstorm alternatives and the selected continuity direction","Persist a buildable Research-to-Spec artifact and executable Implementation Request","Persist repository-scope verification and a durable handoff for a fresh agent"],
+  "excluded_scope":["Product code or runtime behavior changes","Canonical .repo-steward/state.yaml initialization until a direct checkout can compute the Repo Steward content digest","YAML authoring support from upstream issue #16","Complete offline source-project export from upstream issue #17","Adoption of upstream PR #37","GitHub Actions, pull request creation, merge, deploy, release, production data or secret changes"],
+  "requirements":[
+    {"id":"REQ-01","statement":"Record exact fork/upstream/base identity and discovery limitations in repository-owned durable evidence.","source_refs":["OBS-REPO","OBS-FORK","OBS-REMOTE-ONLY"],"acceptance_criteria_ids":["AC-01"],"verification_ids":["VER-01"]},
+    {"id":"REQ-02","statement":"Persist Brainstorm proposals with context_only authority and keep selection separate from unselected ideas.","source_refs":["BRAINSTORM"],"acceptance_criteria_ids":["AC-02"],"verification_ids":["VER-02"]},
+    {"id":"REQ-03","statement":"Persist an executable Implementation Request with exact base/branch/scope/rollback and separate implementation versus merge/deploy/release authority.","source_refs":["AUTHORITY","HANDOFF-CONTRACT"],"acceptance_criteria_ids":["AC-03"],"verification_ids":["VER-03"]},
+    {"id":"REQ-04","statement":"Change only .repo-steward/** in the implementation commit.","source_refs":["SCOPE"],"acceptance_criteria_ids":["AC-04"],"verification_ids":["VER-04"]},
+    {"id":"REQ-05","statement":"Do not claim runtime checks passed; explicitly retain NOT_RUN for unavailable local/npm/browser verification.","source_refs":["REMOTE-LIMIT"],"acceptance_criteria_ids":["AC-05"],"verification_ids":["VER-05"]}
+  ],
+  "acceptance_criteria":[
+    {"id":"AC-01","description":"Exact fork, upstream, default branch and base commit identities are durable."},
+    {"id":"AC-02","description":"Brainstorm proposals remain context-only and product ideas not selected are not implemented."},
+    {"id":"AC-03","description":"Implementation Request is bounded and preserves authority separation and rollback."},
+    {"id":"AC-04","description":"Base-to-implementation diff contains only .repo-steward/** paths."},
+    {"id":"AC-05","description":"Verification distinguishes PASS from NOT_RUN and records the remote-only limitation."}
+  ],
+  "evidence_register":[
+    {"id":"OBS-REPO","kind":"repository","claim":"Fork default branch is main at 6b3cd5c1006ad586f10f1784aa56abd7b39d1001","strength":"direct GitHub connector observation"},
+    {"id":"OBS-FORK","kind":"repository","claim":"Repository is a fork of bestagentkits/design-studio-ai and initially matched upstream HEAD.","strength":"direct GitHub repository metadata"},
+    {"id":"OBS-REMOTE-ONLY","kind":"environment","claim":"Execution container could not resolve github.com for a local clone.","strength":"direct command failure"},
+    {"id":"BRAINSTORM","kind":"specialist","claim":"Continuity bootstrap is research-recommended; Brainstorm grants no implementation authority.","strength":"current Brainstorm RC contract discipline"},
+    {"id":"AUTHORITY","kind":"user","claim":"Bounded implementation is authorized; merge/deploy/release are not.","strength":"active user instruction"},
+    {"id":"HANDOFF-CONTRACT","kind":"ecosystem","claim":"Implementation, verification, review, readiness and authorization remain distinct.","strength":"Steward Suite implementation-handoff draft contract"},
+    {"id":"SCOPE","kind":"spec","claim":"This checkpoint mutates only durable Steward context.","strength":"selected checkpoint"},
+    {"id":"REMOTE-LIMIT","kind":"limitation","claim":"No direct checkout means no canonical Repo Steward content digest and no npm/browser execution.","strength":"environment limitation"}
+  ],
+  "uncertainty":{"blocking":[],"non_blocking":["Canonical .repo-steward/state.yaml must be initialized later from a direct checkout.","The next product checkpoint remains unselected pending local reconciliation."]},
+  "verification_expectations":[
+    {"id":"VER-01","procedure":"Re-read main immediately before mutation and confirm base identity has not drifted."},
+    {"id":"VER-02","procedure":"Read back persisted Brainstorm artifact and confirm context_only authority and candidate separation."},
+    {"id":"VER-03","procedure":"Read back Implementation Request and confirm exact identity, branch, scope, rollback and authority fields."},
+    {"id":"VER-04","procedure":"Compare base to implementation commit and require every changed path to begin with .repo-steward/."},
+    {"id":"VER-05","procedure":"Record local npm/typecheck/unit/browser checks as NOT_RUN because no direct checkout is available."}
+  ],
+  "rollback":"Delete the feature branch or revert only the scoped durable-context commits.",
+  "ready":true,"authority":"context_only",
+  "limitations":["ready means buildable, not implemented and not merge-authorized.","No product/runtime acceptance is claimed by this spec."],
+  "produced_at":"2026-09-13T14:24:00Z"
+}
