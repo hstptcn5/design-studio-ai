@@ -16,18 +16,35 @@
     }
   },
   "current": {
-    "milestone": "YAML MVP merge-readiness closure",
-    "task": "Resolve or formally classify the structured-export host-capability gate and close technical YAML MVP readiness without PR, merge, deploy, or release",
-    "phase": "VERIFY",
+    "milestone": "YAML MVP pull-request handoff",
+    "task": "Open and reconcile a review-only pull request without merge, deploy, release, or product changes",
+    "phase": "HANDOFF",
     "checkpoint": {
-      "id": "DSA-PROD-005",
-      "title": "YAML MVP Merge-Readiness Closure",
-      "objective": "Close the remaining repository-wide gate by proving the Windows symlink failure is a host-capability limitation and running the full unit suite on a capable supported Node 24 host.",
+      "id": "DSA-PR-001",
+      "title": "YAML MVP PR-only Handoff",
+      "objective": "Create and reconcile a review-only pull request for the technically complete YAML MVP while preserving exact evidence identities and absent merge authority.",
       "status": "complete",
       "scope": {
-        "included": ["Push existing DSA-PROD-004 metadata commit", "Windows and WSL2 symlink-capability validation", "Supported Node 24 isolated structured-export reproduction", "Full npm test on capable Linux host", "Review conclusion reconfirmation", "Historical evidence preservation", "Closure response and durable handoff"],
-        "excluded": ["Product code changes", "New YAML features or redesign", "Test weakening", "Unrelated defect repair", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]
+        "included": ["Live GitHub repository/default-branch reconciliation", "Merge-base and branch identity verification", "Pull request creation", "Accurate PR description", "PR diff and status inspection", "PR identity response and durable handoff"],
+        "excluded": ["Product or test code changes", "New features or architecture", "Additional verification", "GitHub Actions manipulation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]
       },
+      "dependencies": ["DSA-PROD-005"],
+      "acceptance_criteria": [
+        {"id": "AC-PR-001-01", "description": "Live GitHub default branch, base SHA, merge base, head branch, head SHA, and clean remote parity are reconciled before PR creation.", "satisfied": true, "evidence_ids": ["EV-PR-001-RECONCILIATION"]},
+        {"id": "AC-PR-001-02", "description": "An open non-draft PR uses the authorized title and accurately describes capability, safety, persistence, dependency, verification, limitations, and authority.", "satisfied": true, "evidence_ids": ["EV-PR-001-CREATION"]},
+        {"id": "AC-PR-001-03", "description": "The resulting PR diff and identities match the intended YAML MVP plus Steward evidence history with no unexpected product scope and no merge.", "satisfied": true, "evidence_ids": ["EV-PR-001-REVIEW"]},
+        {"id": "AC-PR-001-04", "description": "Exact historical and product verification identities remain unchanged, and durable PR handoff validation passes.", "satisfied": true, "evidence_ids": ["EV-PR-001-HISTORICAL", "EV-PR-001-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "pull_request_creation", "review", "historical_preservation", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-pr-001-handoff-response.json", ".repo-steward/handoff.md"],
+      "risks": ["PR creation may trigger repository-configured GitHub checks that were not manually invoked.", "The PR includes the full Steward bootstrap/evidence history because the authorized branch diverges from main before YAML implementation."],
+      "rollback": "Close PR #1 and revert only DSA-PR-001 Steward metadata if the handoff must be withdrawn; do not rewrite product or historical evidence."
+    }
+  },
+  "completed": [
+    {
+      "id": "DSA-PROD-005", "title": "YAML MVP Merge-Readiness Closure", "objective": "Close the remaining repository-wide gate by proving the Windows symlink failure is a host-capability limitation and running the full unit suite on a capable supported Node 24 host.", "status": "complete",
+      "scope": {"included": ["Push existing DSA-PROD-004 metadata commit", "Windows and WSL2 symlink-capability validation", "Supported Node 24 isolated structured-export reproduction", "Full npm test on capable Linux host", "Review conclusion reconfirmation", "Historical evidence preservation", "Closure response and durable handoff"], "excluded": ["Product code changes", "New YAML features or redesign", "Test weakening", "Unrelated defect repair", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]},
       "dependencies": ["DSA-PROD-004"],
       "acceptance_criteria": [
         {"id": "AC-PROD-005-01", "description": "The exact clean branch and sole expected unpushed DSA-PROD-004 metadata commit are reconciled and pushed without a PR.", "satisfied": true, "evidence_ids": ["EV-PROD-005-RECONCILIATION"]},
@@ -40,9 +57,7 @@
       "required_files": [".repo-steward/dsa-prod-005-closure-response.json", ".repo-steward/handoff.md"],
       "risks": ["The direct Windows host remains unable to create the test symlink without an OS policy change.", "The complete repository-selected 35-spec E2E matrix was not run.", "The existing root dependency graph reports eight high-severity audit findings."],
       "rollback": "Revert only the DSA-PROD-005 Steward closure metadata commit; preserve product commit 1769de9258c6be285162a3cee9259600871462c1 and all earlier evidence."
-    }
-  },
-  "completed": [
+    },
     {
       "id": "DSA-PROD-004", "title": "YAML Authoring MVP Review and Node 24/Cross-Browser Gate", "objective": "Independently review product commit 1769de9258c6be285162a3cee9259600871462c1 and verify it under supported Node 24 and practical Chromium, Firefox, and WebKit coverage.", "status": "complete",
       "scope": {"included": ["Remote durability of existing DSA-PROD-003 commits", "Independent bounded implementation review", "Supported Node 24 dependency/typecheck/build/test gate", "Chromium, Firefox, WebKit, and mobile YAML critical-path verification", "Historical evidence preservation", "Review response and durable handoff"], "excluded": ["New YAML features", "Design expansion", "Opportunistic cleanup", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]},
@@ -139,7 +154,8 @@
     {"id": "C-PROD-002", "classification": "DECIDED", "text": "DSA-PROD-002 authorizes Implementation Handoff artifacts only; product implementation, merge, deploy, and release remain unauthorized.", "source": "User request for DSA-PROD-002"},
     {"id": "C-PROD-003", "classification": "DECIDED", "text": "DSA-PROD-003 authorizes only the bounded YAML authoring MVP implementation and local verification; pull request creation, merge, deploy, release, production mutation, destructive action, and unrelated scope remain unauthorized.", "source": "User request for DSA-PROD-003"},
     {"id": "C-PROD-004", "classification": "DECIDED", "text": "DSA-PROD-004 authorizes independent review, bounded verification, remote push of only the expected existing commits, and necessary in-scope defect correction; merge, deploy, release, unrelated work, production mutation, secrets, and destructive actions remain unauthorized.", "source": "User request for DSA-PROD-004"},
-    {"id": "C-PROD-005", "classification": "DECIDED", "text": "DSA-PROD-005 authorizes push of existing in-scope commits, local and host-capability verification, and Steward closure metadata only; PR creation, merge, deploy, release, production mutation, secrets, destructive actions, and new product work remain unauthorized.", "source": "User request for DSA-PROD-005"}
+    {"id": "C-PROD-005", "classification": "DECIDED", "text": "DSA-PROD-005 authorizes push of existing in-scope commits, local and host-capability verification, and Steward closure metadata only; PR creation, merge, deploy, release, production mutation, secrets, destructive actions, and new product work remain unauthorized.", "source": "User request for DSA-PROD-005"},
+    {"id": "C-PR-001", "classification": "DECIDED", "text": "DSA-PR-001 authorizes PR creation and accurate PR/handoff metadata only; product changes, merge, deploy, release, and new product work remain unauthorized.", "source": "User PR-only handoff request"}
   ],
   "decisions": [
     {"id": "DEC-YAML-001", "date": "2026-09-13T17:16:57Z", "status": "accepted", "context": "The canonical DesignDocument is strict versioned JSON-object data shared by every client and persisted as JSON; advanced users and agents have no lower-punctuation whole-document source workflow.", "decision": "Select strict YAML as an explicitly applied editable source representation and interchange format over the existing canonical DesignDocument; do not make YAML canonical persistence.", "reason": "This delivers readable authoring and validation while preserving schema, revision, ownership, merge, renderer, and storage contracts.", "alternatives": ["YAML import/export only", "YAML as canonical source", "Generated read-only YAML", "Improve visual editor without YAML", "Defer or do not build"], "consequences": ["A shared safe YAML codec and cross-client format updates are required", "Semantic round trips are supported but comments and lexical formatting are not persisted", "Product implementation still requires a separately authorized checkpoint"], "supersedes": [], "superseded_by": []}
@@ -160,7 +176,9 @@
     {"id": "F-PROD-004-GATES", "classification": "OBSERVED", "text": "Node v24.21.0 focused gates and production builds passed, all YAML critical-path browser targets passed, and aggregate npm test remained BLOCKED only by the unrelated Windows EPERM symlink permission failure at 482/483 passing.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "medium"},
     {"id": "F-PROD-005-RECON", "classification": "OBSERVED", "text": "DSA-PROD-005 began clean at e625ed0154be9e026405ef26f67c6161985b35da with exactly that one expected review-metadata commit ahead of origin; it was pushed without creating a PR.", "source": "git status/rev-list/log/push", "severity": "low"},
     {"id": "F-PROD-005-HOST", "classification": "OBSERVED", "text": "A WSL2 Ubuntu 24.04.3 native Linux checkout at exact product commit 1769de9258c6be285162a3cee9259600871462c1 supports symlinks and passes the formerly blocked structured React-export test under Node v24.21.0.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"},
-    {"id": "F-PROD-005-FULL", "classification": "OBSERVED", "text": "The full npm test suite passes 483/483 on the capable WSL2 Node v24.21.0 environment; the direct Windows EPERM remains preserved as BLOCKED_HOST_CAPABILITY rather than relabeled.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"}
+    {"id": "F-PROD-005-FULL", "classification": "OBSERVED", "text": "The full npm test suite passes 483/483 on the capable WSL2 Node v24.21.0 environment; the direct Windows EPERM remains preserved as BLOCKED_HOST_CAPABILITY rather than relabeled.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"},
+    {"id": "F-PR-001-IDENTITY", "classification": "OBSERVED", "text": "GitHub PR #1 is open and non-draft at https://github.com/hstptcn5/design-studio-ai/pull/1 from steward/continuity-bootstrap to main; creation-time head was 11791c6057c7129cb1582cc8a3a65fa8de071a20, base and merge base were 6b3cd5c1006ad586f10f1784aa56abd7b39d1001.", "source": "gh repo view, gh pr create, gh pr view", "severity": "low"},
+    {"id": "F-PR-001-DIFF", "classification": "OBSERVED", "text": "The PR has 40 files, 1976 additions, and 40 deletions covering the YAML MVP and full Steward specification/evidence history; no unexpected product area was found and GitHub reported CLEAN merge state before handoff metadata.", "source": "gh pr view and gh pr diff --name-only", "severity": "low"}
   ],
   "blockers": [],
   "risks": [
@@ -418,31 +436,64 @@
       "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
       "timestamp": "2026-09-14T15:31:05Z", "summary": "Closure evidence, formal host disposition, technical readiness, absent merge authority, next action, and durable handoff pass the Steward gate.",
       "limitations": ["Steward validation checks declared consistency rather than independently rerunning tests."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-RECONCILIATION", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "repository_reconciliation",
+      "procedure": "Fetch origin; inspect clean local/upstream parity; query live GitHub repository default branch; resolve origin/main SHA and merge base.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:00Z", "summary": "Live GitHub confirmed main at 6b3cd5c1006ad586f10f1784aa56abd7b39d1001 as both base and merge base; head branch was clean and synchronized at 11791c6057c7129cb1582cc8a3a65fa8de071a20.",
+      "limitations": ["Product evidence remains pinned to the implementation identity rather than metadata-only head commits."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-CREATION", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "pull_request_creation",
+      "procedure": "Create GitHub PR from steward/continuity-bootstrap to main with product-oriented title and evidence-accurate description using gh pr create.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:01Z", "summary": "Created open non-draft PR #1, Add strict YAML authoring and interchange support, at https://github.com/hstptcn5/design-studio-ai/pull/1. No merge was performed.",
+      "limitations": ["PR creation may cause repository-configured checks to run; no workflow was manually dispatched."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-REVIEW", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "review",
+      "procedure": "Inspect gh pr view structured metadata, commit list, file list, name-only diff, base/head identities, merge state, and merged status against the authorized YAML MVP scope.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:02Z", "summary": "The 40-file diff contains the intended YAML product surfaces and full Steward evidence history, with no unexpected product scope; base/head matched, merge state was CLEAN, and mergedAt was null.",
+      "limitations": ["GitHub check results were not claimed or polled as verification evidence."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-HISTORICAL", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "historical_preservation",
+      "procedure": "Verify PR commit list and durable evidence retain exact DSA-STEW-001 and YAML product identities without relabeling.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:03Z", "summary": "DSA-STEW-001 remains bound to 133d1dffac2a57c10baf555123defdadcfa350c7 and YAML verification remains bound to 1769de9258c6be285162a3cee9259600871462c1.",
+      "limitations": ["Historical evidence was referenced, not rerun."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PR-001-HANDOFF", "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:45:04Z", "summary": "PR identity, diff review, verification references, absent merge authority, next action, and durable handoff pass the Steward gate.",
+      "limitations": ["The handoff gate validates recorded consistency rather than GitHub's future state."], "executed": true, "interrupted": false
     }
   ],
   "last_reviewed_commit": "1769de9258c6be285162a3cee9259600871462c1",
   "next": {
-    "recommended_action": "Await explicit authorization for a PR-only handoff or PR creation for the technically complete YAML MVP; do not merge, deploy, release, or begin new product work.",
-    "reason": "The exact YAML product commit is technically merge-ready after 483/483 tests pass on a capable Node 24 host, but PR and merge authority remain absent."
+    "recommended_action": "Await human review of GitHub PR #1 and explicit merge authorization; do not merge, deploy, release, or begin new product work.",
+    "reason": "The technically merge-ready YAML MVP is now in an open, reconciled review PR, while merge authority remains explicitly absent."
   },
-  "updated_at": "2026-09-14T15:31:05Z",
+  "updated_at": "2026-09-14T15:45:04Z",
   "handoff": {
     "verifications": [
-      {"evidence_id": "EV-PROD-005-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
-      {"evidence_id": "EV-PROD-005-HOST", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
-      {"evidence_id": "EV-PROD-005-FULL-TEST", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
-      {"evidence_id": "EV-PROD-005-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
-      {"evidence_id": "EV-PROD-005-HISTORICAL", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
-      {"evidence_id": "EV-PROD-005-HANDOFF", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false}
+      {"evidence_id": "EV-PR-001-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-CREATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-HISTORICAL", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false},
+      {"evidence_id": "EV-PR-001-HANDOFF", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "c8fce172b8802b764fbde85d8685bd9a2a5f20131a31e1074e9ef39048f9272a", "historical": false}
     ],
     "findings": [
-      {"collection": "facts", "id": "F-PROD-005-RECON", "severity": "low"},
-      {"collection": "facts", "id": "F-PROD-005-HOST", "severity": "low"},
-      {"collection": "facts", "id": "F-PROD-005-FULL", "severity": "low"}
+      {"collection": "facts", "id": "F-PR-001-IDENTITY", "severity": "low"},
+      {"collection": "facts", "id": "F-PR-001-DIFF", "severity": "low"}
     ],
     "next_before": {
-      "recommended_action": "Execute DSA-PROD-005 YAML MVP PR Review Handoff and Host-Capability Resolution only after explicit authorization; resolve or formally waive the Windows symlink gate before any merge decision.",
-      "reason": "The exact YAML product commit passed independent scoped and cross-browser review, but merge was unauthorized and repository-wide green remained blocked by one unrelated host-permission test plus an unrun full E2E matrix."
+      "recommended_action": "Await explicit authorization for a PR-only handoff or PR creation for the technically complete YAML MVP; do not merge, deploy, release, or begin new product work.",
+      "reason": "The exact YAML product commit was technically merge-ready after 483/483 tests passed on a capable Node 24 host, but PR and merge authority were absent."
     }
   }
 }
