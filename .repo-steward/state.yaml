@@ -16,18 +16,36 @@
     }
   },
   "current": {
-    "milestone": "YAML authoring MVP independent review",
-    "task": "Review the exact YAML MVP and run supported Node 24 and cross-browser gates without merge, deploy, or release",
-    "phase": "REVIEW",
+    "milestone": "YAML MVP merge-readiness closure",
+    "task": "Resolve or formally classify the structured-export host-capability gate and close technical YAML MVP readiness without PR, merge, deploy, or release",
+    "phase": "VERIFY",
     "checkpoint": {
-      "id": "DSA-PROD-004",
-      "title": "YAML Authoring MVP Review and Node 24/Cross-Browser Gate",
-      "objective": "Independently review product commit 1769de9258c6be285162a3cee9259600871462c1 and verify it under supported Node 24 and practical Chromium, Firefox, and WebKit coverage.",
+      "id": "DSA-PROD-005",
+      "title": "YAML MVP Merge-Readiness Closure",
+      "objective": "Close the remaining repository-wide gate by proving the Windows symlink failure is a host-capability limitation and running the full unit suite on a capable supported Node 24 host.",
       "status": "complete",
       "scope": {
-        "included": ["Remote durability of existing DSA-PROD-003 commits", "Independent bounded implementation review", "Supported Node 24 dependency/typecheck/build/test gate", "Chromium, Firefox, WebKit, and mobile YAML critical-path verification", "Historical evidence preservation", "Review response and durable handoff"],
-        "excluded": ["New YAML features", "Design expansion", "Opportunistic cleanup", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]
+        "included": ["Push existing DSA-PROD-004 metadata commit", "Windows and WSL2 symlink-capability validation", "Supported Node 24 isolated structured-export reproduction", "Full npm test on capable Linux host", "Review conclusion reconfirmation", "Historical evidence preservation", "Closure response and durable handoff"],
+        "excluded": ["Product code changes", "New YAML features or redesign", "Test weakening", "Unrelated defect repair", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]
       },
+      "dependencies": ["DSA-PROD-004"],
+      "acceptance_criteria": [
+        {"id": "AC-PROD-005-01", "description": "The exact clean branch and sole expected unpushed DSA-PROD-004 metadata commit are reconciled and pushed without a PR.", "satisfied": true, "evidence_ids": ["EV-PROD-005-RECONCILIATION"]},
+        {"id": "AC-PROD-005-02", "description": "The Windows symlink failure remains preserved as BLOCKED_HOST_CAPABILITY and the same test passes on a capable WSL2 Linux environment at the exact product identity.", "satisfied": true, "evidence_ids": ["EV-PROD-005-HOST"]},
+        {"id": "AC-PROD-005-03", "description": "The full npm test suite passes under supported Node 24 on the capable host without weakening tests or changing product code.", "satisfied": true, "evidence_ids": ["EV-PROD-005-FULL-TEST"]},
+        {"id": "AC-PROD-005-04", "description": "The prior YAML review, focused verification, cross-browser evidence, product identity, and historical identities remain valid and unchanged.", "satisfied": true, "evidence_ids": ["EV-PROD-005-REVIEW", "EV-PROD-005-HISTORICAL"]},
+        {"id": "AC-PROD-005-05", "description": "Closure artifacts separately declare technical readiness and absent merge authority, and pass durable handoff validation.", "satisfied": true, "evidence_ids": ["EV-PROD-005-HANDOFF"]}
+      ],
+      "required_verification": ["repository_reconciliation", "host_capability", "full_test_gate", "review", "historical_preservation", "handoff_validation"],
+      "required_files": [".repo-steward/dsa-prod-005-closure-response.json", ".repo-steward/handoff.md"],
+      "risks": ["The direct Windows host remains unable to create the test symlink without an OS policy change.", "The complete repository-selected 35-spec E2E matrix was not run.", "The existing root dependency graph reports eight high-severity audit findings."],
+      "rollback": "Revert only the DSA-PROD-005 Steward closure metadata commit; preserve product commit 1769de9258c6be285162a3cee9259600871462c1 and all earlier evidence."
+    }
+  },
+  "completed": [
+    {
+      "id": "DSA-PROD-004", "title": "YAML Authoring MVP Review and Node 24/Cross-Browser Gate", "objective": "Independently review product commit 1769de9258c6be285162a3cee9259600871462c1 and verify it under supported Node 24 and practical Chromium, Firefox, and WebKit coverage.", "status": "complete",
+      "scope": {"included": ["Remote durability of existing DSA-PROD-003 commits", "Independent bounded implementation review", "Supported Node 24 dependency/typecheck/build/test gate", "Chromium, Firefox, WebKit, and mobile YAML critical-path verification", "Historical evidence preservation", "Review response and durable handoff"], "excluded": ["New YAML features", "Design expansion", "Opportunistic cleanup", "Full repository-selected E2E matrix", "GitHub Actions", "Pull request creation", "Merge, deploy, release, production mutation, secrets, or destructive actions"]},
       "dependencies": ["DSA-PROD-003"],
       "acceptance_criteria": [
         {"id": "AC-PROD-004-01", "description": "The exact branch, Steward HEAD, product identity, digest, clean state, and two-commit remote durability scope are reconciled and pushed without a PR.", "satisfied": true, "evidence_ids": ["EV-PROD-004-RECONCILIATION"]},
@@ -40,9 +58,7 @@
       "required_files": [".repo-steward/dsa-prod-004-review-response.json", ".repo-steward/handoff.md"],
       "risks": ["A Windows host-permission EPERM still prevents an all-green repository unit gate.", "The complete repository-selected 35-spec E2E matrix was not run.", "The existing root dependency graph reports eight high-severity audit findings."],
       "rollback": "Revert only the DSA-PROD-004 Steward review metadata commit; the reviewed product commit and already-pushed DSA-PROD-003 history remain unchanged."
-    }
-  },
-  "completed": [
+    },
     {
       "id": "DSA-PROD-003", "title": "YAML Authoring MVP Implementation", "objective": "Implement the bounded DSA-IMPL-YAML-001 request while preserving canonical JSON persistence, revision checks, ownership, and excluded authority.", "status": "complete",
       "scope": {"included": ["Shared strict YAML codec", "Editor validate/preview/apply/reset/download", "Browser YAML import/export", "Authenticated server YAML export", "CLI YAML flows", "API/MCP/WebMCP/docs/skill inventories", "Focused local verification", "Implementation Response and durable handoff"], "excluded": ["Canonical YAML storage", "Comment or formatting persistence", "Collaborative YAML editing", "Raw YAML REST bodies", "Provider changes", "Unrelated redesign/refactors", "GitHub Actions", "Pull request, merge, deploy, or release"]},
@@ -122,7 +138,8 @@
     {"id": "C-PROD-001", "classification": "DECIDED", "text": "DSA-PROD-001 authorizes discovery, assessment, brainstorming, research, specification, and handoff only; product implementation, merge, deploy, and release are not authorized.", "source": "User request for DSA-PROD-001"},
     {"id": "C-PROD-002", "classification": "DECIDED", "text": "DSA-PROD-002 authorizes Implementation Handoff artifacts only; product implementation, merge, deploy, and release remain unauthorized.", "source": "User request for DSA-PROD-002"},
     {"id": "C-PROD-003", "classification": "DECIDED", "text": "DSA-PROD-003 authorizes only the bounded YAML authoring MVP implementation and local verification; pull request creation, merge, deploy, release, production mutation, destructive action, and unrelated scope remain unauthorized.", "source": "User request for DSA-PROD-003"},
-    {"id": "C-PROD-004", "classification": "DECIDED", "text": "DSA-PROD-004 authorizes independent review, bounded verification, remote push of only the expected existing commits, and necessary in-scope defect correction; merge, deploy, release, unrelated work, production mutation, secrets, and destructive actions remain unauthorized.", "source": "User request for DSA-PROD-004"}
+    {"id": "C-PROD-004", "classification": "DECIDED", "text": "DSA-PROD-004 authorizes independent review, bounded verification, remote push of only the expected existing commits, and necessary in-scope defect correction; merge, deploy, release, unrelated work, production mutation, secrets, and destructive actions remain unauthorized.", "source": "User request for DSA-PROD-004"},
+    {"id": "C-PROD-005", "classification": "DECIDED", "text": "DSA-PROD-005 authorizes push of existing in-scope commits, local and host-capability verification, and Steward closure metadata only; PR creation, merge, deploy, release, production mutation, secrets, destructive actions, and new product work remain unauthorized.", "source": "User request for DSA-PROD-005"}
   ],
   "decisions": [
     {"id": "DEC-YAML-001", "date": "2026-09-13T17:16:57Z", "status": "accepted", "context": "The canonical DesignDocument is strict versioned JSON-object data shared by every client and persisted as JSON; advanced users and agents have no lower-punctuation whole-document source workflow.", "decision": "Select strict YAML as an explicitly applied editable source representation and interchange format over the existing canonical DesignDocument; do not make YAML canonical persistence.", "reason": "This delivers readable authoring and validation while preserving schema, revision, ownership, merge, renderer, and storage contracts.", "alternatives": ["YAML import/export only", "YAML as canonical source", "Generated read-only YAML", "Improve visual editor without YAML", "Defer or do not build"], "consequences": ["A shared safe YAML codec and cross-client format updates are required", "Semantic round trips are supported but comments and lexical formatting are not persisted", "Product implementation still requires a separately authorized checkpoint"], "supersedes": [], "superseded_by": []}
@@ -140,7 +157,10 @@
     {"id": "F-PROD-003-GATE", "classification": "OBSERVED", "text": "Focused codec, CLI, export, security, desktop/mobile Chromium, documentation, typecheck, CLI build, and product build checks passed; aggregate npm test had one unrelated Windows EPERM symlink failure on a Node 22 host while the repository requires Node 24+.", "source": ".repo-steward/dsa-prod-003-implementation-response.json", "severity": "medium"},
     {"id": "F-PROD-004-RECON", "classification": "OBSERVED", "text": "DSA-PROD-004 reconciled a clean steward/continuity-bootstrap checkout at ecfbb8558520980c91b745ce824b0bdfe0712152, exactly two expected commits ahead of origin, and pushed that range without creating a PR.", "source": "git status/rev-list/log/push", "severity": "low"},
     {"id": "F-PROD-004-REVIEW", "classification": "OBSERVED", "text": "Independent inspection found no material YAML MVP defect, unsafe parser behavior, auth/owner regression, dependency error, or scope creep; no product code changed.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "low"},
-    {"id": "F-PROD-004-GATES", "classification": "OBSERVED", "text": "Node v24.21.0 focused gates and production builds passed, all YAML critical-path browser targets passed, and aggregate npm test remained BLOCKED only by the unrelated Windows EPERM symlink permission failure at 482/483 passing.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "medium"}
+    {"id": "F-PROD-004-GATES", "classification": "OBSERVED", "text": "Node v24.21.0 focused gates and production builds passed, all YAML critical-path browser targets passed, and aggregate npm test remained BLOCKED only by the unrelated Windows EPERM symlink permission failure at 482/483 passing.", "source": ".repo-steward/dsa-prod-004-review-response.json", "severity": "medium"},
+    {"id": "F-PROD-005-RECON", "classification": "OBSERVED", "text": "DSA-PROD-005 began clean at e625ed0154be9e026405ef26f67c6161985b35da with exactly that one expected review-metadata commit ahead of origin; it was pushed without creating a PR.", "source": "git status/rev-list/log/push", "severity": "low"},
+    {"id": "F-PROD-005-HOST", "classification": "OBSERVED", "text": "A WSL2 Ubuntu 24.04.3 native Linux checkout at exact product commit 1769de9258c6be285162a3cee9259600871462c1 supports symlinks and passes the formerly blocked structured React-export test under Node v24.21.0.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"},
+    {"id": "F-PROD-005-FULL", "classification": "OBSERVED", "text": "The full npm test suite passes 483/483 on the capable WSL2 Node v24.21.0 environment; the direct Windows EPERM remains preserved as BLOCKED_HOST_CAPABILITY rather than relabeled.", "source": ".repo-steward/dsa-prod-005-closure-response.json", "severity": "low"}
   ],
   "blockers": [],
   "risks": [
@@ -356,31 +376,73 @@
       "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
       "timestamp": "2026-09-14T15:10:05Z", "summary": "Canonical DSA-PROD-004 evidence, findings, blocked/not-run gates, next action, authority, and handoff declarations pass the Steward gate.",
       "limitations": ["The gate validates declared consistency rather than independently reproducing checks."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-RECONCILIATION", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "repository_reconciliation",
+      "procedure": "Fetch origin; inspect exact branch, HEAD, clean worktree, upstream divergence, and unpushed diff; push the sole expected DSA-PROD-004 metadata commit.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:00Z", "summary": "The expected clean local HEAD e625ed0 was exactly one commit ahead and was pushed to origin/steward/continuity-bootstrap. No PR was created.",
+      "limitations": ["Identity remains pinned to the YAML product commit, not later metadata commits."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HOST", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "host_capability",
+      "procedure": "Probe symlink creation in WSL2 Ubuntu native /tmp; create an isolated checkout at 1769de9258c6be285162a3cee9259600871462c1; use checksum-verified Node v24.21.0; install dependencies/build renderer/Chromium and run the previously blocked React source archive test.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:01Z", "summary": "Formal disposition PASS_ON_CAPABLE_HOST: WSL2 Ubuntu 24.04.3 symlink probe and targeted structured-export test passed 1/1; the original Windows EPERM remains BLOCKED_HOST_CAPABILITY.",
+      "limitations": ["The direct Windows host still lacks required symlink capability; no test or product behavior was weakened."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-FULL-TEST", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "full_test_gate",
+      "procedure": "In the same isolated WSL2 Ubuntu checkout at the exact product identity, install both dependency trees, build CLI and renderer, supply local runtime libraries, and run npm test under Node v24.21.0.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:02Z", "summary": "Full repository unit suite passed 483/483 with zero failures, skips, cancellations, or interruptions on the capable supported environment.",
+      "limitations": ["The full repository-selected 35-spec E2E matrix and GitHub Actions were not run."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-REVIEW", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "review",
+      "procedure": "Reconfirm DSA-PROD-004 review conclusions against unchanged product bytes and the new capable-host verification results.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:03Z", "summary": "No material YAML defect, unsafe parser behavior, auth/ownership regression, dependency issue, scope creep, or JSON workflow regression emerged; product code is unchanged.",
+      "limitations": ["Existing npm audit findings and the unrun full E2E matrix remain separately disclosed."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HISTORICAL", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "historical_preservation",
+      "procedure": "Confirm current DSA-STEW-001 evidence blob and exact YAML product identity without rewriting or relabeling either record.",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:04Z", "summary": "DSA-STEW-001 remains bound to 133d1dffac2a57c10baf555123defdadcfa350c7 at evidence blob 02fe6a7c917030845d18909fd24de91e898f1e2c; YAML verification remains bound to 1769de9258c6be285162a3cee9259600871462c1.",
+      "limitations": ["Historical evidence was preserved, not rerun."], "executed": true, "interrupted": false
+    },
+    {
+      "id": "EV-PROD-005-HANDOFF", "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS", "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"},
+      "timestamp": "2026-09-14T15:31:05Z", "summary": "Closure evidence, formal host disposition, technical readiness, absent merge authority, next action, and durable handoff pass the Steward gate.",
+      "limitations": ["Steward validation checks declared consistency rather than independently rerunning tests."], "executed": true, "interrupted": false
     }
   ],
   "last_reviewed_commit": "1769de9258c6be285162a3cee9259600871462c1",
   "next": {
-    "recommended_action": "Execute DSA-PROD-005 YAML MVP PR Review Handoff and Host-Capability Resolution only after explicit authorization; resolve or formally waive the Windows symlink gate before any merge decision.",
-    "reason": "The exact YAML product commit passes independent scoped and cross-browser review, but merge is unauthorized and repository-wide green remains blocked by one unrelated host-permission test plus an unrun full E2E matrix."
+    "recommended_action": "Await explicit authorization for a PR-only handoff or PR creation for the technically complete YAML MVP; do not merge, deploy, release, or begin new product work.",
+    "reason": "The exact YAML product commit is technically merge-ready after 483/483 tests pass on a capable Node 24 host, but PR and merge authority remain absent."
   },
-  "updated_at": "2026-09-14T15:10:05Z",
+  "updated_at": "2026-09-14T15:31:05Z",
   "handoff": {
     "verifications": [
-      {"evidence_id": "EV-PROD-004-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false},
-      {"evidence_id": "EV-PROD-004-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false},
-      {"evidence_id": "EV-PROD-004-NODE24", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false},
-      {"evidence_id": "EV-PROD-004-BROWSERS", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false},
-      {"evidence_id": "EV-PROD-004-HISTORICAL", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false},
-      {"evidence_id": "EV-PROD-004-HANDOFF", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "8954d8fcf8e52b004d83b15298e2f2d3b1466d075a2572ebccff7b289094153b", "historical": false}
+      {"evidence_id": "EV-PROD-005-RECONCILIATION", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
+      {"evidence_id": "EV-PROD-005-HOST", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
+      {"evidence_id": "EV-PROD-005-FULL-TEST", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
+      {"evidence_id": "EV-PROD-005-REVIEW", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
+      {"evidence_id": "EV-PROD-005-HISTORICAL", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false},
+      {"evidence_id": "EV-PROD-005-HANDOFF", "result": "PASS", "executed": true, "interrupted": false, "identity": {"head": "1769de9258c6be285162a3cee9259600871462c1", "content_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67"}, "checkpoint_digest": "7bed8dc89bf570364de169f0c5add29e272524fbe9621c97526bb510909c302a", "historical": false}
     ],
     "findings": [
-      {"collection": "facts", "id": "F-PROD-004-RECON", "severity": "low"},
-      {"collection": "facts", "id": "F-PROD-004-REVIEW", "severity": "low"},
-      {"collection": "facts", "id": "F-PROD-004-GATES", "severity": "medium"}
+      {"collection": "facts", "id": "F-PROD-005-RECON", "severity": "low"},
+      {"collection": "facts", "id": "F-PROD-005-HOST", "severity": "low"},
+      {"collection": "facts", "id": "F-PROD-005-FULL", "severity": "low"}
     ],
     "next_before": {
-      "recommended_action": "Execute DSA-PROD-004 YAML Authoring MVP Review and Node 24/Cross-Browser Gate after explicit authorization, using a Node 24-capable host and Firefox/WebKit where available.",
-      "reason": "The bounded implementation was complete and reviewable, while merge remained unauthorized and the aggregate Windows symlink gate plus non-Chromium coverage were unresolved."
+      "recommended_action": "Execute DSA-PROD-005 YAML MVP PR Review Handoff and Host-Capability Resolution only after explicit authorization; resolve or formally waive the Windows symlink gate before any merge decision.",
+      "reason": "The exact YAML product commit passed independent scoped and cross-browser review, but merge was unauthorized and repository-wide green remained blocked by one unrelated host-permission test plus an unrun full E2E matrix."
     }
   }
 }

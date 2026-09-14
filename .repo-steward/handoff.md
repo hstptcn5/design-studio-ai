@@ -1,54 +1,47 @@
-# Repo Steward handoff — DSA-PROD-004
+# Repo Steward handoff — DSA-PROD-005
 
 ## Outcome
 
-`DSA-PROD-004 — YAML Authoring MVP Review and Node 24/Cross-Browser Gate` is **COMPLETE**. Exact reviewed product identity: `1769de9258c6be285162a3cee9259600871462c1`; canonical product digest: `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`; branch: `steward/continuity-bootstrap`.
+`DSA-PROD-005 — YAML MVP Merge-Readiness Closure` is **COMPLETE**. The exact YAML product identity remains `1769de9258c6be285162a3cee9259600871462c1`, with canonical content digest `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`, on `steward/continuity-bootstrap`.
 
-The clean starting Steward HEAD `ecfbb8558520980c91b745ce824b0bdfe0712152` was exactly two expected DSA-PROD-003 commits ahead of origin. That existing range was pushed. No PR was opened.
+The clean starting HEAD `e625ed0154be9e026405ef26f67c6161985b35da` was the sole expected commit ahead of origin and was pushed. No PR was created.
 
-Review response: `.repo-steward/dsa-prod-004-review-response.json`, identity `DSA-REVIEW-YAML-001`.
+Closure response: `.repo-steward/dsa-prod-005-closure-response.json`, identity `DSA-CLOSE-YAML-001`.
 
-## Independent review
+## Host-capability disposition
 
-CONFIRMED: no material defect was found in the strict YAML codec, prohibited-construct handling, DesignDocument validation, semantic round trips, editor Validate/Preview/Apply/Reset/Download workflow, preview non-mutation, revision and brief guards, conflict recovery, browser/server import/export, CLI, REST/MCP/WebMCP/docs parity, accessibility, auth/ownership, JSON compatibility, parser safety, scope, or exact `yaml@2.9.1` ISC dependency.
+`PASS_ON_CAPABLE_HOST`.
 
-SUSPECTED: none.
+The original direct-Windows result remains `BLOCKED_HOST_CAPABILITY`: Windows denied the temporary `node_modules` symlink with `EPERM` under supported Node `v24.21.0`. This evidence was not rewritten or converted to PASS.
 
-No product code changed. Product verification remains bound to `1769de9258c6be285162a3cee9259600871462c1`, not this or any later Steward metadata commit.
+WSL2 Ubuntu 24.04.3 on its native Linux filesystem successfully created the same class of symlink. An isolated checkout at exact product commit `1769de9258c6be285162a3cee9259600871462c1`, using checksum-verified Node `v24.21.0` and npm `11.19.0`, passed the previously blocked React source archive test 1/1 without changing or weakening it.
 
-## Node 24 gate
+## Full repository test gate
 
-Official checksum-verified Node `v24.21.0` with npm `11.19.0` was used.
+`npm test`: **PASS, 483/483**, with zero failures, skips, cancellations, or interruptions on the capable WSL2 Node 24 environment.
 
-PASS: root and CLI `npm ci`; `yaml@2.9.1` identity/license; typecheck; CLI build; production build; codec 5/5; CLI 12/12; security boundaries 6/6; all other YAML-focused tests within the aggregate suite.
-
-BLOCKED: full `npm test` completed 482/483. The sole failure is `tests/structured-export.test.ts`, where Windows denies creation of a temporary `node_modules` symlink with `EPERM`. It reproduces under Node 24 and Node 22, is unrelated to YAML, and is classified as a host-permission blocker rather than a YAML product failure.
-
-Root dependency installation reports eight high-severity findings in the existing graph. No audit-clean claim is made.
-
-## Cross-browser gate
-
-PASS, 2/2 per target:
-
-- Chromium desktop, 1440×1000
-- Firefox 155.0 desktop, 1440×1000
-- WebKit 26.6 mobile, 390×844
-- Chromium mobile, 390×844
-
-The gate covered load → YAML representation → invalid rejection → edit → validate → local non-mutating preview → explicit apply → persisted revision → reload → YAML download and parse, plus stale-revision rejection with buffer preservation and YAML import. A temporary verification-only test extension supplied the invalid/reload/download assertions and was removed after execution; the working product bytes are unchanged.
+Existing exact-product-identity evidence remains valid because product bytes did not change: typecheck, production build, CLI build, YAML codec 5/5, security boundaries 6/6, CLI 12/12, and the Chromium/Firefox/WebKit/mobile YAML critical path all passed.
 
 NOT_RUN: full repository-selected 35-spec E2E matrix and GitHub Actions.
 
-## Regression and authority
+## Review and regression status
 
-No YAML, JSON workflow, auth/owner, revision, CLI, build, or cross-browser regression was observed in executed coverage. The repository-wide gate is not fully green because of the unrelated symlink blocker and unrun full E2E matrix.
+DSA-PROD-004 is reconfirmed: no material YAML MVP defect, unsafe parser behavior, auth/ownership regression, dependency issue, scope creep, or JSON workflow regression was found. No product or test code changed during closure.
 
-Historical DSA-STEW-001 evidence remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c`, exactly bound to `133d1dffac2a57c10baf555123defdadcfa350c7`; no historical evidence was rewritten or relabeled.
+Remaining limitations: Windows requires symlink capability to execute the structured-export case directly; the full mapped E2E matrix was not run; the existing root dependency graph reports eight high-severity npm audit findings.
 
-`READY_TO_REVIEW: YES`. `READY_TO_MERGE: NO`.
+Historical DSA-STEW-001 evidence remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c` and bound to `133d1dffac2a57c10baf555123defdadcfa350c7`. YAML verification remains bound to `1769de9258c6be285162a3cee9259600871462c1`. Neither identity was relabeled.
 
-Review and verification authority is complete. A bounded defect correction was authorized but not needed. PR creation, merge, deploy, release, production mutation, secret changes, destructive actions, and unrelated feature work remain **NOT AUTHORIZED**.
+## Final disposition and authority
 
-## Recommended next checkpoint
+- `YAML_MVP_COMPLETE: YES`
+- `FULL_TEST_GATE: PASS`
+- `READY_TO_REVIEW: YES`
+- `READY_TO_MERGE: YES`
+- `MERGE_AUTHORIZED: NO`
 
-`DSA-PROD-005 — YAML MVP PR Review Handoff and Host-Capability Resolution`: only after explicit authorization, resolve or formally waive the Windows symlink gate, decide whether to run the full mapped E2E matrix, and prepare a PR-level review handoff. Stop before merge unless separately authorized.
+Technical merge readiness does not grant merge authority. PR creation, merge, deploy, release, production mutation, secret changes, destructive actions, and new product work remain **NOT AUTHORIZED**.
+
+## Safest next action
+
+Await explicit authorization for a PR-only handoff or PR creation. Do not merge, deploy, release, or begin the next product checkpoint.
