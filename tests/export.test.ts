@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import { createDocument } from '../src/shared/catalog';
+import { renderSnapshotExport } from '../server/exports';
+import { parseDocumentYaml } from '../src/shared/document-yaml';
+import type { Bindings } from '../server/types';
+import { documentSchema } from '../src/shared/schema';
+
+test('authenticated export service returns validated YAML without a renderer', async () => {
+  const document = createDocument('web', 'Server YAML');
+  const response = await renderSnapshotExport({} as Bindings, document.name, document, { format: 'yaml' }, async () => { throw new Error('YAML export must not resolve assets'); });
+  assert.match(response.headers.get('Content-Type') ?? '', /^application\/yaml/);
+  assert.match(response.headers.get('Content-Disposition') ?? '', /Server_YAML\.yaml/);
+  assert.deepEqual(parseDocumentYaml(await response.text()), documentSchema.parse(JSON.parse(JSON.stringify(document))));
+});
 
 test('real headless renderer creates PNG, PDF, editable PowerPoint, 3D and video bytes', { timeout: 120000 }, async t => {
   const browser = await chromium.launch({ headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--enable-unsafe-swiftshader'] });

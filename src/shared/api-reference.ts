@@ -48,7 +48,7 @@ export const apiEndpoints = [
   { method: 'POST', path: '/api/projects/{id}/media', summary: 'Generate images with OpenAI, Gemini, Leonardo, Grok or custom providers; OpenAI speech and fal media also supported', body: { provider: 'openai', kind: 'image', prompt: 'A ceramic vase in soft light' } },
   { method: 'GET', path: '/api/projects/{id}/media/{jobId}', summary: 'Read generation job status', body: undefined },
   { method: 'GET', path: '/api/projects/{id}/thumbnail', summary: 'Load a private saved-revision PNG cover; first request renders and stores it (202 when busy)', body: undefined },
-  { method: 'POST', path: '/api/projects/{id}/export', summary: 'Export saved bytes, timed scene review or editable-scene JSON', body: { format: 'scene-angles', pageIndex: 0, start: 0, end: 4, reviewSamples: 5, expectedRevision: 1 } },
+  { method: 'POST', path: '/api/projects/{id}/export', summary: 'Export saved bytes, including strict YAML source, timed scene review or editable-scene JSON', body: { format: 'scene-angles', pageIndex: 0, start: 0, end: 4, reviewSamples: 5, expectedRevision: 1 } },
   { method: 'POST', path: '/api/projects/{id}/publish', summary: 'Publish an immutable snapshot', body: {} },
   { method: 'DELETE', path: '/api/projects/{id}/publish', summary: 'Unpublish the current public snapshot', body: undefined },
   { method: 'POST', path: '/api/projects/{id}/preview', summary: 'Create a public immutable preview snapshot', body: {} },

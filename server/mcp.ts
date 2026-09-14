@@ -459,7 +459,7 @@ export async function handleMcp(c: Context<Env>, app: Hono<Env>) {
       inputSchema: {
         projectId: z.string(),
         start:z.number().min(0).optional(),end:z.number().positive().optional(),fps:z.number().int().min(1).max(60).optional(),
-        format: z.enum(["json", "html", "svg", "png", "pdf", "pptx", "webm", "mp4", "react", "glb", "gltf", "motion", "png-sequence", "spritesheet", "scene-angles", "editable-scene"]),
+        format: z.enum(["json", "yaml", "html", "svg", "png", "pdf", "pptx", "webm", "mp4", "react", "glb", "gltf", "motion", "png-sequence", "spritesheet", "scene-angles", "editable-scene"]),
         nodeId:z.string().min(1).max(120).optional(),reviewSamples:z.number().int().min(2).max(25).optional(),
         pageIndex: z.number().int().min(0).default(0),
         expectedRevision: z.number().int().positive().optional(),
@@ -469,7 +469,7 @@ export async function handleMcp(c: Context<Env>, app: Hono<Env>) {
     async ({ projectId, format, pageIndex, expectedRevision, start, end, fps,nodeId,reviewSamples }) => {
       const response = await app.request(`${origin(c)}/api/projects/${encodeURIComponent(projectId)}/export`, { method: 'POST', headers: { Authorization: c.req.header('Authorization')!, 'Content-Type': 'application/json' }, body: JSON.stringify({ format, pageIndex, expectedRevision, start, end, fps,nodeId,reviewSamples }) }, telemetryEnv(c, toolSpan.getStore()));
       if (!response.ok) return { isError: true, ...result(await response.json()) };
-      if (['json', 'html', 'svg'].includes(format)) return result({ format, content: await response.text() });
+      if (['json', 'yaml', 'html', 'svg'].includes(format)) return result({ format, content: await response.text() });
       const bytes = await response.arrayBuffer();
       if (bytes.byteLength > 20 * 1024 * 1024) return { isError: true, ...result({ error: { message: 'This export exceeds the MCP response limit. Download it with the CLI export command.' } }) };
       const data = Buffer.from(bytes).toString('base64');
