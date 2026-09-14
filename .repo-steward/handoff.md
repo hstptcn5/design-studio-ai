@@ -1,45 +1,33 @@
-# Repo Steward handoff — DSA-PROD-002
+# Repo Steward handoff — DSA-PROD-003
 
 ## Outcome
 
-`DSA-PROD-002 — YAML Authoring Implementation Handoff` is **COMPLETE**.
+`DSA-PROD-003 — YAML Authoring MVP Implementation` is **COMPLETE** and ready for bounded review. The product implementation is commit `1769de9258c6be285162a3cee9259600871462c1`, based on `1d07904ac82ef771208bb47d7028fc20301193c6`, on `steward/continuity-bootstrap`. Its measured canonical product-content digest is `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`.
 
-The executable machine-readable request is `.repo-steward/dsa-prod-002-implementation-request.json`, identity `DSA-IMPL-YAML-001`. It is pinned to `https://github.com/hstptcn5/design-studio-ai.git`, branch `steward/continuity-bootstrap`, base `956421bd8c927f3e0d26c5bbe9d0824f400ce387`, and product-content digest `691a11f3645577832339db2c767c93fdc78fff9b5e9822ce1b1afc7946c5e77c`.
+The machine-readable response is `.repo-steward/dsa-prod-003-implementation-response.json`, identity `DSA-RESP-YAML-001`.
 
-## Accepted implementation scope
+## Implemented scope
 
-The future MVP adds one strict shared YAML codec; an explicit editor source workflow; browser import/export; authenticated server YAML export; CLI YAML file/stdin/get/import/export/offline-output support; synchronized REST/MCP/WebMCP capability discovery and owning documentation; and focused unit, server, CLI, browser, security, accessibility, documentation, and regression tests.
+One shared `yaml@2.9.1` codec parses exactly one bounded YAML 1.2 document, rejects anchors, aliases, merge keys, explicit/custom tags, duplicate or non-string keys, unsafe prototype keys, excessive depth/bytes and non-JSON values, then validates the existing `DesignDocument` schema. Serialization is deterministic semantic interchange; comments and formatting are not persisted.
 
-Canonical `DesignDocument`, JSON database storage, ownership, assets, schema versions, optimistic revisions, rendering, publication, and save services remain unchanged.
+The editor now exposes explicit Validate, Preview, Apply and save, Reset from design, and Download YAML actions with unsaved-source protection, stable accessible diagnostics, mobile layout, and source preservation on stale revision/save failure. Browser workspace import accepts `.yaml`/`.yml`; browser and authenticated server exports support YAML. CLI document file/stdin/get/import/export/offline-output flows use the shared codec. REST, MCP, WebMCP, CLI, official docs, agent skill, generated public references, and E2E routing are synchronized. Canonical persistence remains the existing JSON/revision model; no migration exists.
 
-Expected new files are `src/shared/document-yaml.ts`, `src/app/yaml-source-dialog.tsx`, `src/app/yaml-source.css`, `tests/document-yaml.test.ts`, and `tests/yaml-source-ui.spec.ts`. Existing expected owners are listed precisely in the request.
+## Verification
 
-## Dependency and migration
+PASS: typecheck; production build and generated references; 5/5 codec tests; authenticated YAML export; 6/6 security-boundary tests; CLI build and 12/12 CLI tests; YAML E2E 2/2 desktop and 2/2 mobile Chromium; onboarding 2/2 mobile; public docs 5/5 desktop.
 
-Expected dependency: exact root runtime dependency `yaml@2.9.1` plus `package-lock.json`, with custom tags disabled and anchors/aliases independently rejected. No database, document-schema, stored-project, or publication migration is expected.
+BLOCKED: aggregate `npm test` completed 481/482. The only failure is the existing structured React-export test attempting a Windows symlink and receiving `EPERM`; it is unrelated to YAML. The host used Node 22.19.0 while the repository declares Node 24+.
 
-## Verification contract
+NOT_RUN: full repository-selected E2E matrix; Firefox; WebKit. Focused affected lanes ran locally. No GitHub Actions ran.
 
-The request requires focused codec, export/security, CLI, UI mobile/desktop, and documentation tests followed by CLI build, typecheck, full unit tests, production build, and the repository-selected E2E lane. It explicitly covers valid/invalid parsing, prohibited features, schema validation, semantic JSON/YAML round trips, preview non-mutation, revision-checked apply, stale conflicts, import/export, CLI, and existing JSON regression. GitHub Actions are not required.
+## Authority and risk
 
-## Exclusions and risks
+Implementation authority was exercised only for `DSA-IMPL-YAML-001`. PR creation, merge, deploy, and release remain **NOT AUTHORIZED**. No production data, database, credentials, providers, deployment, or release state changed.
 
-Excluded: canonical YAML storage, comment/format persistence, collaboration/text merge, autosave, raw YAML REST bodies, a second schema/migration system, AI provider changes, general configuration-language features, unrelated redesign/refactors, and all implementation during this checkpoint.
+Residual review risks are the Node 24/symlink aggregate gate, untested Firefox/WebKit behavior, and the intentionally coarse whole-document apply protected by exact revision and applicable brief-revision checks. `READY_TO_REVIEW: YES`. `READY_TO_MERGE: NO`.
 
-Non-blocking risks are parser/resource safety, comment-persistence expectations, full-document concurrency, cross-client drift, and mobile accessibility. The request includes concrete mitigations and resolution rules for its three non-blocking questions. No blocking uncertainty remains.
-
-## Validation and authority
-
-PASS: actual repository reconciliation, machine-readable request validation/review, canonical state validation, durable handoff validation, and metadata-only scope review.
-
-NOT_RUN: product tests/build/E2E because product implementation did not occur. GitHub Actions, PR, merge, deploy, and release were not performed.
-
-- Implementation Request creation: **AUTHORIZED and complete**.
-- Request status: **EXECUTABLE**, contingent on fresh reconciliation and explicit implementation authorization.
-- Product implementation: **NOT AUTHORIZED**.
-- PR, merge, deploy, release: **NOT AUTHORIZED**.
-- `READY_TO_MERGE: NO`.
+Historical DSA-STEW-001 evidence remains byte-identical at Git blob `02fe6a7c917030845d18909fd24de91e898f1e2c` and bound to `133d1dffac2a57c10baf555123defdadcfa350c7`. DSA-STEW-002, DSA-PROD-001, and DSA-PROD-002 identities were not relabeled.
 
 ## Recommended next checkpoint
 
-`DSA-PROD-003 — YAML Authoring MVP Implementation`, only after explicit user authorization. Execute `DSA-IMPL-YAML-001` without redesign or scope expansion and stop before merge/deploy/release unless separately authorized.
+`DSA-PROD-004 — YAML Authoring MVP Review and Node 24/Cross-Browser Gate`: review commit `1769de9258c6be285162a3cee9259600871462c1`, rerun the aggregate suite on a Node 24 host with symlink capability, and run Firefox/WebKit plus the repository-selected E2E matrix. Stop before merge unless separately authorized.
