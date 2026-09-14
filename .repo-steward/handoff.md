@@ -1,53 +1,70 @@
-# Repo Steward handoff — DSA-PR-001
+# Repo Steward handoff — DSA-PROD-006
 
 ## Outcome
 
-`DSA-PR-001 — YAML MVP PR-only Handoff` is **COMPLETE**. GitHub PR [#1](https://github.com/hstptcn5/design-studio-ai/pull/1), **Add strict YAML authoring and interchange support**, is open and non-draft from `steward/continuity-bootstrap` to `main`. At creation and reconciliation, base and merge base were `6b3cd5c1006ad586f10f1784aa56abd7b39d1001`, and head was `11791c6057c7129cb1582cc8a3a65fa8de071a20` before this PR-handoff metadata update.
+`DSA-STEW-003 — Post-merge canonical reconciliation` and `DSA-PROD-006 — YAML Semantic Change Review Specification` are **COMPLETE**.
 
-The exact YAML product identity remains `1769de9258c6be285162a3cee9259600871462c1`, with canonical content digest `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`.
+GitHub PR [#1](https://github.com/hstptcn5/design-studio-ai/pull/1), **Add strict YAML authoring and interchange support**, was merged at `2026-09-14T16:10:22Z`. The merge commit is `b73b1f71d93c6995eb7e2498c9242ab0d5a746a8`; the merged feature head is `16a94bca1439cc41b0a0164e88a9a8b8bafb6eab`. The direct checkout was clean, moved to `main`, and fast-forwarded to `origin/main` before this authorized metadata update.
 
-PR handoff response: `.repo-steward/dsa-pr-001-handoff-response.json`.
+Canonical post-merge checkout identity:
 
-## PR reconciliation
+- branch: `main`
+- HEAD before metadata authoring: `b73b1f71d93c6995eb7e2498c9242ab0d5a746a8`
+- content digest: `411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f`
+- default branch: `main`
 
-GitHub reported the PR `OPEN`, `CLEAN`, not draft, and not merged. The 40-file creation-time diff contained 1,976 additions and 40 deletions. Product scope is limited to the strict YAML codec, editor workflow, browser/server/CLI interchange, shared capability documentation, tests, and `yaml@2.9.1`; the remaining files are the complete Steward specification, research, verification, and historical handoff record carried by the authorized branch. No unexpected product area or scope expansion was found.
+The merge commit tree matches the feature head tree. No product changes were authored in this checkpoint.
 
-The PR description accurately references Node 24 full-test 483/483 PASS, codec 5/5, CLI 12/12, security 6/6, Chromium/Firefox/WebKit/mobile critical-path PASS, independent review with no material findings, historical Windows `BLOCKED_HOST_CAPABILITY`, later `PASS_ON_CAPABLE_HOST`, and the full mapped E2E/GitHub Actions checks not run before PR creation. No workflow was manually dispatched.
+## Historical evidence preservation
 
-## Host-capability disposition
+DSA-STEW-001 remains bound exactly to `133d1dffac2a57c10baf555123defdadcfa350c7`; its evidence artifact remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c`.
 
-`PASS_ON_CAPABLE_HOST`.
+YAML product verification remains separately bound to product commit `1769de9258c6be285162a3cee9259600871462c1` and product digest `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`. Neither historical identity was relabeled to the PR head, merge commit, or later Steward metadata.
 
-The original direct-Windows result remains `BLOCKED_HOST_CAPABILITY`: Windows denied the temporary `node_modules` symlink with `EPERM` under supported Node `v24.21.0`. This evidence was not rewritten or converted to PASS.
+Post-merge reconciliation evidence: `.repo-steward/dsa-stew-003-post-merge-reconciliation.json`.
 
-WSL2 Ubuntu 24.04.3 on its native Linux filesystem successfully created the same class of symlink. An isolated checkout at exact product commit `1769de9258c6be285162a3cee9259600871462c1`, using checksum-verified Node `v24.21.0` and npm `11.19.0`, passed the previously blocked React source archive test 1/1 without changing or weakening it.
+## Brainstorm and selection
 
-## Full repository test gate
+Four repository-grounded candidates were compared:
 
-`npm test`: **PASS, 483/483**, with zero failures, skips, cancellations, or interruptions on the capable WSL2 Node 24 environment.
+1. **YAML semantic change review before apply — SELECTED.** The current dialog validates YAML and renders page 1, but whole-document Apply can also alter other pages, node order, themes, assets, boards, paintings, and timeline data without a structural change summary.
+2. **Accessibility preflight accuracy — DEFER.** High value, but exact compositing/rendered-metric work is a broader renderer research problem and risks implying certification.
+3. **Dependency security remediation — DEFER TO A DEDICATED SECURITY CHECKPOINT.** `npm audit` currently reports eight high-severity findings across multiple rendering/Workers dependency chains; safe remediation is broader than a bounded product increment.
+4. **Real-time collaboration presence — REJECT FOR NOW.** Potential value is high, but transport, persistence, presence, and conflict UX make it too large and speculative for the next checkpoint.
 
-Existing exact-product-identity evidence remains valid because product bytes did not change: typecheck, production build, CLI build, YAML codec 5/5, security boundaries 6/6, CLI 12/12, and the Chromium/Firefox/WebKit/mobile YAML critical path all passed.
+Brainstorm record: `.repo-steward/dsa-prod-006-brainstorm.json`.
 
-NOT_RUN: full repository-selected 35-spec E2E matrix and GitHub Actions.
+## Selected checkpoint
 
-## Review and regression status
+The selected product direction is a deterministic, ID-aware semantic change summary integrated into the existing YAML Preview step. It compares validated candidate YAML with the immutable document snapshot captured when the dialog opened, reports complete-document aggregate changes and bounded paths, remains local/non-mutating, and preserves the existing server-owned schema validation and optimistic revision guard.
 
-DSA-PROD-004 is reconfirmed: no material YAML MVP defect, unsafe parser behavior, auth/ownership regression, dependency issue, scope creep, or JSON workflow regression was found. No product or test code changed during closure.
+Specification: `.repo-steward/dsa-prod-006-spec.md`.
 
-Remaining limitations: Windows requires symlink capability to execute the structured-export case directly; the full mapped E2E matrix was not run; the existing root dependency graph reports eight high-severity npm audit findings.
+Expected implementation surfaces are a new shared change-summary utility, the existing YAML dialog and styles, focused shared tests, the YAML browser spec, and the smallest owning documentation update. No runtime dependency, lockfile change, database migration, DesignDocument migration, server route, CLI, MCP, WebMCP, auth, provider, or persistence change is expected.
 
-Historical DSA-STEW-001 evidence remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c` and bound to `133d1dffac2a57c10baf555123defdadcfa350c7`. YAML verification remains bound to `1769de9258c6be285162a3cee9259600871462c1`. Neither identity was relabeled.
+Key safeguards include stable-ID matching, separate reorder classification, deterministic ordering, a maximum of 200 rendered detail rows with accurate totals, privacy-safe handling of values, invalidation after source edits, preview non-mutation, and stale-revision recovery that preserves source and summary.
 
-## Final disposition and authority
+## Verification and residual risks
 
-- `YAML_MVP_COMPLETE: YES`
-- `FULL_TEST_GATE: PASS`
-- `READY_TO_REVIEW: YES`
-- `READY_TO_MERGE: YES`
-- `MERGE_AUTHORIZED: NO`
+This checkpoint ran repository/GitHub reconciliation, canonical snapshotting, historical artifact verification, focused architecture/UI/test inspection, local dependency audit, candidate analysis, and Steward metadata validation. It did not execute product tests because no product behavior changed.
 
-Technical merge readiness does not grant merge authority. PR creation, merge, deploy, release, production mutation, secret changes, destructive actions, and new product work remain **NOT AUTHORIZED**.
+The implementation checkpoint must add focused unit and browser coverage, then run the Node-version-owned dependency installs, typecheck, builds, full unit suite, and repository-selected browser lane. Historical Windows symlink failure must remain `BLOCKED_HOST_CAPABILITY`; later capable-host evidence must be recorded separately.
 
-## Safest next action
+Residual risks:
 
-Await human review of PR #1 and explicit merge authorization. Do not merge, deploy, release, or begin the next product checkpoint.
+- naive deep diffing can misclassify reorder or overwhelm users;
+- large documents require aggregate-first bounded detail;
+- raw before/after values may expose embedded/private content;
+- the summary is advisory and cannot replace authoritative server validation/revision checks;
+- eight high-severity dependency audit findings remain a separate unresolved security-maintenance risk.
+
+## Authority and next action
+
+- `READY_FOR_IMPLEMENTATION_HANDOFF: YES`
+- Product implementation: **NOT AUTHORIZED**
+- New PR: **NOT AUTHORIZED**
+- Merge: **NOT AUTHORIZED**
+- Deploy: **NOT AUTHORIZED**
+- Release: **NOT AUTHORIZED**
+
+Safest next action: authorize `DSA-PROD-007` to convert the accepted DSA-PROD-006 specification into an exact, machine-readable Implementation Request pinned to the then-current `main`. Stop again before product implementation.

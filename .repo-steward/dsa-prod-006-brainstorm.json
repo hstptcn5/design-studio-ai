@@ -1,0 +1,46 @@
+{
+  "checkpoint_id": "DSA-PROD-006",
+  "method": "Repository-grounded Brainstorm after post-merge reconciliation",
+  "evaluated_at": "2026-09-14T17:05:00Z",
+  "constraints": ["Select exactly one bounded checkpoint", "No product implementation", "No new PR, merge, deploy, or release", "Prefer user value over speculative breadth"],
+  "candidates": [
+    {
+      "rank": 1,
+      "name": "YAML semantic change review before apply",
+      "user_value": "High: users can see what a whole-document YAML apply will change, not only how page 1 renders.",
+      "evidence": ["src/app/yaml-source-dialog.tsx renders only the first-page visual preview", "Apply sends the complete parsed DesignDocument", "The existing stale-revision guard protects concurrency but not unintended valid edits", "DSA-PROD-001 identified whole-document replacement as residual risk"],
+      "complexity": "Medium and bounded",
+      "risk": "Low-to-medium; summary accuracy and large-document presentation require explicit limits",
+      "decision": "SELECTED"
+    },
+    {
+      "rank": 2,
+      "name": "Accessibility preflight accuracy",
+      "user_value": "High for design quality and accessibility.",
+      "evidence": ["src/shared/design-checks.ts labels contrast as estimated and excludes compositing, opacity, animation, and font-specific metrics"],
+      "complexity": "Medium-to-high because exact compositing and rendered text measurement cross renderer boundaries",
+      "risk": "Could falsely imply certification; needs a separate research checkpoint",
+      "decision": "DEFER"
+    },
+    {
+      "rank": 3,
+      "name": "Dependency security remediation",
+      "user_value": "Important maintenance/security value but less directly visible to the core design workflow.",
+      "evidence": ["npm audit reports eight high-severity findings through Cloudflare Puppeteer, Wrangler/Miniflare/Sharp, and PptxGenJS/image-size chains"],
+      "complexity": "High and multi-owner; suggested downgrades can be breaking or misleading",
+      "risk": "Broad regression surface across rendering, Workers, and export",
+      "decision": "DEFER_TO_DEDICATED_SECURITY_CHECKPOINT"
+    },
+    {
+      "rank": 4,
+      "name": "Real-time collaboration presence",
+      "user_value": "Potentially high for teams.",
+      "evidence": ["Current editor uses polling and optimistic merge/revision semantics without presence"],
+      "complexity": "Very high; persistence, transport, presence, and conflict UX redesign",
+      "risk": "Speculative and not bounded enough for the next checkpoint",
+      "decision": "REJECT_FOR_NOW"
+    }
+  ],
+  "selection": "DSA-PROD-006 — YAML Semantic Change Review Specification",
+  "rationale": "It closes the clearest post-launch safety gap in the newly merged capability while reusing current parsing, schema, preview, and revision semantics and avoiding persistence/API redesign."
+}

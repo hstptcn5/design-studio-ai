@@ -1,0 +1,44 @@
+{
+  "checkpoint_id": "DSA-STEW-003",
+  "title": "Post-merge canonical reconciliation",
+  "repository": "https://github.com/hstptcn5/design-studio-ai.git",
+  "reconciled_at": "2026-09-14T17:05:00Z",
+  "default_branch": "main",
+  "current_branch": "main",
+  "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+  "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f",
+  "working_tree_clean_before_metadata": true,
+  "pull_request": {
+    "number": 1,
+    "title": "Add strict YAML authoring and interchange support",
+    "state": "MERGED",
+    "merged_at": "2026-09-14T16:10:22Z",
+    "base_branch": "main",
+    "base_sha_at_creation": "6b3cd5c1006ad586f10f1784aa56abd7b39d1001",
+    "head_branch": "steward/continuity-bootstrap",
+    "head_sha": "16a94bca1439cc41b0a0164e88a9a8b8bafb6eab",
+    "merge_commit": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+    "merge_tree_matches_head": true
+  },
+  "verification": {
+    "state_before_reconciliation": "PASS",
+    "handoff_before_reconciliation": "PASS",
+    "resume_before_reconciliation": ["HEAD_DRIFT", "CONTENT_DRIFT", "BRANCH_DRIFT", "HISTORICAL_EVIDENCE"],
+    "interpretation": "Expected drift after the authorized merge; canonical state must move from the feature branch identity to post-merge main while retaining historical evidence identities."
+  },
+  "historical_evidence": {
+    "dsa_stew_001_identity": "133d1dffac2a57c10baf555123defdadcfa350c7",
+    "evidence_blob": "02fe6a7c917030845d18909fd24de91e898f1e2c",
+    "yaml_product_identity": "1769de9258c6be285162a3cee9259600871462c1",
+    "yaml_product_digest": "64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67",
+    "relabelled": false
+  },
+  "authority": {
+    "metadata_update": "AUTHORIZED",
+    "product_implementation": "NOT_AUTHORIZED",
+    "pull_request": "NOT_AUTHORIZED",
+    "merge": "NOT_AUTHORIZED",
+    "deploy": "NOT_AUTHORIZED",
+    "release": "NOT_AUTHORIZED"
+  }
+}
