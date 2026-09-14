@@ -1,70 +1,93 @@
-# Repo Steward handoff — DSA-PROD-006
+# Repo Steward handoff — DSA-PROD-007
 
 ## Outcome
 
-`DSA-STEW-003 — Post-merge canonical reconciliation` and `DSA-PROD-006 — YAML Semantic Change Review Specification` are **COMPLETE**.
+`DSA-PROD-007 — YAML Semantic Change Review Implementation Handoff` is **COMPLETE**.
 
-GitHub PR [#1](https://github.com/hstptcn5/design-studio-ai/pull/1), **Add strict YAML authoring and interchange support**, was merged at `2026-09-14T16:10:22Z`. The merge commit is `b73b1f71d93c6995eb7e2498c9242ab0d5a746a8`; the merged feature head is `16a94bca1439cc41b0a0164e88a9a8b8bafb6eab`. The direct checkout was clean, moved to `main`, and fast-forwarded to `origin/main` before this authorized metadata update.
-
-Canonical post-merge checkout identity:
+DSA-PROD-006 was first closed as Steward-only commit `a1bdebd8c05a3e8266f3f949a588f137716a810f` and pushed to `origin/main`. The clean post-closure snapshot was:
 
 - branch: `main`
-- HEAD before metadata authoring: `b73b1f71d93c6995eb7e2498c9242ab0d5a746a8`
+- HEAD: `a1bdebd8c05a3e8266f3f949a588f137716a810f`
 - content digest: `411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f`
-- default branch: `main`
+- local/remote parity: exact before DSA-PROD-007 metadata authoring
 
-The merge commit tree matches the feature head tree. No product changes were authored in this checkpoint.
+No product source changed during DSA-PROD-006 closure or this handoff.
 
-## Historical evidence preservation
+## Implementation Request
 
-DSA-STEW-001 remains bound exactly to `133d1dffac2a57c10baf555123defdadcfa350c7`; its evidence artifact remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c`.
+- Request ID: `DSA-IMPL-YAML-CHANGE-REVIEW-001`
+- Path: `.repo-steward/dsa-prod-007-implementation-request.json`
+- Accepted specification: `.repo-steward/dsa-prod-006-spec.md`
+- Expected implementation branch: `codex/yaml-semantic-change-review`
+- Exact base: `a1bdebd8c05a3e8266f3f949a588f137716a810f`
+- `READY_FOR_IMPLEMENTATION: YES`
+- Product implementation authority: **NOT AUTHORIZED**
 
-YAML product verification remains separately bound to product commit `1769de9258c6be285162a3cee9259600871462c1` and product digest `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`. Neither historical identity was relabeled to the PR head, merge commit, or later Steward metadata.
+The request is self-contained and executable by a fresh agent after reconciling its exact base.
 
-Post-merge reconciliation evidence: `.repo-steward/dsa-stew-003-post-merge-reconciliation.json`.
+## Bounded product scope
 
-## Brainstorm and selection
+Add a DesignDocument-specific, deterministic, side-effect-free semantic comparison utility and show its aggregate/bounded output during the existing YAML Preview workflow.
 
-Four repository-grounded candidates were compared:
+The summary must:
 
-1. **YAML semantic change review before apply — SELECTED.** The current dialog validates YAML and renders page 1, but whole-document Apply can also alter other pages, node order, themes, assets, boards, paintings, and timeline data without a structural change summary.
-2. **Accessibility preflight accuracy — DEFER.** High value, but exact compositing/rendered-metric work is a broader renderer research problem and risks implying certification.
-3. **Dependency security remediation — DEFER TO A DEDICATED SECURITY CHECKPOINT.** `npm audit` currently reports eight high-severity findings across multiple rendering/Workers dependency chains; safe remediation is broader than a bounded product increment.
-4. **Real-time collaboration presence — REJECT FOR NOW.** Potential value is high, but transport, persistence, presence, and conflict UX make it too large and speculative for the next checkpoint.
+- compare the complete validated candidate with the immutable opening document;
+- match pages, nodes, assets, characters, boards, paintings, timeline tracks, and other uniquely identified collections by stable repository-defined identity;
+- distinguish added, removed, modified, and reordered content;
+- avoid inventing identity for nested collections without a schema guarantee;
+- suppress formatting/comments/key-order and `metadata.updatedAt`-only noise;
+- cap rendered details at 200 rows while preserving complete aggregate counts;
+- avoid dumping raw private/large values;
+- remain local/non-mutating and preserve explicit revision-guarded Apply;
+- preserve source and the last valid summary after stale-save failure.
 
-Brainstorm record: `.repo-steward/dsa-prod-006-brainstorm.json`.
+Expected paths:
 
-## Selected checkpoint
+- new `src/shared/document-change-summary.ts`
+- new `tests/document-change-summary.test.ts`
+- `src/app/yaml-source-dialog.tsx`
+- `src/app/yaml-source.css`
+- `tests/yaml-source-ui.spec.ts`
+- `scripts/test-plan.mjs` if routing requires it
+- the smallest directly owning documentation, expected `docs/agents.md`
 
-The selected product direction is a deterministic, ID-aware semantic change summary integrated into the existing YAML Preview step. It compares validated candidate YAML with the immutable document snapshot captured when the dialog opened, reports complete-document aggregate changes and bounded paths, remains local/non-mutating, and preserves the existing server-owned schema validation and optimistic revision guard.
+No package, lockfile, runtime dependency, database migration, DesignDocument migration, API, CLI, MCP, WebMCP, persistence, authorization, provider, or revision change is expected.
 
-Specification: `.repo-steward/dsa-prod-006-spec.md`.
+## Verification requirement
 
-Expected implementation surfaces are a new shared change-summary utility, the existing YAML dialog and styles, focused shared tests, the YAML browser spec, and the smallest owning documentation update. No runtime dependency, lockfile change, database migration, DesignDocument migration, server route, CLI, MCP, WebMCP, auth, provider, or persistence change is expected.
+The future implementation must use repository-owned Node 24+ and run:
 
-Key safeguards include stable-ID matching, separate reorder classification, deterministic ordering, a maximum of 200 rendered detail rows with accurate totals, privacy-safe handling of values, invalidation after source edits, preview non-mutation, and stale-revision recovery that preserves source and summary.
+- reproducible root and CLI dependency installs;
+- focused change-summary, YAML, and fingerprint unit tests;
+- desktop/mobile YAML UI tests;
+- relevant CLI/export/security JSON/YAML regressions;
+- `npm run typecheck`;
+- `npm test` where practical;
+- `npm run build`;
+- the PowerShell-safe repository-selected E2E lane;
+- focused manual review at 375/768/1024/1440 widths, keyboard-only, long-path, truncation, and stale-save states.
 
-## Verification and residual risks
+GitHub Actions are not required when equivalent local evidence is sufficient.
 
-This checkpoint ran repository/GitHub reconciliation, canonical snapshotting, historical artifact verification, focused architecture/UI/test inspection, local dependency audit, candidate analysis, and Steward metadata validation. It did not execute product tests because no product behavior changed.
+## Security debt
 
-The implementation checkpoint must add focused unit and browser coverage, then run the Node-version-owned dependency installs, typecheck, builds, full unit suite, and repository-selected browser lane. Historical Windows symlink failure must remain `BLOCKED_HOST_CAPABILITY`; later capable-host evidence must be recorded separately.
+`npm audit` still reports eight high-severity findings in Cloudflare Puppeteer/extract-zip, Wrangler/Miniflare/Sharp, and PptxGenJS/image-size dependency chains.
 
-Residual risks:
+They are deferred and were not modified. The proposed pure DesignDocument comparison and React YAML-dialog path do not require those affected capabilities, so no demonstrated direct exploit blocks this request. Implementation must fail closed if an affected audited dependency is introduced into the new path.
 
-- naive deep diffing can misclassify reorder or overwhelm users;
-- large documents require aggregate-first bounded detail;
-- raw before/after values may expose embedded/private content;
-- the summary is advisory and cannot replace authoritative server validation/revision checks;
-- eight high-severity dependency audit findings remain a separate unresolved security-maintenance risk.
+## Historical evidence
 
-## Authority and next action
+DSA-STEW-001 remains bound to `133d1dffac2a57c10baf555123defdadcfa350c7` and evidence blob `02fe6a7c917030845d18909fd24de91e898f1e2c`.
 
-- `READY_FOR_IMPLEMENTATION_HANDOFF: YES`
+The YAML product verification remains bound separately to `1769de9258c6be285162a3cee9259600871462c1` and digest `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`. No historical evidence was relabeled.
+
+## Authority and safest next action
+
+- Steward request/state/handoff commit and push: **AUTHORIZED**
 - Product implementation: **NOT AUTHORIZED**
-- New PR: **NOT AUTHORIZED**
+- New product PR: **NOT AUTHORIZED**
 - Merge: **NOT AUTHORIZED**
 - Deploy: **NOT AUTHORIZED**
 - Release: **NOT AUTHORIZED**
 
-Safest next action: authorize `DSA-PROD-007` to convert the accepted DSA-PROD-006 specification into an exact, machine-readable Implementation Request pinned to the then-current `main`. Stop again before product implementation.
+Safest next checkpoint: explicitly authorize `DSA-PROD-008 — YAML Semantic Change Review Implementation` against `DSA-IMPL-YAML-CHANGE-REVIEW-001`, after reconciling the then-current `main`. Do not implement before that authorization.

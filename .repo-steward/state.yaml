@@ -11,15 +11,106 @@
     "default_branch": "main",
     "current_branch": "main",
     "recorded": {
-      "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+      "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
       "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
     }
   },
   "current": {
-    "milestone": "Post-merge reconciliation and next bounded product specification",
-    "task": "Reconcile merged YAML MVP on main, select one evidence-backed next product checkpoint, and persist its implementation-ready specification",
-    "phase": "PLAN",
+    "milestone": "YAML semantic change review implementation handoff",
+    "task": "Convert accepted DSA-PROD-006 into one exact executable Implementation Request without implementing product code",
+    "phase": "HANDOFF",
     "checkpoint": {
+      "id": "DSA-PROD-007",
+      "title": "YAML Semantic Change Review Implementation Handoff",
+      "objective": "Produce a repository-pinned machine-readable request for the bounded YAML semantic change review, with exact behavior, verification, security boundary, and authority.",
+      "status": "complete",
+      "scope": {
+        "included": [
+          "Close, commit, and push DSA-PROD-006 Steward metadata",
+          "Reconcile clean main and canonical snapshot",
+          "Inspect current DesignDocument/YAML/test ownership and dependency audit boundary",
+          "Create one machine-readable executable Implementation Request",
+          "Update canonical state and durable handoff",
+          "Commit and push DSA-PROD-007 Steward metadata"
+        ],
+        "excluded": [
+          "Product source or behavior changes",
+          "YAML parser/schema/persistence/API/revision/authorization changes",
+          "Dependency or migration changes",
+          "Audit remediation",
+          "New product PR",
+          "Merge, deploy, release, production mutation, credentials, secrets, destructive actions"
+        ]
+      },
+      "dependencies": [
+        "DSA-PROD-006"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "AC-PROD-007-01",
+          "description": "DSA-PROD-006 changes are verified as Steward-only, validated, committed, pushed, and reconciled on clean main.",
+          "satisfied": true,
+          "evidence_ids": [
+            "EV-PROD-007-RECONCILIATION"
+          ]
+        },
+        {
+          "id": "AC-PROD-007-02",
+          "description": "Current schema, YAML workflow, UI/test ownership, branch strategy, and security-debt boundary are inspected without finding a blocking contradiction.",
+          "satisfied": true,
+          "evidence_ids": [
+            "EV-PROD-007-RESEARCH",
+            "EV-PROD-007-SECURITY"
+          ]
+        },
+        {
+          "id": "AC-PROD-007-03",
+          "description": "A machine-readable request pins exact identity, accepted specification, bounded behavior, scope, targets, dependencies, migrations, verification, rollback, risks, questions, authority, and prohibitions.",
+          "satisfied": true,
+          "evidence_ids": [
+            "EV-PROD-007-REQUEST"
+          ]
+        },
+        {
+          "id": "AC-PROD-007-04",
+          "description": "The request is independently reviewed as concrete and executable for a fresh agent without prior conversation context.",
+          "satisfied": true,
+          "evidence_ids": [
+            "EV-PROD-007-REVIEW"
+          ]
+        },
+        {
+          "id": "AC-PROD-007-05",
+          "description": "Canonical state and durable handoff validate while product implementation and all prohibited actions remain absent.",
+          "satisfied": true,
+          "evidence_ids": [
+            "EV-PROD-007-HANDOFF"
+          ]
+        }
+      ],
+      "required_verification": [
+        "repository_reconciliation",
+        "research",
+        "security_review",
+        "implementation_request",
+        "review",
+        "handoff_validation"
+      ],
+      "required_files": [
+        ".repo-steward/dsa-prod-007-implementation-request.json",
+        ".repo-steward/handoff.md"
+      ],
+      "risks": [
+        "A future main drift requires refreshing the request before implementation.",
+        "Absent-ID nested collections must not receive invented identity semantics.",
+        "Eight high-severity dependency findings remain deferred and must stay outside the pure summary path.",
+        "Large or raw-value summaries can create usability/privacy regressions if implementation ignores the specified caps."
+      ],
+      "rollback": "Revert only the DSA-PROD-007 Steward request/state/handoff metadata commit; preserve the already-pushed DSA-PROD-006 closure and all product/history commits."
+    }
+  },
+  "completed": [
+    {
       "id": "DSA-PROD-006",
       "title": "YAML Semantic Change Review Specification",
       "objective": "Specify a deterministic semantic change summary for the YAML Preview flow so users can understand complete-document impact before explicit revision-guarded apply.",
@@ -109,9 +200,7 @@
         "The summary must remain advisory and cannot weaken server validation or optimistic revision checks."
       ],
       "rollback": "Revert only DSA-STEW-003/DSA-PROD-006 Steward metadata; no product, schema, dependency, or data rollback is needed."
-    }
-  },
-  "completed": [
+    },
     {
       "id": "DSA-PR-001",
       "title": "YAML MVP PR-only Handoff",
@@ -975,6 +1064,13 @@
       "text": "YAML Preview renders page 1 but does not summarize complete-document semantic changes before whole-document apply.",
       "source": "EV-PROD-006-BRAINSTORM and EV-PROD-006-SPEC",
       "severity": "medium"
+    },
+    {
+      "id": "F-PROD-007-REQUEST",
+      "classification": "OBSERVED",
+      "text": "DSA-IMPL-YAML-CHANGE-REVIEW-001 is executable and pinned to main commit a1bdebd8c05a3e8266f3f949a588f137716a810f.",
+      "source": ".repo-steward/dsa-prod-007-implementation-request.json",
+      "severity": "low"
     }
   ],
   "blockers": [],
@@ -1859,111 +1955,202 @@
       ],
       "executed": true,
       "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-RECONCILIATION",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "repository_reconciliation",
+      "procedure": "Fetch origin; verify the only dirty paths are expected DSA-PROD-006 Steward artifacts; validate; commit a1bdebd8c05a3e8266f3f949a588f137716a810f; push main; confirm local/origin parity and canonical snapshot.",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:00Z",
+      "summary": "DSA-PROD-006 closed as Steward-only commit a1bdebd8c05a3e8266f3f949a588f137716a810f, pushed to origin/main; clean snapshot digest remained 411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f.",
+      "limitations": [
+        "The subsequent DSA-PROD-007 metadata authoring makes the checkout dirty until its authorized closure commit."
+      ],
+      "executed": true,
+      "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-RESEARCH",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "research",
+      "procedure": "Inspect schema.ts, document fingerprint/merge ownership, YAML dialog/styles/UI tests, prior Implementation Request contract, test-plan routing, repository guidance, and current dependency graph.",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:01Z",
+      "summary": "All top-level DesignDocument entity collections expose stable IDs; some nested arrays do not, requiring deterministic structural/index fallback. Existing YAML Preview/save ownership supports the bounded feature without parser, server, schema, or API changes.",
+      "limitations": [
+        "Implementation must re-check uniqueness guarantees before treating nested name/time fields as identity."
+      ],
+      "executed": true,
+      "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-SECURITY",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "security_review",
+      "procedure": "Run and inspect npm audit/npm dependency paths, then compare affected packages with the proposed pure shared comparison and React YAML-dialog execution path.",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:02Z",
+      "summary": "Eight high findings remain in Cloudflare Puppeteer/extract-zip, Wrangler/Miniflare/Sharp, and PptxGenJS/image-size chains. None is required by the new pure comparison/UI path; no demonstrated direct compromise blocks the request.",
+      "limitations": [
+        "Audit debt remains unresolved and must fail closed if an affected dependency is introduced into implementation scope."
+      ],
+      "executed": true,
+      "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-REQUEST",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "implementation_request",
+      "procedure": "Create and parse .repo-steward/dsa-prod-007-implementation-request.json against the accepted specification and reconciled repository ownership.",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:03Z",
+      "summary": "Created executable request DSA-IMPL-YAML-CHANGE-REVIEW-001 with exact base/branch, semantic model, requirements, ten acceptance criteria, target files, no-dependency/migration expectations, verification, rollback, risks, questions, authority, and stop rules.",
+      "limitations": [
+        "Product implementation remains explicitly unauthorized."
+      ],
+      "executed": true,
+      "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-REVIEW",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "review",
+      "procedure": "Review the request for completeness, architecture fit, absent schema invention, UX/accessibility states, security boundary, local verification sufficiency, rollback, and authority separation.",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:04Z",
+      "summary": "The request is bounded and executable by a fresh implementation agent; non-blocking questions include explicit conservative resolution rules and no blocking ambiguity remains.",
+      "limitations": [
+        "The request must be refreshed if main or product ownership changes before authorization."
+      ],
+      "executed": true,
+      "interrupted": false
+    },
+    {
+      "id": "EV-PROD-007-HANDOFF",
+      "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
+      "type": "handoff_validation",
+      "procedure": "python D:/build2026/repo-steward/scripts/steward.py validate-handoff .repo-steward/state.yaml",
+      "result": "PASS",
+      "identity": {
+        "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+        "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
+      },
+      "timestamp": "2026-09-14T17:35:05Z",
+      "summary": "Closure identity, request, security boundary, authority, next action, and durable handoff pass canonical Steward validation.",
+      "limitations": [
+        "The gate validates declared evidence and does not execute future product tests."
+      ],
+      "executed": true,
+      "interrupted": false
     }
   ],
-  "last_reviewed_commit": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+  "last_reviewed_commit": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
   "next": {
-    "recommended_action": "Authorize DSA-PROD-007 to convert the accepted YAML semantic change review specification into an exact Implementation Request pinned to then-current main; do not implement yet.",
-    "reason": "DSA-PROD-006 is concrete and bounded enough for an implementation handoff, but current authority stops before product implementation."
+    "recommended_action": "Explicitly authorize DSA-PROD-008 to implement DSA-IMPL-YAML-CHANGE-REVIEW-001 on a new codex/yaml-semantic-change-review branch from the reconciled base; implementation is not yet authorized.",
+    "reason": "The machine-readable request is complete and executable, but this checkpoint grants metadata handoff authority only."
   },
-  "updated_at": "2026-09-14T17:05:04Z",
+  "updated_at": "2026-09-14T17:35:05Z",
   "handoff": {
     "verifications": [
       {
-        "evidence_id": "EV-STEW-003-RECONCILIATION",
+        "evidence_id": "EV-PROD-007-RECONCILIATION",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       },
       {
-        "evidence_id": "EV-STEW-003-HISTORICAL",
+        "evidence_id": "EV-PROD-007-RESEARCH",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
-        "historical": true
-      },
-      {
-        "evidence_id": "EV-PROD-006-BRAINSTORM",
-        "result": "PASS",
-        "executed": true,
-        "interrupted": false,
-        "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
-          "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
-        },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       },
       {
-        "evidence_id": "EV-PROD-006-RESEARCH",
+        "evidence_id": "EV-PROD-007-SECURITY",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       },
       {
-        "evidence_id": "EV-PROD-006-REVIEW",
+        "evidence_id": "EV-PROD-007-REQUEST",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       },
       {
-        "evidence_id": "EV-PROD-006-SPEC",
+        "evidence_id": "EV-PROD-007-REVIEW",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       },
       {
-        "evidence_id": "EV-PROD-006-HANDOFF",
+        "evidence_id": "EV-PROD-007-HANDOFF",
         "result": "PASS",
         "executed": true,
         "interrupted": false,
         "identity": {
-          "head": "b73b1f71d93c6995eb7e2498c9242ab0d5a746a8",
+          "head": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
           "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f"
         },
-        "checkpoint_digest": "6341e16ec2f307af9917c1f562ba068adf084b026d5118802a1a35f02524a6be",
+        "checkpoint_digest": "124bc8bbc68191d658c7a80854bb61b3becf1cf65bb4f9f20f046e7b71a565a0",
         "historical": false
       }
     ],
     "findings": [
       {
         "collection": "facts",
-        "id": "F-STEW-003-MERGED",
+        "id": "F-PROD-007-REQUEST",
         "severity": "low"
-      },
-      {
-        "collection": "facts",
-        "id": "F-PROD-006-PREVIEW-GAP",
-        "severity": "medium"
       },
       {
         "collection": "risks",
@@ -1972,8 +2159,8 @@
       }
     ],
     "next_before": {
-      "recommended_action": "Await human review of GitHub PR #1 and explicit merge authorization; do not merge, deploy, release, or begin new product work.",
-      "reason": "The technically merge-ready YAML MVP was in an open review PR while merge authority was absent."
+      "recommended_action": "Authorize DSA-PROD-007 to convert the accepted YAML semantic change review specification into an exact Implementation Request pinned to then-current main; do not implement yet.",
+      "reason": "DSA-PROD-006 is concrete and bounded enough for an implementation handoff, but current authority stops before product implementation."
     }
   }
 }

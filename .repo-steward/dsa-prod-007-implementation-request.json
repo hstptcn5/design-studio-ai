@@ -1,0 +1,351 @@
+{
+  "contract_version": "0.1.0",
+  "kind": "implementation_request",
+  "request_id": "DSA-IMPL-YAML-CHANGE-REVIEW-001",
+  "checkpoint": {
+    "id": "DSA-PROD-007",
+    "title": "YAML Semantic Change Review Implementation Handoff"
+  },
+  "repository": {
+    "identity": "https://github.com/hstptcn5/design-studio-ai.git",
+    "default_branch": "main",
+    "base_commit": "a1bdebd8c05a3e8266f3f949a588f137716a810f",
+    "content_digest": "411d528ca194ce6c60120dae3746f93e01251884e1695d59ba476797ccdab75f",
+    "expected_implementation_branch": "codex/yaml-semantic-change-review",
+    "branch_strategy": "Create the implementation branch from the exact base commit after confirming origin/main still contains it. If main or tracked product bytes have moved, reconcile and refresh this request before editing.",
+    "reconciliation_rule": "Repository reality wins. Preserve unknown edits and fail closed on material schema, YAML workflow, or ownership-boundary contradictions."
+  },
+  "accepted_specification": {
+    "id": "DSA-PROD-006",
+    "title": "YAML Semantic Change Review Specification",
+    "path": ".repo-steward/dsa-prod-006-spec.md",
+    "decision": "SELECTED",
+    "behavior": "Preview must provide a deterministic, ID-aware semantic summary of how the complete validated DesignDocument differs from the immutable document captured when the YAML dialog opened.",
+    "authority_boundary": "The summary is a local review aid. Existing strict parsing, explicit Preview then Apply, server validation, and optimistic revision checks remain authoritative."
+  },
+  "authority": {
+    "request_creation": "authorized",
+    "product_implementation": "not_authorized_in_DSA-PROD-007",
+    "new_product_pull_request": "not_authorized",
+    "merge": "not_authorized",
+    "deploy": "not_authorized",
+    "release": "not_authorized",
+    "production_mutation": "not_authorized",
+    "credential_or_secret_changes": "not_authorized",
+    "required_next_authorization": "Explicitly authorize the bounded product implementation against this request after reconciling the then-current base."
+  },
+  "included_scope": [
+    "Add one DesignDocument-specific shared semantic comparison utility.",
+    "Integrate the summary into the existing YAML Preview workflow without changing Validate or Apply authority.",
+    "Present aggregate and bounded detailed changes accessibly in the existing YAML modal on desktop and mobile.",
+    "Add focused shared unit tests and YAML browser workflow tests.",
+    "Update only the smallest directly owning behavioral documentation.",
+    "Update E2E test-plan routing only if the new shared owner would otherwise select the wrong lane."
+  ],
+  "excluded_scope": [
+    "YAML parser or serializer changes",
+    "Canonical persistence or stored document changes",
+    "DesignDocument schema or database migrations",
+    "REST, API, MCP, WebMCP, CLI, import, or export contract changes",
+    "Revision, authorization, ownership, publication, or collaboration changes",
+    "Raw YAML/text diff as the primary semantic model",
+    "Generic JSON/YAML diff framework",
+    "Selective hunk apply, generalized history/version-control UI, undo redesign, or automatic merge",
+    "Presence, WebSockets, collaborative YAML editing, or conflict-resolution redesign",
+    "AI-generated explanations or provider calls",
+    "Dependency-security remediation or unrelated dependency upgrades",
+    "Unrelated accessibility work, editor redesign, refactoring, deployment, or release"
+  ],
+  "semantic_model": {
+    "baseline": "A structured clone or otherwise immutable reference-equivalent DesignDocument captured when YamlSourceDialog opens.",
+    "candidate": "The DesignDocument returned by the existing parseDocumentYaml path after strict YAML and documentSchema validation.",
+    "ignored_noise": [
+      "YAML comments, formatting, scalar spelling, and mapping-key order",
+      "Object insertion order",
+      "metadata.updatedAt when it is the only semantic difference"
+    ],
+    "id_aware_collections": [
+      "characters by id",
+      "pages by id",
+      "nodes within each page by id",
+      "assets by id",
+      "schemaVersion 2 boards by id",
+      "schemaVersion 2 paintings by id",
+      "timeline tracks by id",
+      "nested collections that expose a repository-schema stable id, name, or other explicitly unique identifier"
+    ],
+    "non_id_collections": "Where the current schema permits no stable identity, do not invent one. Compare deterministically by structural value and index, report the owning field/collection as modified, and classify reorder separately only when exact element equality establishes a safe permutation.",
+    "classifications": [
+      "added",
+      "removed",
+      "modified",
+      "reordered"
+    ],
+    "paths": "Use user-comprehensible collection names and stable IDs where present, for example pages[home].nodes[hero].text. Never use array position as entity identity when a stable ID exists.",
+    "ordering": "Sort summary groups in a fixed documented product order and detail rows by classification, semantic path, then stable identifier so identical inputs always produce byte-equivalent summary objects.",
+    "limits": {
+      "max_rendered_detail_rows": 200,
+      "aggregate_counts_must_remain_complete": true,
+      "truncation_message_required": true,
+      "raw_values_default": "Do not render raw before/after values by default.",
+      "privacy": "Never dump data URLs, asset URLs, embedded/binary-like strings, large arrays/objects, or complete user content into the summary."
+    }
+  },
+  "requirements": [
+    {
+      "id": "REQ-CHANGE-01",
+      "statement": "Implement a shared, synchronous, deterministic, side-effect-free comparison function accepting two schema-valid DesignDocument values and returning typed aggregate counts plus bounded detail rows.",
+      "acceptance_criteria": ["AC-CHANGE-01", "AC-CHANGE-02", "AC-CHANGE-08"]
+    },
+    {
+      "id": "REQ-CHANGE-02",
+      "statement": "Match collections by repository-defined stable identity wherever available; classify stable-identity reorder independently from add/remove and never infer absent identity semantics.",
+      "acceptance_criteria": ["AC-CHANGE-02", "AC-CHANGE-03", "AC-CHANGE-04"]
+    },
+    {
+      "id": "REQ-CHANGE-03",
+      "statement": "Report complete-document changes across document fields, theme, characters, pages, nodes, assets, design system, presentation, timeline, and schemaVersion 2 boards/paintings while suppressing serialization-only noise.",
+      "acceptance_criteria": ["AC-CHANGE-01", "AC-CHANGE-04", "AC-CHANGE-05"]
+    },
+    {
+      "id": "REQ-CHANGE-04",
+      "statement": "Run comparison only after existing strict YAML/schema validation during Preview; source edits invalidate both visual preview and semantic summary.",
+      "acceptance_criteria": ["AC-CHANGE-05", "AC-CHANGE-06"]
+    },
+    {
+      "id": "REQ-CHANGE-05",
+      "statement": "Keep Preview local and non-mutating. Apply must continue sending the complete parsed document through the existing revision and optional brief-revision guarded save path.",
+      "acceptance_criteria": ["AC-CHANGE-06", "AC-CHANGE-07"]
+    },
+    {
+      "id": "REQ-CHANGE-06",
+      "statement": "On stale-revision or save failure, preserve the edited YAML and last valid semantic summary for reconciliation and retain the existing actionable error behavior.",
+      "acceptance_criteria": ["AC-CHANGE-07"]
+    },
+    {
+      "id": "REQ-CHANGE-07",
+      "statement": "Present aggregate-first user-facing groups, unchanged state, bounded details, and explicit truncation without relying on color; preserve keyboard order, focus visibility, status/error semantics, long-path wrapping, and existing mobile full-screen behavior.",
+      "acceptance_criteria": ["AC-CHANGE-01", "AC-CHANGE-09"]
+    },
+    {
+      "id": "REQ-CHANGE-08",
+      "statement": "Reuse current DesignDocument/YAML contracts and add no runtime dependency, migration, public contract, persistence, authorization, or provider behavior.",
+      "acceptance_criteria": ["AC-CHANGE-10"]
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-CHANGE-01",
+      "description": "For a valid candidate, Preview clearly reports complete aggregate added, removed, modified, and reordered counts plus bounded semantic paths for meaningful changes across the complete document, including changes outside page 1."
+    },
+    {
+      "id": "AC-CHANGE-02",
+      "description": "Pages, nodes, assets, characters, boards, paintings, timeline tracks, and other schema collections with stable identity are matched by that identity rather than array index."
+    },
+    {
+      "id": "AC-CHANGE-03",
+      "description": "Pure reorder of stable-ID entities is reported as reorder and is not misreported as removal plus addition; modification combined with reorder remains visible as both applicable effects."
+    },
+    {
+      "id": "AC-CHANGE-04",
+      "description": "Collections without stable IDs use deterministic structural/index fallback without invented identity; additions, removals, nested modifications, and safely detectable exact-value permutations are classified consistently."
+    },
+    {
+      "id": "AC-CHANGE-05",
+      "description": "Semantically equivalent documents report unchanged despite YAML formatting/comments/key order or object insertion order; metadata.updatedAt alone creates no user-visible change."
+    },
+    {
+      "id": "AC-CHANGE-06",
+      "description": "Invalid or unsupported YAML cannot produce a semantic preview or reach Apply; editing source after Preview clears the rendered preview and summary; Preview performs no persistence or canonical editor mutation."
+    },
+    {
+      "id": "AC-CHANGE-07",
+      "description": "Correct-revision Apply continues to save the complete validated document through the existing path, while stale revision is rejected without losing edited source or the last valid summary."
+    },
+    {
+      "id": "AC-CHANGE-08",
+      "description": "Repeated comparison of identical before/after inputs yields deep-equal ordered output and neither input is mutated, including frozen-input tests."
+    },
+    {
+      "id": "AC-CHANGE-09",
+      "description": "The summary is usable by keyboard and assistive technology, does not rely on color, wraps long paths/content, exposes truncation, and remains operable at representative 375, 768, 1024, and 1440 pixel layouts."
+    },
+    {
+      "id": "AC-CHANGE-10",
+      "description": "Existing Validate/Preview/Apply, strict YAML, JSON persistence/workflows, schema v1/v2, revision conflicts, import/export, CLI, authorization, and production build regressions remain green with no dependency, lockfile, migration, or public-contract change."
+    }
+  ],
+  "target_files": {
+    "new_expected": [
+      {
+        "path": "src/shared/document-change-summary.ts",
+        "purpose": "DesignDocument-specific typed semantic comparison and deterministic bounded output"
+      },
+      {
+        "path": "tests/document-change-summary.test.ts",
+        "purpose": "Unit coverage for semantics, determinism, immutability, limits, and schema versions"
+      }
+    ],
+    "existing_expected": [
+      {
+        "path": "src/app/yaml-source-dialog.tsx",
+        "purpose": "Capture opening baseline, generate/clear summary with Preview, preserve summary on save conflict, and render accessible review UI"
+      },
+      {
+        "path": "src/app/yaml-source.css",
+        "purpose": "Aggregate/detail hierarchy, wrapping, truncation, and responsive presentation"
+      },
+      {
+        "path": "tests/yaml-source-ui.spec.ts",
+        "purpose": "Non-mutation, semantic presentation, invalidation, Apply, stale revision, accessibility, and mobile/desktop workflow"
+      },
+      {
+        "path": "scripts/test-plan.mjs",
+        "purpose": "Add the new shared owner to the existing yaml-source area unless current routing already selects the intended lane"
+      },
+      {
+        "path": "docs/agents.md",
+        "purpose": "Small owning behavioral clarification if this remains the canonical YAML workflow documentation"
+      }
+    ],
+    "conditional_documentation": [
+      {
+        "path": "src/app/guide.tsx",
+        "condition": "Only if repository documentation ownership shows the user guide directly promises YAML Preview behavior"
+      },
+      {
+        "path": "tests/public-docs.spec.ts",
+        "condition": "Only when a public guide/source claim changes"
+      }
+    ],
+    "unexpected_change_stop_rule": "Stop for re-authorization before changing server routes, schema owners, persistence, CLI/MCP/WebMCP, package.json, package-lock.json, migrations, generated bundles, or unrelated product files."
+  },
+  "dependency_expectations": {
+    "new_runtime_dependencies": [],
+    "new_dev_dependencies": [],
+    "package_json_change": "none",
+    "lockfile_change": "none",
+    "security_debt": "Eight existing high-severity npm audit findings remain deferred. Inspection shows they are in Cloudflare Puppeteer/extract-zip, Wrangler/Miniflare/Sharp, and PptxGenJS/image-size chains, not in the proposed pure DesignDocument comparison or React YAML-dialog path.",
+    "fail_closed_rule": "If implementation introduces archive extraction, image parsing, renderer execution, untrusted executable content, or any affected audited dependency into the summary path, stop and open a security-specific blocker rather than continuing."
+  },
+  "migration_expectations": {
+    "database": "none",
+    "document_schema": "none",
+    "stored_documents": "unchanged canonical JSON/revision model",
+    "api": "none",
+    "data_backfill": "none",
+    "rollback_data_action": "none"
+  },
+  "verification_plan": [
+    {
+      "id": "VER-CHANGE-DEPS",
+      "commands": ["node --version", "npm ci", "npm ci --prefix packages/cli"],
+      "covers": ["Node 24+ requirement", "reproducible dependency trees"],
+      "expected": "No manifest or lockfile delta"
+    },
+    {
+      "id": "VER-CHANGE-UNIT",
+      "commands": ["npx tsx --test tests/document-change-summary.test.ts", "npx tsx --test tests/document-yaml.test.ts tests/document-fingerprint.test.ts"],
+      "covers": ["add/remove/modify", "stable-ID matching", "reorder", "nested/no-ID fallback", "schema v1/v2", "determinism", "immutability", "truncation/privacy", "YAML and semantic-equality regression"]
+    },
+    {
+      "id": "VER-CHANGE-UI",
+      "commands": ["npm run build", "npm run test:e2e -- tests/yaml-source-ui.spec.ts --project=desktop", "npm run test:e2e -- tests/yaml-source-ui.spec.ts --project=mobile"],
+      "covers": ["semantic presentation", "unchanged state", "invalid-source clearing", "Preview non-mutation", "Apply", "stale conflict recovery", "keyboard/status semantics", "desktop/mobile"]
+    },
+    {
+      "id": "VER-CHANGE-JSON",
+      "commands": ["npm run build:cli", "npx tsx --test tests/cli.test.ts tests/export.test.ts tests/security-boundaries.test.ts"],
+      "covers": ["existing JSON/YAML CLI and export behavior", "authorization and revision boundaries"]
+    },
+    {
+      "id": "VER-CHANGE-GATES",
+      "commands": ["npm run typecheck", "npm test", "npm run build"],
+      "covers": ["shared contracts", "full unit/integration regression where practical", "production build"]
+    },
+    {
+      "id": "VER-CHANGE-E2E-PLAN",
+      "procedure": "Generate changed paths and run the PowerShell-safe equivalent of npm run test:e2e -- $(node scripts/test-plan.mjs --format=args). At minimum preserve yaml-source-ui plus always-run security coverage. Record only browsers actually executed.",
+      "covers": ["repository-selected browser lane", "security regressions"]
+    },
+    {
+      "id": "VER-CHANGE-MANUAL",
+      "procedure": "Inspect representative unchanged, small, reordered, multi-page, and over-200-change summaries at 375/768/1024/1440 widths, keyboard-only operation, long paths, zoom/text scaling, and stale-save recovery."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revert only the focused change-summary utility, YAML dialog integration/styles, corresponding tests/test-plan mapping, and directly owning documentation.",
+    "data": "No migration or persisted-data rollback is required.",
+    "preserve": [
+      "Merged strict YAML codec and existing authoring/import/export/CLI behavior",
+      "Canonical JSON DesignDocument persistence and revisions",
+      "Existing projects and publications",
+      "Historical Steward evidence and unrelated user changes"
+    ]
+  },
+  "known_risks": [
+    {
+      "id": "R-CHANGE-01",
+      "risk": "Naive recursion misclassifies ID-aware reorder or emits noisy paths.",
+      "mitigation": "Explicit collection ownership, stable-ID maps, separate order comparison, deterministic tests, and no generic diff abstraction."
+    },
+    {
+      "id": "R-CHANGE-02",
+      "risk": "Large documents overwhelm memory or the modal.",
+      "mitigation": "Schema-valid bounded inputs, aggregate-first processing, 200 rendered rows, deterministic truncation, and large-document tests."
+    },
+    {
+      "id": "R-CHANGE-03",
+      "risk": "Before/after values expose private URLs, data URLs, or substantial user content.",
+      "mitigation": "Paths and classifications by default; no raw values unless short primitive disclosure is explicitly reviewed and bounded."
+    },
+    {
+      "id": "R-CHANGE-04",
+      "risk": "Users mistake the semantic summary or first-page render for authoritative save validation or complete visual coverage.",
+      "mitigation": "Label as a local review, retain explicit Apply, disclose complete semantic versus first-page visual coverage, and preserve server checks."
+    },
+    {
+      "id": "R-CHANGE-05",
+      "risk": "Existing audit debt becomes conflated with this feature.",
+      "mitigation": "No dependency changes; keep the eight findings deferred and fail closed if an affected dependency enters the implementation path."
+    }
+  ],
+  "unresolved_non_blocking": [
+    {
+      "id": "Q-CHANGE-01",
+      "question": "Should short primitive before/after values appear by default?",
+      "resolution_rule": "Start with paths, classifications, and aggregate counts only. Add bounded primitive values only if implementation UX review demonstrates clear benefit without privacy/noise regression."
+    },
+    {
+      "id": "Q-CHANGE-02",
+      "question": "How much stable-ID reorder detail should be shown?",
+      "resolution_rule": "Show aggregate reorder count and a bounded owning collection/identifier list; do not render a complete move script."
+    },
+    {
+      "id": "Q-CHANGE-03",
+      "question": "Should Apply be disabled when the candidate is semantically unchanged?",
+      "resolution_rule": "Preserve current enabled behavior unless focused implementation review proves disabling improves clarity without changing accepted workflow semantics."
+    },
+    {
+      "id": "Q-CHANGE-04",
+      "question": "Should nested schema collections keyed by name/time be treated as stable identities?",
+      "resolution_rule": "Only use a field when the current schema/validator explicitly guarantees uniqueness in that owning collection; otherwise use the non-ID fallback."
+    }
+  ],
+  "prohibited_actions": [
+    "Do not implement product code during DSA-PROD-007",
+    "Do not change YAML parsing or serialization",
+    "Do not change schemas, persistence, revisions, APIs, authorization, ownership, providers, or migrations",
+    "Do not add dependencies or modify the lockfile without a newly demonstrated blocking necessity and re-authorization",
+    "Do not fix the eight deferred audit findings in this checkpoint",
+    "Do not create a product pull request, merge, deploy, release, or mutate production",
+    "Do not change credentials or secrets",
+    "Do not hand-edit generated bundles or generated documentation",
+    "Do not weaken tests, validation, revision checks, or historical evidence",
+    "Do not expand into generic diff/history/collaboration/editor-redesign work"
+  ],
+  "executable": true,
+  "blocking_uncertainty": [],
+  "ready_for_implementation": true,
+  "next_checkpoint": "DSA-PROD-008 — YAML Semantic Change Review Implementation"
+}
