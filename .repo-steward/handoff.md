@@ -1,33 +1,54 @@
-# Repo Steward handoff — DSA-PROD-003
+# Repo Steward handoff — DSA-PROD-004
 
 ## Outcome
 
-`DSA-PROD-003 — YAML Authoring MVP Implementation` is **COMPLETE** and ready for bounded review. The product implementation is commit `1769de9258c6be285162a3cee9259600871462c1`, based on `1d07904ac82ef771208bb47d7028fc20301193c6`, on `steward/continuity-bootstrap`. Its measured canonical product-content digest is `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`.
+`DSA-PROD-004 — YAML Authoring MVP Review and Node 24/Cross-Browser Gate` is **COMPLETE**. Exact reviewed product identity: `1769de9258c6be285162a3cee9259600871462c1`; canonical product digest: `64060021fbace8978e7b540b430ad549bc4c194f9a33de4fb432321687f6bd67`; branch: `steward/continuity-bootstrap`.
 
-The machine-readable response is `.repo-steward/dsa-prod-003-implementation-response.json`, identity `DSA-RESP-YAML-001`.
+The clean starting Steward HEAD `ecfbb8558520980c91b745ce824b0bdfe0712152` was exactly two expected DSA-PROD-003 commits ahead of origin. That existing range was pushed. No PR was opened.
 
-## Implemented scope
+Review response: `.repo-steward/dsa-prod-004-review-response.json`, identity `DSA-REVIEW-YAML-001`.
 
-One shared `yaml@2.9.1` codec parses exactly one bounded YAML 1.2 document, rejects anchors, aliases, merge keys, explicit/custom tags, duplicate or non-string keys, unsafe prototype keys, excessive depth/bytes and non-JSON values, then validates the existing `DesignDocument` schema. Serialization is deterministic semantic interchange; comments and formatting are not persisted.
+## Independent review
 
-The editor now exposes explicit Validate, Preview, Apply and save, Reset from design, and Download YAML actions with unsaved-source protection, stable accessible diagnostics, mobile layout, and source preservation on stale revision/save failure. Browser workspace import accepts `.yaml`/`.yml`; browser and authenticated server exports support YAML. CLI document file/stdin/get/import/export/offline-output flows use the shared codec. REST, MCP, WebMCP, CLI, official docs, agent skill, generated public references, and E2E routing are synchronized. Canonical persistence remains the existing JSON/revision model; no migration exists.
+CONFIRMED: no material defect was found in the strict YAML codec, prohibited-construct handling, DesignDocument validation, semantic round trips, editor Validate/Preview/Apply/Reset/Download workflow, preview non-mutation, revision and brief guards, conflict recovery, browser/server import/export, CLI, REST/MCP/WebMCP/docs parity, accessibility, auth/ownership, JSON compatibility, parser safety, scope, or exact `yaml@2.9.1` ISC dependency.
 
-## Verification
+SUSPECTED: none.
 
-PASS: typecheck; production build and generated references; 5/5 codec tests; authenticated YAML export; 6/6 security-boundary tests; CLI build and 12/12 CLI tests; YAML E2E 2/2 desktop and 2/2 mobile Chromium; onboarding 2/2 mobile; public docs 5/5 desktop.
+No product code changed. Product verification remains bound to `1769de9258c6be285162a3cee9259600871462c1`, not this or any later Steward metadata commit.
 
-BLOCKED: aggregate `npm test` completed 481/482. The only failure is the existing structured React-export test attempting a Windows symlink and receiving `EPERM`; it is unrelated to YAML. The host used Node 22.19.0 while the repository declares Node 24+.
+## Node 24 gate
 
-NOT_RUN: full repository-selected E2E matrix; Firefox; WebKit. Focused affected lanes ran locally. No GitHub Actions ran.
+Official checksum-verified Node `v24.21.0` with npm `11.19.0` was used.
 
-## Authority and risk
+PASS: root and CLI `npm ci`; `yaml@2.9.1` identity/license; typecheck; CLI build; production build; codec 5/5; CLI 12/12; security boundaries 6/6; all other YAML-focused tests within the aggregate suite.
 
-Implementation authority was exercised only for `DSA-IMPL-YAML-001`. PR creation, merge, deploy, and release remain **NOT AUTHORIZED**. No production data, database, credentials, providers, deployment, or release state changed.
+BLOCKED: full `npm test` completed 482/483. The sole failure is `tests/structured-export.test.ts`, where Windows denies creation of a temporary `node_modules` symlink with `EPERM`. It reproduces under Node 24 and Node 22, is unrelated to YAML, and is classified as a host-permission blocker rather than a YAML product failure.
 
-Residual review risks are the Node 24/symlink aggregate gate, untested Firefox/WebKit behavior, and the intentionally coarse whole-document apply protected by exact revision and applicable brief-revision checks. `READY_TO_REVIEW: YES`. `READY_TO_MERGE: NO`.
+Root dependency installation reports eight high-severity findings in the existing graph. No audit-clean claim is made.
 
-Historical DSA-STEW-001 evidence remains byte-identical at Git blob `02fe6a7c917030845d18909fd24de91e898f1e2c` and bound to `133d1dffac2a57c10baf555123defdadcfa350c7`. DSA-STEW-002, DSA-PROD-001, and DSA-PROD-002 identities were not relabeled.
+## Cross-browser gate
+
+PASS, 2/2 per target:
+
+- Chromium desktop, 1440×1000
+- Firefox 155.0 desktop, 1440×1000
+- WebKit 26.6 mobile, 390×844
+- Chromium mobile, 390×844
+
+The gate covered load → YAML representation → invalid rejection → edit → validate → local non-mutating preview → explicit apply → persisted revision → reload → YAML download and parse, plus stale-revision rejection with buffer preservation and YAML import. A temporary verification-only test extension supplied the invalid/reload/download assertions and was removed after execution; the working product bytes are unchanged.
+
+NOT_RUN: full repository-selected 35-spec E2E matrix and GitHub Actions.
+
+## Regression and authority
+
+No YAML, JSON workflow, auth/owner, revision, CLI, build, or cross-browser regression was observed in executed coverage. The repository-wide gate is not fully green because of the unrelated symlink blocker and unrun full E2E matrix.
+
+Historical DSA-STEW-001 evidence remains blob `02fe6a7c917030845d18909fd24de91e898f1e2c`, exactly bound to `133d1dffac2a57c10baf555123defdadcfa350c7`; no historical evidence was rewritten or relabeled.
+
+`READY_TO_REVIEW: YES`. `READY_TO_MERGE: NO`.
+
+Review and verification authority is complete. A bounded defect correction was authorized but not needed. PR creation, merge, deploy, release, production mutation, secret changes, destructive actions, and unrelated feature work remain **NOT AUTHORIZED**.
 
 ## Recommended next checkpoint
 
-`DSA-PROD-004 — YAML Authoring MVP Review and Node 24/Cross-Browser Gate`: review commit `1769de9258c6be285162a3cee9259600871462c1`, rerun the aggregate suite on a Node 24 host with symlink capability, and run Firefox/WebKit plus the repository-selected E2E matrix. Stop before merge unless separately authorized.
+`DSA-PROD-005 — YAML MVP PR Review Handoff and Host-Capability Resolution`: only after explicit authorization, resolve or formally waive the Windows symlink gate, decide whether to run the full mapped E2E matrix, and prepare a PR-level review handoff. Stop before merge unless separately authorized.
